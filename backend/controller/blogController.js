@@ -7,7 +7,7 @@ import cloudinary from "cloudinary";
 // @route   POST /api/blogs/create
 // @access  Private
 const createBlog = asyncHandler(async (req, res) => {
-  const { title, content, tags, image } = req.body;
+  const { title, content, tags } = req.body;
   const userId = req.user?._id;
   const user = await User.findById(userId);
   if (!user) {
@@ -19,13 +19,21 @@ const createBlog = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please fill all the fields");
   }
+  let imageUrl = "";
+  let imagePublicId = "";
+  if (req.file) {
+    imageUrl = req.file.path; // secure_url from cloudinary
+    imagePublicId = req.file.filename; // public_id from cloudinary
+  }
 
   const blog = await Blog.create({
     title,
     content,
     tags,
-    image,
-    author: userId, // ✅ Corrected field name
+    image: imageUrl,
+    imagePublicId,
+    author: userId,
+    // ✅ Corrected field name
   });
   user.blogPosts.push(blog._id);
   await user.save();
@@ -56,7 +64,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 // update a blog
 // @route   PUT /api/blogs/:id
 const updateBlog = asyncHandler(async (req, res) => {
-  const { title, content, tags, image, aiSummary, aiImage } = req.body;
+  const { title, content, tags } = req.body;
   const blogId = req.params.id;
 
   const blog = await Blog.findById(blogId);
@@ -70,14 +78,17 @@ const updateBlog = asyncHandler(async (req, res) => {
       .status(403)
       .json({ message: "You are not authorized to update this blog" });
   }
-
+  if (req.file) {
+    if (blog.imagePublicId) {
+      await cloudinary.uploader.destroy(blog.imagePublicId);
+    }
+    blog.image = req.file.path;
+    blog.imagePublicId = req.file.filename;
+  }
   // Only update the fields provided
   if (title !== undefined) blog.title = title;
   if (content !== undefined) blog.content = content;
   if (tags !== undefined) blog.tags = tags;
-  if (image !== undefined) blog.image = image;
-  if (aiSummary !== undefined) blog.aiSummary = aiSummary;
-  if (aiImage !== undefined) blog.aiImage = aiImage;
 
   await blog.save();
 

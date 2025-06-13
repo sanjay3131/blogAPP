@@ -44,7 +44,7 @@ const CreateBlogPage = () => {
   };
 
   return (
-    <div className="px-4 pb-4">
+    <div className="container mx-auto p-8 md:px-24">
       <h1 className="text-xl md:text-3xl uppercase font-semibold text-gray-500">
         Write your <span className="text-black font-extrabold">Blog</span>
       </h1>
