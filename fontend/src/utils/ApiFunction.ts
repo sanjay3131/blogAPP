@@ -32,6 +32,17 @@ const getAllBlogs = async () => {
   const response = await axiosInstance.get("/blogs");
   return response.data;
 };
+//post a blog
+
+const postBlog = async (formdata: FormData) => {
+  const response = await axiosInstance.post("/blogs/create", formdata, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  console.log(response);
+
+  return response.data;
+};
+
 //like and unlike a blog
 const toogleLike = async (blogId: string) => {
   const response = await axiosInstance.post(`/blogs/like/${blogId}`);
@@ -51,4 +62,5 @@ export {
   toogleLike,
   getSingleblog,
   Logout,
+  postBlog,
 };

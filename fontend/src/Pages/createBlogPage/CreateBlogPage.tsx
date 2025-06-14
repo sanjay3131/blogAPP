@@ -1,23 +1,51 @@
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { postBlog } from "@/utils/ApiFunction";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 const CreateBlogPage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [blogTags, setBlogTags] = useState<string[]>([]);
   const [selectedTag, setSelectedTag] = useState("");
-
-  const handelForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const [blogImage, setBlogImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handelForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Title:", title);
-    console.log("Content:", content);
-    console.log("Tags:", blogTags);
+    if (blogTags.length <= 0) {
+      return alert("please selete some tags");
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    blogTags.forEach((tag) => {
+      formData.append("tags", tag);
+    });
+    if (blogImage) formData.append("image", blogImage); // Add only if file exists
+
+    const result = await postBlog(formData);
+    console.log(result);
+    if (result.message) {
+      toast.success(result.message);
+    } else {
+      toast.error("blog upload failed");
+    }
 
     // Reset
     setTitle("");
     setContent("");
     setBlogTags([]);
     setSelectedTag("");
+    setBlogImage(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handelImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setBlogImage(e.target.files[0]); // Store the File object, not URL
+    }
   };
 
   const tags: string[] = [
@@ -84,9 +112,11 @@ const CreateBlogPage = () => {
             id="tags"
             value={selectedTag}
             onChange={handleTagSelect}
-            className="border-2 border-gray-400 rounded-2xl p-2 outline-none w-1/2 focus:shadow-gray-400"
+            className="border-2 border-gray-400 rounded-xl p-2 outline-none w-1/2 focus:shadow-gray-400"
           >
-            <option value="">Select a tag</option>
+            <option value="" className="rounded-2xl">
+              Select a tag
+            </option>
             {tags.map((tag) => (
               <option key={tag} value={tag}>
                 {tag}
@@ -126,6 +156,40 @@ const CreateBlogPage = () => {
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></textarea>
+        </div>
+
+        {/* Image Upload */}
+        <div className="flex flex-col justify-center items-center">
+          <div className="flex gap-3 justify-center items-center">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handelImage}
+              placeholder="upload"
+              ref={fileInputRef}
+              className="bg-Primary-button-color hover:bg-gray-500/50 p-4 rounded-2xl text-center"
+            />
+            {/* Delete Image */}
+            {previewImage && (
+              <Button
+                type="button"
+                onClick={() => {
+                  setBlogImage(null);
+                  setPreviewImage("");
+                  if (fileInputRef.current) fileInputRef.current.value = "";
+                }}
+              >
+                Delete Image
+              </Button>
+            )}
+          </div>
+          {blogImage && (
+            <img
+              src={URL.createObjectURL(blogImage)}
+              alt=""
+              className="size-[10rem]"
+            />
+          )}
         </div>
 
         <Button type="submit">Publish</Button>

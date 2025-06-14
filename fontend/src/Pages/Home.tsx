@@ -91,11 +91,11 @@ const Home = () => {
         <motion.section className="flex flex-col gap-4  p-4 rounded-2xl justify-center items-center">
           <h2 className="text-2xl font-bold  ">Trending Blogs</h2>
 
-          <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center items-center ">
+          <motion.div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center items-center  w-full ">
             {data.slice(0, 6).map((blogData: BlogData) => (
               <motion.div
                 key={blogData._id}
-                className=" bg-Primary-text-color/10 h-[210px] p-4 rounded-2xl flex flex-col justify-between gap-2 
+                className=" bg-Primary-text-color/10 h-[210px] w-full p-4 rounded-2xl flex flex-col justify-between gap-2 
                   transition-shadow duration-300 border-8 border-Primary-button-color shadow-md shadow-Primary-text-color/50"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
