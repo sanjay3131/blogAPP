@@ -17,6 +17,8 @@ const AllBlogs = () => {
     content: string;
     likes: number;
     likedBy: string[];
+    image: string;
+    imagePublicId: string;
     author: {
       _id: string;
       name: string;
@@ -27,15 +29,19 @@ const AllBlogs = () => {
   if (error) return <div>error </div>;
 
   return (
-    <div className=" w-full grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-5 p-4">
+    <div className=" w-full grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-5 p-4 justify-center items-center  ">
       {data.map((bloagdata: BlogData) => (
         <div
           key={bloagdata._id}
           onClick={() => navigate(`/blogs/${bloagdata._id}`)}
-          className="w-full h-fit p-2 rounded-2xl shadow-md shadow-green-950"
+          className="w-full h-fit  p-2 rounded-2xl shadow-md shadow-green-950"
         >
           <div className="relative rounded-xl ">
-            <img src={sampleimage} alt="" className="rounded-2xl" />
+            <img
+              src={bloagdata.image ? bloagdata.image : sampleimage}
+              alt=""
+              className="rounded-2xl"
+            />
             <div className="bg-white/55 backdrop-blur-[5px] absolute bottom-0 rounded-xl py-2 px-2 w-full h-[35%] overflow-hidden">
               {" "}
               <h1 className="text-xl uppercase font-bold">{bloagdata.title}</h1>
