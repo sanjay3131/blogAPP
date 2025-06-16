@@ -2,7 +2,7 @@ import { getAllBlogs } from "@/utils/ApiFunction";
 import { useQuery } from "@tanstack/react-query";
 import sampleimage from "../../assets/gemini-image.png";
 import { useNavigate } from "react-router-dom";
-
+import { motion, spring } from "framer-motion";
 const AllBlogs = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["blogs"],
@@ -25,35 +25,43 @@ const AllBlogs = () => {
       email: string;
     };
   };
+
   if (isLoading) return <div>loading...</div>;
   if (error) return <div>error </div>;
 
   return (
-    <div className=" w-full grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-5 p-4 justify-center items-center  ">
-      {data.map((bloagdata: BlogData) => (
-        <div
+    <div className=" w-full grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-8 p-4 justify-center items-center  ">
+      {data.map((bloagdata: BlogData, index: number) => (
+        <motion.div
+          initial={{ opacity: 0, x: index % 2 == 0 ? -100 : 100 }}
+          animate={{ opacity: 0 }}
+          exit={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, type: spring, repeat: 0 }}
           key={bloagdata._id}
           onClick={() => navigate(`/blogs/${bloagdata._id}`)}
-          className="w-full h-fit  p-2 rounded-2xl shadow-md shadow-green-950"
+          className="w-[20rem] sm:w-[19rem] md:w-[16rem] h-full p-2 rounded-2xl shadow-md shadow-green-950/50 relative cursor-pointer overflow-hidden group"
         >
-          <div className="relative rounded-xl ">
-            <img
+          <div className="rounded-xl">
+            <motion.img
               src={bloagdata.image ? bloagdata.image : sampleimage}
               alt=""
-              className="rounded-2xl"
+              className="rounded-2xl transition-transform duration-300 group-hover:scale-105 w-full"
             />
-            <div className="bg-white/55 backdrop-blur-[5px] absolute bottom-0 rounded-xl py-2 px-2 w-full h-[35%] overflow-hidden">
-              {" "}
+            <div className="bg-Primary-button-color/55 backdrop-blur-[5px] absolute bottom-0 left-0 right-0 rounded-xl py-2 px-2 w-full h-fit overflow-hidden">
               <h1 className="text-xl uppercase font-bold">{bloagdata.title}</h1>
               <div className="flex gap-2 text-lg font-semibold flex-wrap mb-8 ">
                 {bloagdata.tags.map((tag) => (
-                  <h2 className="bg-green-200 px-1 rounded-md">{tag}</h2>
+                  <h2 key={tag} className="bg-green-200 px-1 rounded-md">
+                    {tag}
+                  </h2>
                 ))}
               </div>
               <p className="line-clamp-2">{bloagdata.content}</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       ))}
     </div>
   );
