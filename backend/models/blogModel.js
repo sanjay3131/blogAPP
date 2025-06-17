@@ -75,10 +75,5 @@ const blogSchema = new mongoose.Schema(
   }
 );
 
-// Optional: Add comment count virtual
-blogSchema.virtual("commentCount").get(function () {
-  return this.comments.length;
-});
-
 const Blog = mongoose.model("Blog", blogSchema);
 export default Blog;

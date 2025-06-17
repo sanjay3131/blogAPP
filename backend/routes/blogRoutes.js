@@ -12,6 +12,7 @@ import {
   UserFollowers,
   userFollowing,
   getSingleBlog,
+  allBlogsOfUser,
 } from "../controller/blogController.js";
 import { protect } from "../middleware/authmiddleware.js";
 import getUpload from "../middleware/upload.js";
@@ -60,9 +61,12 @@ router.post("/follow/:id", protect, toggleFollow);
 router.post("/image/generation", protect, imageGeneration);
 
 // User followers
-router.get("/followers", protect, UserFollowers);
+router.get("/user/followers", protect, UserFollowers);
 
 // User following
-router.get("/following", protect, userFollowing);
+router.get("/user/following", protect, userFollowing);
+
+// user Blogs
+router.get("/user/blogs", protect, allBlogsOfUser);
 
 export default router;

@@ -286,6 +286,8 @@ const toggleFollow = asyncHandler(async (req, res) => {
 // @route   GET /api/blogs/followers/
 const UserFollowers = asyncHandler(async (req, res) => {
   const userId = req.user._id;
+  console.log(userId);
+
   if (!userId) {
     return res.status(400).json({ message: "User not found" });
   }
@@ -335,6 +337,24 @@ const getSingleBlog = asyncHandler(async (req, res) => {
   }
   res.status(200).json(blog);
 });
+//get all blogs of user
+
+const allBlogsOfUser = asyncHandler(async (req, res) => {
+  const author = req.user._id;
+  if (!author)
+    return res.status(404).json({
+      message: "author not found",
+    });
+  const userBlogs = await Blog.find({ author }).populate(
+    "author",
+    "name email"
+  );
+  console.log(userBlogs);
+  if (userBlogs) {
+    return res.status(200).json(userBlogs);
+  }
+  res.status(404).json({ message: "not blog found" });
+});
 
 export {
   createBlog,
@@ -349,4 +369,5 @@ export {
   UserFollowers,
   userFollowing,
   getSingleBlog,
+  allBlogsOfUser,
 };

@@ -30,7 +30,7 @@ const AllBlogs = () => {
   if (error) return <div>error </div>;
 
   return (
-    <div className=" w-full grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-8 p-4 justify-center items-center  ">
+    <div className=" w-full grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-8 p-4 justify-center items-center pb-20 ">
       {data.map((bloagdata: BlogData, index: number) => (
         <motion.div
           initial={{ opacity: 0, x: index % 2 == 0 ? -100 : 100 }}

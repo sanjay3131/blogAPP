@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { checkUser, getAllBlogs } from "@/utils/ApiFunction";
+import { checkUser, getAllUserBlog } from "@/utils/ApiFunction";
 
 type Blog = {
   _id: string;
@@ -12,13 +12,13 @@ type Blog = {
 const UserPage = () => {
   const { data, isLoading, error } = useQuery<Blog[]>({
     queryKey: ["blogs"],
-    queryFn: getAllBlogs,
+    queryFn: getAllUserBlog,
   });
   const { data: userData } = useQuery({
     queryKey: ["user"],
     queryFn: checkUser,
   });
-  console.log("userData", userData);
+  console.log("userData", userData, data);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {(error as Error).message}</div>;

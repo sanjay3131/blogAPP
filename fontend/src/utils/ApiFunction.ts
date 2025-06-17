@@ -53,6 +53,11 @@ const getSingleblog = async (blogId: string) => {
   const response = await axiosInstance.get(`blogs/${blogId}`);
   return response.data;
 };
+//  get all usersblog
+const getAllUserBlog = async () => {
+  const response = await axiosInstance.get("blogs/user/blogs");
+  return response.data;
+};
 
 export {
   getAllBlogs,
@@ -63,4 +68,5 @@ export {
   getSingleblog,
   Logout,
   postBlog,
+  getAllUserBlog,
 };
