@@ -4,7 +4,7 @@ import { checkUser, getAllUserBlog } from "@/utils/ApiFunction";
 type Blog = {
   _id: string;
   title: string;
-  description: string;
+  content: string;
   image: string;
   userId: string;
 };
@@ -28,6 +28,7 @@ const UserPage = () => {
       {data?.map((item) => (
         <div key={item._id}>
           <h1>{item.title}</h1>
+          <p>{item.content}</p>
         </div>
       ))}
     </div>
