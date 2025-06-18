@@ -3,11 +3,11 @@ import { Outlet } from "react-router-dom";
 
 const MainLayouts = () => {
   return (
-    <div className="w-full min-h-dvh flex flex-col justify-between  bg-Primary-background-color overflow-x-hidden min-w-[256px] relative">
+    <div className="w-full min-h-screen flex flex-col justify-between  bg-Primary-background-color overflow-x-hidden min-w-[256px] relative">
       <div className="w-full z-10">
         <Navbar />
       </div>
-      <div className="flex-1 pt-20 min-w-[256px] h-dvh ">
+      <div className="flex-1 pt-8 min-w-[256px] h-full ">
         <Outlet />
       </div>
       <div className="absolute bottom-0 w-full bg-yellow-300">Footer</div>
