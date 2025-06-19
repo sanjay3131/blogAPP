@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Home = () => {
   const queryClient = useQueryClient();
@@ -46,6 +47,14 @@ const Home = () => {
       console.error("Error liking the blog:", error);
     }
   };
+  const handelNavigation = () => {
+    if (userData?.status == 200) {
+      navigate("/createblog");
+    } else {
+      toast.success("login to create a blog ");
+      navigate("/login");
+    }
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -82,9 +91,7 @@ const Home = () => {
 
         <div className="relative">
           <motion.div className="w-full  flex items-center justify-center">
-            <Button onClick={() => navigate("/createblog")}>
-              Write a Blog
-            </Button>
+            <Button onClick={() => handelNavigation()}>Write a Blog</Button>
           </motion.div>
         </div>
         {/* trending blogs  */}

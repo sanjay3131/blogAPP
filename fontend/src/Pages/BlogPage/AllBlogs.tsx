@@ -38,7 +38,7 @@ const AllBlogs = () => {
           exit={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1, type: spring, repeat: 0 }}
+          transition={{ duration: 1, type: spring }}
           key={bloagdata._id}
           onClick={() => navigate(`/blogs/${bloagdata._id}`)}
           className="w-[20rem] sm:w-[19rem] md:w-[16rem] h-full p-2 rounded-2xl shadow-md shadow-green-950/50 relative cursor-pointer overflow-hidden group"
