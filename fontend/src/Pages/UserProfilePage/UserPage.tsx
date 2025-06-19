@@ -45,7 +45,7 @@ const UserPage = () => {
       {/* side bar */}
       <div
         className="flex flex-row gap-2 justify-between items-center w-full rounded-full
-      md:flex-col md:w-fit  md:gap-3 md:h-[400px] border-2 backdrop-blur-2xl bg-Primary-text-color/15 
+      md:flex-col md:w-fit  md:gap-3 md:h-[400px] border-2 shadow-xl backdrop-blur-2xl bg-Primary-text-color/15 
       px-5 py-3 "
       >
         {sidebardata.map((item) => (
@@ -71,7 +71,7 @@ const UserPage = () => {
               className="absolute  -bottom-10 z-10 hidden group-hover:block 
              bg-black/15 font-semibold text-xs rounded px-2 py-1 
              w-fit
-             md:text-md"
+             md:text-md md:bottom-5 md:left-15"
             >
               <h3> {item.name}</h3>
             </motion.div>

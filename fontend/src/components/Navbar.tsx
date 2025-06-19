@@ -45,9 +45,9 @@ const Navbar = () => {
   };
 
   return (
-    <nav>
+    <nav className="">
       {/* mobile navbar */}
-      <div className="md:hidden w-full bg-Green-color text-Primary-text-color z-50 relative">
+      <div className="md:hidden w-full bg-Green-color text-Primary-text-color z-50 relative h-full">
         <div className="flex justify-between items-center px-4 py-2">
           <h1
             className="text-2xl font-bold uppercase cursor-pointer"

@@ -37,7 +37,7 @@ const AllBlogs = () => {
           animate={{ opacity: 0 }}
           exit={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 1, type: spring }}
           key={bloagdata._id}
           onClick={() => navigate(`/blogs/${bloagdata._id}`)}

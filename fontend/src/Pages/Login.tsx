@@ -38,7 +38,7 @@ const Login = () => {
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ type: "spring", stiffness: 100, duration: 0.5 }}
-        className="text-5xl font-semibold"
+        className="text-5xl font-semibold "
       >
         Login
       </motion.h1>
@@ -93,6 +93,9 @@ const Login = () => {
         >
           <Button className="w-4/5">Login with Google</Button>
         </a>
+        <Button className="mt-5 " onClick={() => redirect("/")}>
+          Home Page
+        </Button>
       </motion.section>
     </motion.div>
   );
