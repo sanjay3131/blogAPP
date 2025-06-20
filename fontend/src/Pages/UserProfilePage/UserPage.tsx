@@ -1,5 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { checkUser, getAllUserBlog } from "@/utils/ApiFunction";
+import {
+  checkUser,
+  deleteBlogsOfUser,
+  getAllUserBlog,
+} from "@/utils/ApiFunction";
 import { motion } from "framer-motion";
 
 import addFriend from "../../assets/add-friend.png";
@@ -7,6 +11,12 @@ import bell from "../../assets/bell.png";
 import check from "../../assets/check.png";
 import social from "../../assets/social.png";
 import blogIcon from "../../assets/computer.png";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+
+const deleteAllBlogs = () => {
+  deleteBlogsOfUser();
+};
 
 type Blog = {
   _id: string;
@@ -29,6 +39,7 @@ const UserPage = () => {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {(error as Error).message}</div>;
+  // const []=useState([])
   const sidebardata = [
     { name: "Notification", icon: bell },
     {
@@ -39,6 +50,8 @@ const UserPage = () => {
     { name: "Following", icon: check },
     { name: "Blogs", icon: blogIcon },
   ];
+  const { author } = userData;
+  console.log(author);
 
   return (
     <div className="bg-Primary-background-color w-full min-h-screen  flex flex-col md:flex-row p-8 gap-4">
@@ -78,6 +91,21 @@ const UserPage = () => {
           </motion.div>
         ))}
       </div>
+      {/* uesr profile */}
+      <motion.div>
+        <div className="bg-yellow-100 w-full h-fit flex flex-col gap-4 justify-center items-center p-4">
+          <img
+            src={author.profilePic}
+            alt=""
+            className=" size-24 rounded-full "
+          />
+          <h1 className="text-2xl font-bold uppercase">{author.name}</h1>
+          {/* social links */}
+          <div>
+            <a href="">{author.socialLinks.facebook}</a>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };

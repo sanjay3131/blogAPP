@@ -58,6 +58,11 @@ const getAllUserBlog = async () => {
   const response = await axiosInstance.get("blogs/user/blogs");
   return response.data;
 };
+// delete all user blogs
+const deleteBlogsOfUser = async () => {
+  const response = await axiosInstance.delete("/blogs/delete");
+  return response.data;
+};
 
 export {
   getAllBlogs,
@@ -69,4 +74,5 @@ export {
   Logout,
   postBlog,
   getAllUserBlog,
+  deleteBlogsOfUser,
 };
