@@ -15,6 +15,7 @@
     "@fal-ai/client": "^1.4.0",
     "@google/genai": "^0.14.0",
     "@huggingface/inference": "^3.13.0",
+    "@treeee/youtube-caption-extractor": "^1.5.5",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.6.1",
@@ -31,6 +32,8 @@
     "nodemon": "^3.1.9",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "together-ai": "^0.16.0"
+    "together-ai": "^0.16.0",
+    "youtube-captions-scraper": "^2.0.3",
+    "youtube-transcript": "^1.2.1"
   }
 }

@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import Blog from "../models/blogModel.js";
 import User from "../models/userModel.js";
 import cloudinary from "cloudinary";
+import pkg from "@treeee/youtube-caption-extractor";
 
 // @desc    Post a blog
 // @route   POST /api/blogs/create
@@ -349,11 +350,49 @@ const allBlogsOfUser = asyncHandler(async (req, res) => {
     "author",
     "name email"
   );
-  console.log(userBlogs);
   if (userBlogs) {
     return res.status(200).json(userBlogs);
   }
   res.status(404).json({ message: "not blog found" });
+});
+// text generation from youtube videos// Extract YouTube Video ID
+const { getSubtitles } = pkg;
+
+const extractYouTubeId = (url) => {
+  const m = url.match(/(?:v=|youtu\.be\/)([^&]+)/);
+  return m ? m[1] : null;
+};
+
+const textGenerationApi = asyncHandler(async (req, res) => {
+  const user = req.user?._id;
+  if (!user) return res.status(401).json({ message: "User not found" });
+
+  const { videoUrl } = req.body;
+  if (!videoUrl)
+    return res.status(400).json({ message: "No video URL provided" });
+
+  const videoID = extractYouTubeId(videoUrl);
+  if (!videoID) return res.status(400).json({ message: "Invalid YouTube URL" });
+
+  try {
+    const subtitles = await getSubtitles({ videoID, lang: "en" });
+
+    if (!subtitles || subtitles.length === 0)
+      return res.status(404).json({ message: "No video transcript found" });
+
+    const fullText = subtitles.map((s) => s.text).join(" ");
+
+    res.status(200).json({
+      message: "Transcript fetched successfully",
+      transcript: fullText,
+      transcriptChunks: subtitles,
+    });
+  } catch (error) {
+    console.error("Caption fetch error:", error.message);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch transcript", error: error.message });
+  }
 });
 
 export {
@@ -370,4 +409,5 @@ export {
   userFollowing,
   getSingleBlog,
   allBlogsOfUser,
+  textGenerationApi,
 };

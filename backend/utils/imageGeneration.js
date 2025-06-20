@@ -1,5 +1,12 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 import * as fs from "node:fs";
+import cloudinary from "./cloudinaryConfig.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// ES Module __dirname fix
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const imageGeneration = async (req, res) => {
   try {
@@ -13,11 +20,13 @@ export const imageGeneration = async (req, res) => {
         responseModalities: [Modality.TEXT, Modality.IMAGE],
       },
     });
+
     if (!response || !response.candidates || response.candidates.length === 0) {
       return res.status(500).json({ message: "No response from AI" });
     }
 
     let result = {};
+
     for (const part of response.candidates[0].content.parts) {
       if (part.text) {
         result.text = part.text;
@@ -25,11 +34,36 @@ export const imageGeneration = async (req, res) => {
         const imageData = part.inlineData.data;
 
         const buffer = Buffer.from(imageData, "base64");
-        const filename = `gemini-image.png`;
-        fs.writeFileSync(filename, buffer);
-        result.image = `/generated/${filename}`; // frontend can access
+        const filename = `gemini-image-${Date.now()}.png`;
+
+        // Ensure 'generated' folder exists
+        const folderPath = path.join(__dirname, "../generated");
+        if (!fs.existsSync(folderPath)) {
+          fs.mkdirSync(folderPath);
+        }
+
+        const localPath = path.join(folderPath, filename);
+
+        // Save image locally
+        fs.writeFileSync(localPath, buffer);
+
+        // Upload to Cloudinary
+        const uploadResult = await cloudinary.uploader.upload(localPath, {
+          folder: "ai-generated-images",
+        });
+
+        console.log(uploadResult);
+
+        // Clean up local file
+        fs.unlinkSync(localPath);
+
+        // Save Cloudinary URL to result
+        result.image = uploadResult.secure_url;
       }
     }
+    const user = req.user;
+    user.aiImageGenerated.push(result.image);
+    await user.save();
 
     res.json(result);
   } catch (error) {

@@ -13,6 +13,7 @@ import {
   userFollowing,
   getSingleBlog,
   allBlogsOfUser,
+  textGenerationApi,
 } from "../controller/blogController.js";
 import { protect } from "../middleware/authmiddleware.js";
 import getUpload from "../middleware/upload.js";
@@ -69,4 +70,6 @@ router.get("/user/following", protect, userFollowing);
 // user Blogs
 router.get("/user/blogs", protect, allBlogsOfUser);
 
+//Text generation
+router.get("/video/textgeneration", protect, textGenerationApi);
 export default router;

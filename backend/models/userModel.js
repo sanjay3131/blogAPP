@@ -92,6 +92,7 @@ const userSchema = new mongoose.Schema(
         ref: "Notification",
       },
     ],
+    aiImageGenerated: [{ type: String, default: "" }],
   },
   {
     timestamps: true,
