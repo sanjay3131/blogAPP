@@ -1,9 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  checkUser,
-  deleteBlogsOfUser,
-  getAllUserBlog,
-} from "@/utils/ApiFunction";
+import { checkUser, getAllUserBlog } from "@/utils/ApiFunction";
 import { motion } from "framer-motion";
 
 import addFriend from "../../assets/add-friend.png";
@@ -11,12 +7,6 @@ import bell from "../../assets/bell.png";
 import check from "../../assets/check.png";
 import social from "../../assets/social.png";
 import blogIcon from "../../assets/computer.png";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-
-const deleteAllBlogs = () => {
-  deleteBlogsOfUser();
-};
 
 type Blog = {
   _id: string;
