@@ -35,6 +35,7 @@ const Home = () => {
       name: string;
       email: string;
     };
+    image: string;
   };
   const handelLike = async (blogId: string) => {
     try {
@@ -98,21 +99,28 @@ const Home = () => {
         <motion.section className="flex flex-col gap-4  p-4 rounded-2xl justify-center items-center">
           <h2 className="text-2xl font-bold  ">Trending Blogs</h2>
 
-          <motion.div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center items-center  w-full ">
+          <motion.div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 justify-center items-center  w-full  ">
             {data.slice(0, 6).map((blogData: BlogData) => (
               <motion.div
                 key={blogData._id}
-                className=" bg-Primary-text-color/10 h-[210px] w-full p-4 rounded-2xl flex flex-col justify-between gap-2 
-                  transition-shadow duration-300 border-8 border-Primary-button-color shadow-md shadow-Primary-text-color/50"
+                className=" bg-Primary-text-color/10 h-fit w-full  p-4 rounded-2xl flex flex-col justify-between gap-2 
+                  not-last-of-type: border-8 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group min-h-full "
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
+                <div className=" w-fit overflow-hidden rounded-2xl">
+                  <img
+                    src={blogData.image}
+                    alt=""
+                    className="rounded-2xl group-hover:scale-110  transition-all duration-300 ease-in-out"
+                  />
+                </div>
                 <h3 className="text-xl font-bold text-Primary-text-color uppercase">
                   {blogData.title}
                 </h3>
-                <p className="text-gray-700 line-clamp-[10px] ">
+                <p className="text-gray-700 line-clamp-2 ">
                   {blogData.content}
                 </p>
                 {/*  like*/}

@@ -11,8 +11,10 @@ const CreateBlogPage = () => {
   const [blogImage, setBlogImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [disable, setDisable] = useState(false);
   const handelForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setDisable(true);
     if (blogTags.length <= 0) {
       return alert("please selete some tags");
     }
@@ -28,6 +30,7 @@ const CreateBlogPage = () => {
     const result = await postBlog(formData);
     console.log(result);
     if (result.message) {
+      setDisable(false);
       toast.success(result.message);
     } else {
       toast.error("blog upload failed");
@@ -192,7 +195,14 @@ const CreateBlogPage = () => {
           )}
         </div>
 
-        <Button type="submit">Publish</Button>
+        <Button
+          disabled={disable}
+          className={`${
+            disable ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+          }`}
+        >
+          Submit
+        </Button>
       </form>
     </div>
   );
