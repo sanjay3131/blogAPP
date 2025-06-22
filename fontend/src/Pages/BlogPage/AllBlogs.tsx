@@ -34,26 +34,31 @@ const AllBlogs = () => {
       {data.map((bloagdata: BlogData, index: number) => (
         <motion.div
           initial={{ opacity: 0, x: index % 2 == 0 ? -100 : 100 }}
-          animate={{ opacity: 0 }}
+          animate={{ opacity: 0.5 }}
           exit={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 1, type: spring }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5, type: spring }}
           key={bloagdata._id}
           onClick={() => navigate(`/blogs/${bloagdata._id}`)}
           className="w-[20rem] sm:w-[19rem] md:w-[16rem] h-full p-2 rounded-2xl shadow-md shadow-green-950/50 relative cursor-pointer overflow-hidden group"
         >
-          <div className="rounded-xl">
-            <motion.img
-              src={bloagdata.image ? bloagdata.image : sampleimage}
-              alt=""
-              className="rounded-2xl transition-transform duration-300 group-hover:scale-105 w-full"
-            />
-            <div className="bg-Primary-button-color/55 backdrop-blur-[5px] absolute bottom-0 left-0 right-0 rounded-xl py-2 px-2 w-full h-fit overflow-hidden">
+          <div className="rounded-xl h-full  flex flex-col justify-between items-center ">
+            <div className="w-fit overflow-hidden rounded-2xl">
+              <motion.img
+                src={bloagdata.image ? bloagdata.image : sampleimage}
+                alt=""
+                className="rounded-2xl transition-transform duration-300 group-hover:scale-105 w-full"
+              />
+            </div>
+            <div className="bg-Primary-button-color/55 group-hover:bg-Primary-text-color/10 transition-all duration-300 ease-in-out backdrop-blur-[5px] mt-2  rounded-xl py-2 px-2 w-full h-fit overflow-hidden">
               <h1 className="text-xl uppercase font-bold">{bloagdata.title}</h1>
               <div className="flex gap-2 text-lg font-semibold flex-wrap mb-8 ">
                 {bloagdata.tags.map((tag) => (
-                  <h2 key={tag} className="bg-green-200 px-1 rounded-md">
+                  <h2
+                    key={tag}
+                    className="bg-green-400/50 py-1 px-2 rounded-md"
+                  >
                     {tag}
                   </h2>
                 ))}
