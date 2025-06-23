@@ -6,6 +6,8 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { FaRegArrowAltCircleRight } from "react-icons/fa";
+import { useState } from "react";
 
 const Home = () => {
   const queryClient = useQueryClient();
@@ -37,6 +39,17 @@ const Home = () => {
     };
     image: string;
   };
+  const tags: string[] = [
+    "programing",
+    "Environment",
+    "Science",
+    "Entertainment",
+    "Politics",
+    "Finance",
+    "Economics",
+    "Others",
+  ];
+  const [selectedTag, setSelectedTag] = useState("");
   const handelLike = async (blogId: string) => {
     try {
       if (!userData) alert("Login to like");
@@ -72,21 +85,23 @@ const Home = () => {
         transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
       >
         {/* first section */}
-        <motion.section className="flex flex-col  gap-4 bg-Primary-text-color p-4 text-white rounded-2xl ">
-          <motion.button className="bg-red-500 rounded-[5px] font-semibold uppercase  w-[100px] py-2">
-            Hot Now
-          </motion.button>
-
+        <motion.section className="flex flex-col   gap-4 bg-Primary-text-color p-4 text-white rounded-2xl ">
           <motion.h1 className="text-3xl font-bold">
-            Bulvinar Neque Laoreet Suspendisse Interdum
+            Uncover fresh perspectives, ideas, and knowledge through the power
+            of blogs.
           </motion.h1>
 
           <p className="text-gray-100/50 ">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            consectetur, nisi at commodo facilisis, enim erat aliquet quam, nec
-            tincidunt enim nisi euismod est. Sed at ligula in quam facilisis
-            commodo.
+            Blog is an open platform where readers find dynamic thinking, and
+            where expert and undiscovered voices can share their writing on any
+            topic.
           </p>
+          <motion.button className="bg-Green-color text-Primary-text-color  rounded-[5px] font-semibold uppercase  w-[180px] py-2 flex items-center justify-between px-4">
+            Start Reading
+            <span>
+              <FaRegArrowAltCircleRight />
+            </span>
+          </motion.button>
         </motion.section>
         {/* create a blog */}
 
@@ -96,19 +111,21 @@ const Home = () => {
           </motion.div>
         </div>
         {/* trending blogs  */}
-        <motion.section className="flex flex-col gap-4  p-4 rounded-2xl justify-center items-center">
-          <h2 className="text-2xl font-bold  ">Trending Blogs</h2>
+        <motion.section className="flex flex-col gap-4  p-4 rounded-2xl justify-center items-center ">
+          <h2 className="text-2xl font-bold  ">New Blogs</h2>
 
-          <motion.div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 justify-center items-center  w-full  ">
-            {data.slice(0, 6).map((blogData: BlogData) => (
+          <motion.div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 justify-center items-center  w-full p-8 ">
+            {data.slice(0, 6).map((blogData: BlogData, index: number) => (
               <motion.div
                 key={blogData._id}
                 className=" bg-Primary-text-color/10 h-fit w-full  p-4 rounded-2xl flex flex-col justify-between gap-2 
-                  not-last-of-type: border-8 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group min-h-full "
-                initial={{ opacity: 0, y: 10 }}
+                  not-last-of-type: border-2 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group min-h-full min-w-[200px] "
+                initial={{ opacity: 0, x: index % 2 == 0 ? -100 : 100 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                exit={{ opacity: 0, x: index % 2 == 0 ? -100 : 100 }}
+                transition={{ duration: 0.3, type: "spring" }}
               >
                 <div className=" w-fit overflow-hidden rounded-2xl">
                   <img
@@ -153,6 +170,28 @@ const Home = () => {
             More Blogs
           </Button>
         </motion.section>
+        {/* Blogs by categories */}
+        <motion.div className="flex flex-col items-center gap-5">
+          <h1 className="text-2xl font-bold">Blogs by categories</h1>
+          <motion.div className="flex gap-4 flex-wrap justify-center items-center">
+            {tags.map((cat) => (
+              <div
+                className={`" px-4 py-2 rounded-2xl  font-semibold uppercase hover:bg-Green-color ${
+                  selectedTag == cat ? "bg-Green-color" : "bg-Green-color/25"
+                }`}
+                onClick={() => {
+                  setSelectedTag(cat);
+                }}
+              >
+                {cat}
+              </div>
+            ))}
+          </motion.div>
+        </motion.div>
+
+        <div className="flex justify-center">
+          <div>{selectedTag}</div>
+        </div>
       </motion.div>
     </motion.div>
   );
