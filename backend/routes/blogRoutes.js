@@ -14,6 +14,7 @@ import {
   getSingleBlog,
   allBlogsOfUser,
   textGenerationApi,
+  getBlogsByTags,
 } from "../controller/blogController.js";
 import { protect } from "../middleware/authmiddleware.js";
 import getUpload from "../middleware/upload.js";
@@ -31,6 +32,8 @@ router.put("/update/:id", protect, uploadBlogImage.single("image"), updateBlog);
 
 // Get all blogs
 router.get("/", getBlogs);
+//get blogs by Tags
+router.get("/selectedTags", getBlogsByTags);
 
 // Get a single blog by ID
 router.get("/:id", getSingleBlog);
@@ -72,4 +75,5 @@ router.get("/user/blogs", protect, allBlogsOfUser);
 
 //Text generation
 router.get("/video/textgeneration", protect, textGenerationApi);
+
 export default router;

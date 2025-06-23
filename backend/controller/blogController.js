@@ -394,6 +394,22 @@ const textGenerationApi = asyncHandler(async (req, res) => {
       .json({ message: "Failed to fetch transcript", error: error.message });
   }
 });
+const getBlogsByTags = asyncHandler(async (req, res) => {
+  const { tags } = req.body; // tags should be an array
+  console.log(tags);
+
+  if (!Array.isArray(tags) || tags.length === 0) {
+    return res.status(400).json({ message: "Tags must be a non-empty array" });
+  }
+
+  // Find blogs where at least one tag matches
+  const selectedBlogs = await Blog.find({ tags: { $in: tags } });
+
+  if (!selectedBlogs || selectedBlogs.length === 0)
+    return res.status(404).json({ message: "No blogs found" });
+
+  res.status(200).json({ selectedBlogs });
+});
 
 export {
   createBlog,
@@ -410,4 +426,5 @@ export {
   getSingleBlog,
   allBlogsOfUser,
   textGenerationApi,
+  getBlogsByTags,
 };

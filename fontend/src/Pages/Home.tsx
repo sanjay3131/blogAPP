@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { checkUser, getAllBlogs, toogleLike } from "@/utils/ApiFunction";
+import {
+  checkUser,
+  getAllBlogs,
+  getBlogsByTags,
+  toogleLike,
+} from "@/utils/ApiFunction";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { FaRegHeart } from "react-icons/fa";
@@ -10,6 +15,8 @@ import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import { useState } from "react";
 
 const Home = () => {
+  const [selectedTag, setSelectedTag] = useState([""]);
+
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
@@ -22,7 +29,12 @@ const Home = () => {
     queryFn: checkUser,
     retry: false,
   });
+  const { data: blogsByTags } = useQuery({
+    queryKey: ["blogCategory"],
+    queryFn: getBlogsByTags(selectedTag),
+  });
   const navigate = useNavigate();
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -49,7 +61,6 @@ const Home = () => {
     "Economics",
     "Others",
   ];
-  const [selectedTag, setSelectedTag] = useState("");
   const handelLike = async (blogId: string) => {
     try {
       if (!userData) alert("Login to like");
@@ -177,10 +188,12 @@ const Home = () => {
             {tags.map((cat) => (
               <div
                 className={`" px-4 py-2 rounded-2xl  font-semibold uppercase hover:bg-Green-color ${
-                  selectedTag == cat ? "bg-Green-color" : "bg-Green-color/25"
+                  selectedTag.includes(cat)
+                    ? "bg-Green-color"
+                    : "bg-Geen-color/25"
                 }`}
                 onClick={() => {
-                  setSelectedTag(cat);
+                  setSelectedTag((pre) => [...pre, cat]);
                 }}
               >
                 {cat}
@@ -190,7 +203,9 @@ const Home = () => {
         </motion.div>
 
         <div className="flex justify-center">
-          <div>{selectedTag}</div>
+          {selectedTag.map((t) => (
+            <div>{t}</div>
+          ))}
         </div>
       </motion.div>
     </motion.div>
