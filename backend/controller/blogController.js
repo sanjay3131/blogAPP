@@ -406,7 +406,7 @@ const getBlogsByTags = asyncHandler(async (req, res) => {
   const selectedBlogs = await Blog.find({ tags: { $in: tags } });
 
   if (!selectedBlogs || selectedBlogs.length === 0)
-    return res.status(404).json({ message: "No blogs found" });
+    return res.status(400).json({ message: "No blogs found" });
 
   res.status(200).json({ selectedBlogs });
 });

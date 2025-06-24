@@ -33,7 +33,7 @@ router.put("/update/:id", protect, uploadBlogImage.single("image"), updateBlog);
 // Get all blogs
 router.get("/", getBlogs);
 //get blogs by Tags
-router.get("/selectedTags", getBlogsByTags);
+router.post("/selectedTags", getBlogsByTags);
 
 // Get a single blog by ID
 router.get("/:id", getSingleBlog);

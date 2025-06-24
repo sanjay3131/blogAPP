@@ -65,7 +65,8 @@ const deleteBlogsOfUser = async () => {
 };
 //get blogs by tags
 const getBlogsByTags = async (tags: string[]) => {
-  const response = await axiosInstance.get("/blogs/selectedTags", { tags });
+  const response = await axiosInstance.post("/blogs/selectedTags", { tags });
+
   return response.data;
 };
 
