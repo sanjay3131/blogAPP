@@ -11,6 +11,7 @@ import { FaRegHeart, FaHeart, FaRegArrowAltCircleRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useState } from "react";
+import { BlogData } from "../lib/types.tsx";
 
 const Home = () => {
   const [selectedTag, setSelectedTag] = useState<string[]>([]);
@@ -46,20 +47,6 @@ const Home = () => {
     "Economics",
     "Others",
   ];
-
-  type BlogData = {
-    _id: string;
-    title: string;
-    content: string;
-    likes: number;
-    likedBy: string[];
-    author: {
-      _id: string;
-      name: string;
-      email: string;
-    };
-    image: string;
-  };
 
   const handelLike = async (blogId: string) => {
     try {
@@ -210,53 +197,79 @@ const Home = () => {
             ))}
           </motion.div>
 
-          <Button onClick={() => setSelectedTag([])} className="mt-4">
-            Clear Selected Tags
-          </Button>
+          {selectedTag.length > 0 && (
+            <Button onClick={() => setSelectedTag([])} className="mt-4">
+              Clear Selected Tags
+            </Button>
+          )}
         </motion.div>
 
         {/* Display Blogs by Tags */}
         {tagLoading && selectedTag.length > 0 && (
           <div>Loading blogs for selected tags...</div>
         )}
+        {selectedTag.length > 0 && blogsByTags?.message && (
+          <div>no blogs found</div>
+        )}
 
         {blogsByTags &&
           blogsByTags.selectedBlogs &&
           blogsByTags.selectedBlogs.length > 0 && (
             <motion.section className="flex flex-col gap-4 p-4 rounded-2xl justify-center items-center">
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-2xl font-bold capitalize">
                 Blogs in {selectedTag.join(", ")}
               </h2>
               <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-                {blogsByTags.selectedBlogs.map((blogData: BlogData) => (
-                  <motion.div
-                    key={blogData._id}
-                    className="bg-Primary-text-color/10 p-4 rounded-2xl shadow-md group"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="overflow-hidden rounded-2xl">
-                      <img
-                        src={blogData.image}
-                        alt=""
-                        className="rounded-2xl group-hover:scale-110 transition-all duration-300"
-                      />
-                    </div>
-                    <h3 className="text-xl font-bold text-Primary-text-color uppercase mt-2">
-                      {blogData.title}
-                    </h3>
-                    <p className="text-gray-700 line-clamp-2">
-                      {blogData.content}
-                    </p>
-                    <Button
-                      onClick={() => navigate(`/blogs/${blogData._id}`)}
-                      className="mt-2 cursor-pointer hover:scale-105"
+                {blogsByTags.selectedBlogs.map(
+                  (blogData: BlogData, index: number) => (
+                    <motion.div
+                      key={blogData._id}
+                      className="bg-Primary-text-color/10 h-fit w-full p-4 rounded-2xl flex flex-col justify-between gap-2 border-2 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group min-h-full min-w-[200px]"
+                      initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      exit={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                      transition={{ duration: 0.3, type: "spring" }}
                     >
-                      Read More
-                    </Button>
-                  </motion.div>
-                ))}
+                      <div className="w-fit overflow-hidden rounded-2xl">
+                        <img
+                          src={blogData.image}
+                          alt=""
+                          className="rounded-2xl group-hover:scale-110 transition-all duration-300 ease-in-out"
+                        />
+                      </div>
+                      <h3 className="text-xl font-bold text-Primary-text-color uppercase">
+                        {blogData.title}
+                      </h3>
+                      <p className="text-gray-700 line-clamp-2">
+                        {blogData.content}
+                      </p>
+                      <section className="flex justify-between items-center">
+                        <span className="flex justify-center items-center gap-1 cursor-pointer transition-all duration-300 ease-in-out">
+                          {blogData.likedBy.includes(userData?.author._id) ? (
+                            <FaHeart
+                              className="text-red-500"
+                              onClick={() => handelLike(blogData._id)}
+                            />
+                          ) : (
+                            <FaRegHeart
+                              className=""
+                              onClick={() => handelLike(blogData._id)}
+                            />
+                          )}
+                          {blogData.likes !== 0 ? blogData.likes : ""}
+                        </span>
+                        <Button
+                          onClick={() => navigate(`/blogs/${blogData._id}`)}
+                          className="mt-2 cursor-pointer hover:scale-105"
+                        >
+                          Read More
+                        </Button>
+                      </section>
+                    </motion.div>
+                  )
+                )}
               </motion.div>
             </motion.section>
           )}
