@@ -5,8 +5,18 @@ import { checkUser } from "@/utils/ApiFunction.ts";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button.tsx";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { handelLike } from "@/lib/utilFunction.ts";
 
-const Card = (BlogData: BlogData, index: number) => {
+interface CardProps {
+  blogData: BlogData;
+  index: number;
+  selectedTag: string[];
+  queryClient: {
+    invalidateQueries: (options: { queryKey: unknown[] }) => Promise<unknown>;
+  };
+}
+
+const Card = ({ blogData, index, selectedTag, queryClient }: CardProps) => {
   const { data: userData } = useQuery({
     queryKey: ["user"],
     queryFn: checkUser,
@@ -16,7 +26,6 @@ const Card = (BlogData: BlogData, index: number) => {
 
   return (
     <motion.div
-      key={BlogData._id}
       className="bg-Primary-text-color/10 h-fit w-full p-4 rounded-2xl flex flex-col justify-between gap-2 border-2 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group min-h-full min-w-[200px]"
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       animate={{ opacity: 1, y: 0 }}
@@ -25,31 +34,49 @@ const Card = (BlogData: BlogData, index: number) => {
       exit={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       transition={{ duration: 0.3, type: "spring" }}
     >
+      {/* blog image  */}
       <div className="w-fit overflow-hidden rounded-2xl">
         <img
-          src={BlogData.image}
-          alt=""
+          src={blogData.image}
+          alt={blogData.title}
           className="rounded-2xl group-hover:scale-110 transition-all duration-300 ease-in-out"
         />
       </div>
+      {/* blog title */}
       <h3 className="text-xl font-bold text-Primary-text-color uppercase">
-        {BlogData.title}
+        {blogData.title}
       </h3>
-      <p className="text-gray-700 line-clamp-2">{BlogData.content}</p>
+      {/* blog content */}
+      <p className="text-gray-700 line-clamp-2">{blogData.content}</p>
+      {/* tags  */}
+      <div className=" flex gap-2 flex-wrap">
+        {blogData?.tags.map((tag) => (
+          <h2 className=" bg-Green-color/50 px-4 py-1 rounded-xl capitalize font-semibold">
+            {tag}
+          </h2>
+        ))}
+      </div>
+      {/* like and read more section */}
       <section className="flex justify-between items-center">
         <span className="flex justify-center items-center gap-1 cursor-pointer transition-all duration-300 ease-in-out">
-          {BlogData.likedBy.includes(userData?.author._id) ? (
+          {blogData?.likedBy.includes(userData?.author._id) ? (
             <FaHeart
               className="text-red-500"
-              onClick={() => handelLike(BlogData._id)}
+              onClick={() =>
+                handelLike(blogData._id, userData, selectedTag, queryClient)
+              }
             />
           ) : (
-            <FaRegHeart className="" onClick={() => handelLike(BlogData._id)} />
+            <FaRegHeart
+              onClick={() =>
+                handelLike(blogData._id, userData, selectedTag, queryClient)
+              }
+            />
           )}
-          {BlogData.likes !== 0 ? BlogData.likes : ""}
+          {blogData.likes !== 0 ? blogData.likes : ""}
         </span>
         <Button
-          onClick={() => navigate(`/blogs/${BlogData._id}`)}
+          onClick={() => navigate(`/blogs/${blogData._id}`)}
           className="mt-2 cursor-pointer hover:scale-105"
         >
           Read More
