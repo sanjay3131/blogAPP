@@ -82,9 +82,12 @@ const Home = () => {
             where expert and undiscovered voices can share their writing on any
             topic.
           </p>
-          <motion.button className="bg-Green-color text-Primary-text-color rounded-[5px] font-semibold uppercase w-[180px] py-2 flex items-center justify-between px-4">
+          <motion.button
+            className="bg-Green-color text-Primary-text-color rounded-[5px] font-semibold uppercase w-[180px] py-2 flex items-center 
+          justify-between px-4 hover:scale-105  transition-all duration-200 ease-in-out group"
+          >
             Start Reading
-            <span>
+            <span className="group-hover:text-white transition-all duration-200 ease-in-out">
               <FaRegArrowAltCircleRight />
             </span>
           </motion.button>
@@ -106,7 +109,6 @@ const Home = () => {
                 key={blogData._id}
                 blogData={blogData}
                 index={index}
-                selectedTag={selectedTag}
                 queryClient={queryClient}
               />
             ))}
@@ -168,17 +170,16 @@ const Home = () => {
                 Blogs in {selectedTag.join(", ")}
               </h2>
               <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-                {blogsByTags.selectedBlogs.map(
-                  (blogData: BlogData, index: number) => (
+                {blogsByTags.selectedBlogs
+                  .slice(0, 6)
+                  .map((blogData: BlogData, index: number) => (
                     <Card
                       key={blogData._id}
                       blogData={blogData}
                       index={index}
-                      selectedTag={selectedTag}
                       queryClient={queryClient}
                     />
-                  )
-                )}
+                  ))}
               </motion.div>
             </motion.section>
           )}

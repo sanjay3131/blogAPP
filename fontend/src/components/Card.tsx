@@ -6,17 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button.tsx";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { handelLike } from "@/lib/utilFunction.ts";
+import sampleImage from "../../src/assets/gemini-image.png";
 
 interface CardProps {
   blogData: BlogData;
   index: number;
-  selectedTag: string[];
   queryClient: {
     invalidateQueries: (options: { queryKey: unknown[] }) => Promise<unknown>;
   };
 }
 
-const Card = ({ blogData, index, selectedTag, queryClient }: CardProps) => {
+const Card = ({ blogData, index, queryClient }: CardProps) => {
   const { data: userData } = useQuery({
     queryKey: ["user"],
     queryFn: checkUser,
@@ -28,16 +28,15 @@ const Card = ({ blogData, index, selectedTag, queryClient }: CardProps) => {
     <motion.div
       className="bg-Primary-text-color/10 h-fit w-full p-4 rounded-2xl flex flex-col justify-between gap-2 border-2 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group min-h-full min-w-[200px]"
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-      animate={{ opacity: 1, y: 0 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, amount: 0.5 }}
       exit={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       transition={{ duration: 0.3, type: "spring" }}
     >
       {/* blog image  */}
       <div className="w-fit overflow-hidden rounded-2xl">
         <img
-          src={blogData.image}
+          src={blogData.image ? blogData.image : sampleImage}
           alt={blogData.title}
           className="rounded-2xl group-hover:scale-110 transition-all duration-300 ease-in-out"
         />
@@ -51,7 +50,10 @@ const Card = ({ blogData, index, selectedTag, queryClient }: CardProps) => {
       {/* tags  */}
       <div className=" flex gap-2 flex-wrap">
         {blogData?.tags.map((tag) => (
-          <h2 className=" bg-Green-color/50 px-4 py-1 rounded-xl capitalize font-semibold">
+          <h2
+            key={tag}
+            className=" bg-Green-color/50 px-4 py-1 rounded-xl capitalize font-semibold"
+          >
             {tag}
           </h2>
         ))}
@@ -62,15 +64,11 @@ const Card = ({ blogData, index, selectedTag, queryClient }: CardProps) => {
           {blogData?.likedBy.includes(userData?.author._id) ? (
             <FaHeart
               className="text-red-500"
-              onClick={() =>
-                handelLike(blogData._id, userData, selectedTag, queryClient)
-              }
+              onClick={() => handelLike(blogData._id, userData, queryClient)}
             />
           ) : (
             <FaRegHeart
-              onClick={() =>
-                handelLike(blogData._id, userData, selectedTag, queryClient)
-              }
+              onClick={() => handelLike(blogData._id, userData, queryClient)}
             />
           )}
           {blogData.likes !== 0 ? blogData.likes : ""}

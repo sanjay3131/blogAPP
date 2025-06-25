@@ -1,21 +1,25 @@
-import { checkUser, toogleLike } from "@/utils/ApiFunction";
-import { useQuery } from "@tanstack/react-query";
+import { toogleLike } from "@/utils/ApiFunction";
+import { useNavigate } from "react-router-dom";
+
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  // Add other user properties as needed
+}
 
 export const handelLike = async (
   blogId: string,
-  userData,
-  selectedTag,
-  queryClient
-) => {
+  userData: UserData | null,
+  queryClient: {
+    invalidateQueries: (options: { queryKey: unknown[] }) => Promise<unknown>;
+  }
+): Promise<void> => {
   try {
     if (!userData) return alert("Login to like");
     await toogleLike(blogId);
     await queryClient.invalidateQueries({ queryKey: ["blogs"] });
-    if (selectedTag.length > 0) {
-      await queryClient.invalidateQueries({
-        queryKey: ["blogCategory", selectedTag],
-      });
-    }
+    await queryClient.invalidateQueries({ queryKey: ["blogCategory"] });
   } catch (error) {
     console.error("Error liking the blog:", error);
   }

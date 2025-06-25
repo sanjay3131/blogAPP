@@ -50,10 +50,10 @@ const Navbar = () => {
       <div className="md:hidden w-full bg-Green-color text-Primary-text-color z-50 relative h-full">
         <div className="flex justify-between items-center px-4 py-2">
           <h1
-            className="text-2xl font-bold uppercase cursor-pointer"
+            className="text-2xl font-bold  cursor-pointer"
             onClick={() => navigate("/")}
           >
-            Blog
+            BlogVerse
           </h1>
 
           <button onClick={() => setOpen(!open)} className="text-3xl">
@@ -107,9 +107,9 @@ const Navbar = () => {
           {/* logo */}
           <h1
             onClick={() => navigate("/")}
-            className="text-2xl font-bold uppercase cursor-pointer"
+            className="text-2xl font-bold cursor-pointer"
           >
-            Blog
+            BlogVerse
           </h1>
           <div className="flex justify-between items-center gap-8">
             {navdata.map((item) => (
