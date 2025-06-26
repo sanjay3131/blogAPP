@@ -74,7 +74,7 @@ const UserPage = () => {
               className="absolute  -bottom-10 z-10 hidden group-hover:block 
              bg-black/15 font-semibold text-xs rounded px-2 py-1 
              w-fit
-             md:text-md md:bottom-5 md:left-15"
+             md:text-md md:bottom-5 md:left-15 backdrop-blur-2xl"
             >
               <h3> {item.name}</h3>
             </motion.div>

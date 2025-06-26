@@ -29,7 +29,7 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       className="bg-Primary-text-color/10 h-fit w-full p-4 rounded-2xl flex flex-col justify-between gap-2 border-2 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group min-h-full min-w-[200px]"
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.5 }}
+      viewport={{ once: true, amount: 0.3 }}
       exit={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       transition={{ duration: 0.3, type: "spring" }}
     >
@@ -49,7 +49,7 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       <p className="text-gray-700 line-clamp-2">{blogData.content}</p>
       {/* tags  */}
       <div className=" flex gap-2 flex-wrap">
-        {blogData?.tags.map((tag) => (
+        {blogData?.tags.slice(0, 3).map((tag) => (
           <h2
             key={tag}
             className=" bg-Green-color/50 px-4 py-1 rounded-xl capitalize font-semibold"
