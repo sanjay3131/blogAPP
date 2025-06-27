@@ -103,7 +103,7 @@ const Home = () => {
         {/* Trending Blogs */}
         <motion.section className="flex flex-col gap-4 p-4 rounded-2xl justify-center items-center">
           <h2 className="text-2xl font-bold">New Blogs</h2>
-          <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 justify-center items-center w-full p-8">
+          <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 container mx-auto  gap-4 justify-center items-center w-full p-8">
             {data.slice(0, 6).map((blogData: BlogData, index: number) => (
               <Card
                 key={blogData._id}

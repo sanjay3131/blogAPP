@@ -18,6 +18,8 @@ import { Toaster } from "./components/ui/sonner";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import AllBlogs from "./Pages/BlogPage/AllBlogs";
 import CreateBlogPage from "./Pages/createBlogPage/CreateBlogPage";
+import "react-quill/dist/quill.snow.css";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +28,8 @@ const AnimatedRoutes = () => {
 
   return (
     <AnimatePresence mode="wait">
+      <ScrollToTop />
+
       <Routes location={location} key={location.pathname}>
         {/* Layout with Navbar (Main) */}
         <Route element={<MainLayouts />}>
