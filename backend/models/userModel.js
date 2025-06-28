@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
         return !this.googleId;
       },
     },
+
     role: {
       type: String,
       enum: ["user", "admin"],

@@ -1,5 +1,4 @@
 import { toogleLike } from "@/utils/ApiFunction";
-import { useNavigate } from "react-router-dom";
 
 interface UserData {
   id: string;

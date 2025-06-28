@@ -9,8 +9,14 @@ import social from "../../assets/social.png";
 import blogIcon from "../../assets/computer.png";
 import Card from "@/components/Card";
 import { BlogData } from "@/lib/types";
+import { FaFacebookSquare, FaInstagramSquare } from "react-icons/fa";
+import { FaSquareXTwitter } from "react-icons/fa6";
+import { useState } from "react";
+import Follower from "@/components/Follower";
+import Following from "@/components/Following";
 
 const UserPage = () => {
+  const [toogleBlock, setToogleBlock] = useState(1);
   const {
     data: userBlogs,
     isLoading,
@@ -36,9 +42,9 @@ const UserPage = () => {
       name: "Update_Profile",
       icon: social,
     },
-    { name: "Followers", icon: addFriend },
-    { name: "Following", icon: check },
-    { name: "Blogs", icon: blogIcon },
+    { name: "Followers", icon: addFriend, toogle: 2 },
+    { name: "Following", icon: check, toogle: 3 },
+    { name: "Blogs", icon: blogIcon, toogle: 1 },
   ];
   const { author } = userData;
   console.log(author);
@@ -56,17 +62,27 @@ const UserPage = () => {
           />
           <h1 className="text-2xl font-bold uppercase">{author.name}</h1>
           {/* social links */}
-          <div className="">
-            <a href="">{author.socialLinks.facebook}</a>
-            <a href="">{author.socialLinks.instagram}</a>
-            <a href="">{author.socialLinks.twitter}</a>
+          <div className=" flex  w-fit justify-center items-center gap-3 px-9 text-2xl ">
+            <a href={author.socialLinks?.facebook}>
+              <FaFacebookSquare />
+            </a>
+            <a href={author.socialLinks?.instagram}>
+              <FaInstagramSquare />{" "}
+            </a>
+            <a href={author.socialLinks?.twitter}>
+              <FaSquareXTwitter />
+            </a>
           </div>
         </div>
-        {/* side bar */}
-        <div
-          className="flex flex-row gap-2 justify-between items-center w-[90%] rounded-full
+        {/* tool bar */}
+
+        <motion.div
+          initial={{ opacity: 1, x: 100 }}
+          animate={{ x: 0 }}
+          transition={{ duration: 0.32, type: "spring" }}
+          className="flex flex-row gap-2 justify-between items-center  rounded-full
         md:gap-3 border-2 shadow-xl backdrop-blur-2xl bg-Primary-text-color/15 
-      px-5 py-3 stic top-0 z-40  "
+      px-5 py-3 sticky top-0 z-40  mb-5 min-w-[300px] w-full "
         >
           {sidebardata.map((item) => (
             <motion.div
@@ -77,6 +93,9 @@ const UserPage = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.3, type: "spring" }}
+              onClick={() => {
+                if (item.toogle) setToogleBlock(item.toogle);
+              }}
             >
               <img
                 src={item.icon}
@@ -88,33 +107,63 @@ const UserPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, type: "spring" }}
-                className="absolute  -bottom-10 z-10 hidden group-hover:block 
+                className="absolute  -bottom-8 z-10 hidden group-hover:block 
              bg-black/15 font-semibold text-xs rounded px-2 py-1 
              w-fit
-             md:text-md md:bottom-5 md:left-15 backdrop-blur-2xl"
+             md:text-md  md:left-15 backdrop-blur-2xl"
               >
                 <h3> {item.name}</h3>
               </motion.div>
             </motion.div>
           ))}
-        </div>
-        {/* user blogs */}
-        <div className="w-full ">
-          {userBlogs && userBlogs.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 container mx-auto  content-center">
-              {userBlogs?.map((blogData: BlogData, index) => (
-                <Card
-                  key={blogData._id}
-                  blogData={blogData}
-                  index={index}
-                  queryClient={queryClient}
-                />
-              ))}
+        </motion.div>
+        {/* wrapper */}
+        <motion.div>
+          {/* user blogs */}
+          {toogleBlock == 1 ? (
+            <div className="w-full ">
+              {userBlogs && userBlogs.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:container md:mx-auto justify-items-center sm:justify-items-normal ">
+                  {userBlogs?.map((blogData: BlogData, index) => (
+                    <Card
+                      key={blogData._id}
+                      blogData={blogData}
+                      index={index}
+                      queryClient={queryClient}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <h1>No Blogs Posted</h1>
+              )}
             </div>
           ) : (
-            <h1>No Blogs Posted</h1>
+            ""
           )}
-        </div>
+          {/* Follower */}
+          {toogleBlock == 2 && (
+            <motion.div
+              initial={{ x: 500 }}
+              animate={{ x: 0 }}
+              transition={{ duration: 0.5, type: "spring" }}
+              exit={{ x: -500 }}
+            >
+              <Follower />
+            </motion.div>
+          )}
+
+          {/* Following */}
+          {toogleBlock == 3 && (
+            <motion.div
+              initial={{ x: 500 }}
+              animate={{ x: 0 }}
+              transition={{ duration: 0.5, type: "spring" }}
+              exit={{ x: -500 }}
+            >
+              <Following />
+            </motion.div>
+          )}
+        </motion.div>
       </motion.div>
     </div>
   );
