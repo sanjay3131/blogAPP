@@ -69,7 +69,16 @@ const getBlogsByTags = async (tags: string[]) => {
 
   return response.data;
 };
+//get user followers
+const getUserFollowers = async () => {
+  const response = await axiosInstance.get("/blogs/user/followers");
+  return response.data;
+};
 
+const getUserFollowing = async () => {
+  const response = await axiosInstance.get("/blogs/user/following");
+  return response.data;
+};
 export {
   getAllBlogs,
   checkUser,
@@ -82,4 +91,6 @@ export {
   getAllUserBlog,
   getBlogsByTags,
   deleteBlogsOfUser,
+  getUserFollowing,
+  getUserFollowers,
 };
