@@ -75,8 +75,15 @@ const getUserFollowers = async () => {
   return response.data;
 };
 
+//get user following
 const getUserFollowing = async () => {
   const response = await axiosInstance.get("/blogs/user/following");
+  return response.data;
+};
+
+//toogle follow and unfollow a user
+const toogleFollowAndUnfollow = async (id: string) => {
+  const response = await axiosInstance.post(`/blogs/follow/${id}`);
   return response.data;
 };
 export {
@@ -93,4 +100,5 @@ export {
   deleteBlogsOfUser,
   getUserFollowing,
   getUserFollowers,
+  toogleFollowAndUnfollow,
 };

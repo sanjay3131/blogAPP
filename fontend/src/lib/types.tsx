@@ -13,3 +13,10 @@ export type BlogData = {
   image: string;
   tags: string[];
 };
+
+export type UserData = {
+  _id: string;
+  name: string;
+  profilePic: string;
+  email: string;
+};

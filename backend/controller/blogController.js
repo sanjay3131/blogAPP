@@ -346,10 +346,9 @@ const allBlogsOfUser = asyncHandler(async (req, res) => {
     return res.status(404).json({
       message: "author not found",
     });
-  const userBlogs = await Blog.find({ author }).populate(
-    "author",
-    "name email"
-  );
+  const userBlogs = await Blog.find({ author })
+    .populate("author", "name email")
+    .sort({ createdAt: -1 });
   if (userBlogs) {
     return res.status(200).json(userBlogs);
   }
