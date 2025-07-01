@@ -27,7 +27,7 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
   return (
     <motion.div
       className="bg-Primary-text-color/10  max-w-[380px] p-4 rounded-2xl flex flex-col justify-between gap-2 border-2 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group 
-       min-w-[200px] h-full  "
+       min-w-[200px] h-[90%]  "
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.3 }}
@@ -35,11 +35,11 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       transition={{ duration: 0.3, type: "spring" }}
     >
       {/* blog image  */}
-      <div className="w-fit overflow-hidden rounded-2xl">
+      <div className="w-fit  overflow-hidden rounded-2xl ">
         <img
           src={blogData.image ? blogData.image : sampleImage}
           alt={blogData.title}
-          className="rounded-2xl group-hover:scale-110 transition-all duration-300 ease-in-out"
+          className="rounded-2xl group-hover:scale-110 transition-all duration-300 ease-in-out  "
         />
       </div>
       {/* blog title */}

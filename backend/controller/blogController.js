@@ -408,7 +408,27 @@ const getBlogsByTags = asyncHandler(async (req, res) => {
 
   res.status(200).json({ selectedBlogs });
 });
+//get single user
+const getSingleUser = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  console.log(userId);
 
+  if (!userId)
+    return res.status(400).json({
+      message: "userid is not there ",
+    });
+  const user = await User.findById(userId)
+    .populate("blogPosts")
+    .populate("followers", "name email profilePic")
+    .populate("following", "name email profilePic");
+  console.log(user);
+
+  if (!user)
+    return res.status(404).json({
+      message: "user not found",
+    });
+  res.status(200).json(user);
+});
 export {
   createBlog,
   getBlogs,
@@ -425,4 +445,5 @@ export {
   allBlogsOfUser,
   textGenerationApi,
   getBlogsByTags,
+  getSingleUser,
 };

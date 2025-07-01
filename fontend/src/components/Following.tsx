@@ -3,6 +3,7 @@ import { getUserFollowing, toogleFollowAndUnfollow } from "@/utils/ApiFunction";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import noProfile from "../assets/noProfile.png";
 import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Following = () => {
   const { data } = useQuery({
@@ -17,6 +18,7 @@ const Following = () => {
     console.log(respose);
     await queryClient.invalidateQueries({ queryKey: ["following"] });
   };
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-2">
       {data?.message ? (
@@ -24,6 +26,7 @@ const Following = () => {
       ) : (
         data?.following?.map((f: UserData) => (
           <div
+            onClick={() => navigate(`/userPage/${f._id}`)}
             key={f._id}
             className="flex bg-Primary-text-color/15 px-2 py-2 rounded-full min-w-[300px] w-full  gap-1 justify-between items-center  "
           >

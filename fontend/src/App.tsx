@@ -20,6 +20,7 @@ import AllBlogs from "./Pages/BlogPage/AllBlogs";
 import CreateBlogPage from "./Pages/createBlogPage/CreateBlogPage";
 import "react-quill/dist/quill.snow.css";
 import ScrollToTop from "./components/ScrollToTop";
+import OtherUserPage from "./Pages/UserProfilePage/OtherUserPage";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,8 @@ const AnimatedRoutes = () => {
           <Route path="/blogs" element={<AllBlogs />} />
           <Route path="/blogs/:id" element={<BlogPage />} />
           <Route path="/createblog" element={<CreateBlogPage />} />
+          <Route path="/userPage/:id" element={<OtherUserPage />} />
+
           <Route
             path="/user"
             element={
