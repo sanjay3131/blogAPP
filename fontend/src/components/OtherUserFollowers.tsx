@@ -1,4 +1,6 @@
 import { UserData } from "@/lib/types";
+import noProfile from "../assets/noProfile.png";
+import { Button } from "./ui/button";
 
 interface OtherUserFollowersProps {
   followers: UserData[];
@@ -10,7 +12,18 @@ const OtherUserFollowers = ({ followers }: OtherUserFollowersProps) => {
   return (
     <div>
       {followers.map((user, idx) => (
-        <h1 key={idx}>{user.name}</h1>
+        <div key={idx} className="flex justify-center items-center gap-2">
+          <img
+            src={user.profilePic ? user.profilePic : noProfile}
+            alt="profile pic"
+            className="size-24"
+          />
+          <div className="flex  flex-col">
+            <h1>{user.name}</h1>
+            <h1>{user.email}</h1>
+          </div>
+          <Button>follow</Button>
+        </div>
       ))}
     </div>
   );
