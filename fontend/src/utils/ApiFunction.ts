@@ -70,14 +70,18 @@ const getBlogsByTags = async (tags: string[]) => {
   return response.data;
 };
 //get user followers
-const getUserFollowers = async () => {
-  const response = await axiosInstance.get("/blogs/user/followers");
+const getUserFollowers = async (userId: string) => {
+  const response = await axiosInstance.post(`/blogs/user/followers`, {
+    userId,
+  });
   return response.data;
 };
 
 //get user following
-const getUserFollowing = async () => {
-  const response = await axiosInstance.get("/blogs/user/following");
+const getUserFollowing = async (userId: string) => {
+  const response = await axiosInstance.post("/blogs/user/following", {
+    userId,
+  });
   return response.data;
 };
 

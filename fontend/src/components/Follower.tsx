@@ -1,4 +1,5 @@
 import {
+  checkUser,
   getUserFollowers,
   getUserFollowing,
   toogleFollowAndUnfollow,
@@ -8,8 +9,9 @@ import { Button } from "./ui/button";
 import noProfile from "../assets/noProfile.png";
 import { UserData } from "@/lib/types";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Follower = () => {
+const Follower = ({ userId }: { userId: string }) => {
   const queryClient = useQueryClient();
   const [loadingUserId, setLoadingUserId] = useState<string | null>(null);
 
@@ -18,8 +20,8 @@ const Follower = () => {
     isLoading: isFollowersLoading,
     isError: isFollowersError,
   } = useQuery({
-    queryKey: ["followers"],
-    queryFn: getUserFollowers,
+    queryKey: ["followers", userId],
+    queryFn: () => getUserFollowers(userId),
   });
 
   const {
@@ -28,9 +30,14 @@ const Follower = () => {
     isError: isFollowingError,
   } = useQuery({
     queryKey: ["following"],
-    queryFn: getUserFollowing,
+    queryFn: () => getUserFollowing(userId),
   });
-  console.log("user following ", following);
+  const { data: userdata } = useQuery({
+    queryKey: ["user"],
+    queryFn: checkUser,
+  });
+  console.log("user following ", following, userdata.author.following);
+  const navigate = useNavigate();
 
   const handleFollow = async (id: string) => {
     try {
@@ -42,6 +49,10 @@ const Follower = () => {
       });
       await queryClient.invalidateQueries({
         queryKey: ["following"],
+        exact: true,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["user"],
         exact: true,
       });
     } catch (error) {
@@ -58,9 +69,9 @@ const Follower = () => {
   if (isFollowersError || isFollowingError) {
     return <p>Error loading data</p>;
   }
-
   return (
     <div className="flex flex-col gap-4">
+      <h1 className="text-xl font-semibold text-center">Followers </h1>
       {data?.message ? (
         <h1>{data.message}</h1>
       ) : (
@@ -75,11 +86,15 @@ const Follower = () => {
               src={f.profilePic || noProfile}
               alt="Profile pic"
               referrerPolicy="no-referrer"
-              className="size-10 rounded-full"
+              className="size-10 rounded-full cursor-pointer"
+              onClick={() => navigate(`/userPage/${f._id}`)}
             />
 
             {/* name and email  */}
-            <div className="flex flex-col">
+            <div
+              className="flex flex-col cursor-pointer"
+              onClick={() => navigate(`/userPage/${f._id}`)}
+            >
               <h1 className="font-semibold capitalize">{f.name}</h1>
             </div>
 
@@ -91,9 +106,7 @@ const Follower = () => {
             >
               {loadingUserId === f._id
                 ? "Loading..."
-                : following?.following?.some(
-                    (user: UserData) => user._id === f._id
-                  )
+                : userdata?.author?.following?.includes(f._id)
                 ? "Unfollow"
                 : "Follow"}
             </Button>

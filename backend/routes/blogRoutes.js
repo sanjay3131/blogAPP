@@ -66,10 +66,10 @@ router.post("/follow/:id", protect, toggleFollow);
 router.post("/image/generation", protect, imageGeneration);
 
 // User followers
-router.get("/user/followers", protect, UserFollowers);
+router.post("/user/followers", protect, UserFollowers);
 
 // User following
-router.get("/user/following", protect, userFollowing);
+router.post("/user/following", protect, userFollowing);
 
 // user Blogs
 router.get("/user/blogs", protect, allBlogsOfUser);

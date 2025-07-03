@@ -11,7 +11,6 @@ import { BlogData, UserData } from "@/lib/types";
 import { useState } from "react";
 import Follower from "./Follower";
 import Following from "./Following";
-import OtherUserFollowers from "./OtherUserFollowers";
 interface UserComponentProps {
   author: {
     profilePic: string;
@@ -22,6 +21,7 @@ interface UserComponentProps {
       twitter?: string;
     };
     followers: UserData[];
+    _id: string;
   };
   userBlogs: BlogData[];
   queryClient: {
@@ -32,8 +32,6 @@ interface UserComponentProps {
     icon: string;
     toogle?: number;
   }[];
-
-  mainUser: boolean;
 }
 
 const UserComponent = ({
@@ -41,9 +39,9 @@ const UserComponent = ({
   userBlogs,
   queryClient,
   sidebardata,
-  mainUser,
 }: UserComponentProps) => {
   const [toogleBlock, setToogleBlock] = useState(1);
+  console.log(author);
 
   return (
     <motion.div className="w-full flex flex-col  justify-baseline  items-center gap-5 relative">
@@ -142,11 +140,12 @@ const UserComponent = ({
             transition={{ duration: 0.5, type: "spring" }}
             exit={{ x: -1000, opacity: 0 }}
           >
-            {mainUser ? (
-              <Follower />
+            {/* {mainUser ? (
+              <Follower userId={author._id} />
             ) : (
               <OtherUserFollowers followers={author.followers} />
-            )}
+            )} */}
+            <Follower userId={author._id} />
           </motion.div>
         )}
 
@@ -158,7 +157,7 @@ const UserComponent = ({
             exit={{ x: -1000, opacity: 0 }}
             transition={{ duration: 0.5, type: "spring" }}
           >
-            <Following />
+            <Following userId={author._id} />
           </motion.div>
         )}
       </motion.div>

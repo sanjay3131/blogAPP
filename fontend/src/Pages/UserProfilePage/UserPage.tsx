@@ -50,7 +50,6 @@ const UserPage = () => {
         userBlogs={userBlogs ?? []}
         queryClient={queryClient}
         sidebardata={sidebardata}
-        mainUser={true}
       />
     </div>
   );

@@ -1,16 +1,24 @@
 import { UserData } from "@/lib/types";
-import { getUserFollowing, toogleFollowAndUnfollow } from "@/utils/ApiFunction";
+import {
+  checkUser,
+  getUserFollowing,
+  toogleFollowAndUnfollow,
+} from "@/utils/ApiFunction";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import noProfile from "../assets/noProfile.png";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 
-const Following = () => {
+const Following = ({ userId }: { userId: string }) => {
   const { data } = useQuery({
     queryKey: ["following"],
-    queryFn: getUserFollowing,
+    queryFn: () => getUserFollowing(userId),
   });
   console.log(data);
+  const { data: userdata } = useQuery({
+    queryKey: ["user"],
+    queryFn: checkUser,
+  });
   const queryClient = useQueryClient();
 
   const handelUnfollow = async (id: string) => {
@@ -26,7 +34,6 @@ const Following = () => {
       ) : (
         data?.following?.map((f: UserData) => (
           <div
-            onClick={() => navigate(`/userPage/${f._id}`)}
             key={f._id}
             className="flex bg-Primary-text-color/15 px-2 py-2 rounded-full min-w-[300px] w-full  gap-1 justify-between items-center  "
           >
@@ -35,11 +42,15 @@ const Following = () => {
               src={f.profilePic ? f.profilePic : noProfile}
               alt="Profile pic"
               referrerPolicy="no-referrer"
-              className="size-10 rounded-full"
+              className="size-10 rounded-full cursor-pointer"
+              onClick={() => navigate(`/userPage/${f._id}`)}
             />
 
             {/* name and email  */}
-            <div className="flex flex-col ">
+            <div
+              className="flex flex-col cursor-pointer  "
+              onClick={() => navigate(`/userPage/${f._id}`)}
+            >
               <h1 className="font-semibold block  capitalize">{f.name}</h1>
               {/* <h1 className="text-gray-500 text-sm">{f.email}</h1> */}
             </div>
@@ -50,7 +61,9 @@ const Following = () => {
               onClick={() => handelUnfollow(f._id)}
               className="text-sm rounded-full"
             >
-              Unfollow
+              {userdata?.author?.following?.includes(f._id)
+                ? "Unfollow"
+                : "Follow"}
             </Button>
           </div>
         ))

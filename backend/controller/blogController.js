@@ -286,7 +286,7 @@ const toggleFollow = asyncHandler(async (req, res) => {
 //user followers
 // @route   GET /api/blogs/followers/
 const UserFollowers = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
+  const { userId } = req.body;
   console.log(userId);
 
   if (!userId) {
@@ -308,7 +308,7 @@ const UserFollowers = asyncHandler(async (req, res) => {
 //user following
 // @route   GET /api/blogs/following/
 const userFollowing = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
+  const { userId } = req.body;
   if (!userId) {
     return res.status(400).json({ message: "User not found" });
   }

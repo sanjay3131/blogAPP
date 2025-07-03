@@ -11,7 +11,7 @@ const OtherUserPage = () => {
   const userId = params.id as string;
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["userData", userId],
+    queryKey: ["otherUserData", userId],
     queryFn: () => getSingleUserDetails(userId),
   });
 
@@ -43,7 +43,6 @@ const OtherUserPage = () => {
         userBlogs={data.blogPosts ?? []}
         queryClient={queryClient}
         sidebardata={sidebardata}
-        mainUser={false}
       />
     </div>
   );

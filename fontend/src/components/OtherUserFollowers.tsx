@@ -1,6 +1,7 @@
 import { UserData } from "@/lib/types";
 import noProfile from "../assets/noProfile.png";
 import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface OtherUserFollowersProps {
   followers: UserData[];
@@ -8,6 +9,7 @@ interface OtherUserFollowersProps {
 
 const OtherUserFollowers = ({ followers }: OtherUserFollowersProps) => {
   console.log(">>", followers);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -16,13 +18,15 @@ const OtherUserFollowers = ({ followers }: OtherUserFollowersProps) => {
           <img
             src={user.profilePic ? user.profilePic : noProfile}
             alt="profile pic"
-            className="size-24"
+            referrerPolicy="no-referrer"
+            className="size-10 rounded-full cursor-pointer"
+            onClick={() => navigate(`/userPage/${user._id}`)}
           />
           <div className="flex  flex-col">
             <h1>{user.name}</h1>
             <h1>{user.email}</h1>
           </div>
-          <Button>follow</Button>
+          <Button>follow </Button>
         </div>
       ))}
     </div>

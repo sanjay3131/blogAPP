@@ -19,6 +19,7 @@ export const handelLike = async (
     await toogleLike(blogId);
     await queryClient.invalidateQueries({ queryKey: ["blogs"] });
     await queryClient.invalidateQueries({ queryKey: ["blogCategory"] });
+    await queryClient.invalidateQueries({ queryKey: ["otherUserData"] });
   } catch (error) {
     console.error("Error liking the blog:", error);
   }
