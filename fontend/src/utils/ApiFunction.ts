@@ -96,6 +96,13 @@ const getSingleUserDetails = async (id: string) => {
   const response = await axiosInstance.get(`/blogs/user/${id}`);
   return response.data;
 };
+
+//search blogs by title
+const getSearchBlog = async (Query: string) => {
+  const response = await axiosInstance.get(`/blogs/searchBlog?query=${Query}`);
+  return response.data;
+};
+
 export {
   getAllBlogs,
   checkUser,
@@ -112,4 +119,5 @@ export {
   getUserFollowers,
   toogleFollowAndUnfollow,
   getSingleUserDetails,
+  getSearchBlog,
 };

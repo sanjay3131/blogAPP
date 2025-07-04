@@ -429,6 +429,21 @@ const getSingleUser = asyncHandler(async (req, res) => {
     });
   res.status(200).json(user);
 });
+// search blog by Titl e
+
+const getBlogByTitle = asyncHandler(async (req, res) => {
+  const searchQuery = req.query.query || "";
+
+  if (!searchQuery)
+    return res.status(400).json({
+      message: "no title found to search",
+    });
+
+  const searchBlog = await Blog.find({
+    title: { $regex: "^" + searchQuery, $options: "i" },
+  });
+  res.status(200).json(searchBlog);
+});
 export {
   createBlog,
   getBlogs,
@@ -446,4 +461,5 @@ export {
   textGenerationApi,
   getBlogsByTags,
   getSingleUser,
+  getBlogByTitle,
 };

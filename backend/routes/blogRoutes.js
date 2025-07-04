@@ -16,6 +16,7 @@ import {
   textGenerationApi,
   getBlogsByTags,
   getSingleUser,
+  getBlogByTitle,
 } from "../controller/blogController.js";
 import { protect } from "../middleware/authmiddleware.js";
 import getUpload from "../middleware/upload.js";
@@ -24,6 +25,9 @@ import { imageGeneration } from "../utils/imageGeneration.js";
 const router = express.Router();
 
 const uploadBlogImage = getUpload("blog-images"); // folder name
+
+//Search Blog by title
+router.get("/searchBlog", getBlogByTitle);
 
 // ✅ Post a blog with image upload support
 router.post("/create", protect, uploadBlogImage.single("image"), createBlog);
