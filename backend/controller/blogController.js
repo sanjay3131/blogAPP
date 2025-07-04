@@ -444,6 +444,17 @@ const getBlogByTitle = asyncHandler(async (req, res) => {
   });
   res.status(200).json(searchBlog);
 });
+
+// get all users
+const getAllusers = asyncHandler(async (req, res) => {
+  const loginInUser = req.user._id;
+
+  const allUsers = await User.find({ _id: { $ne: loginInUser } }).select(
+    "name email profilePic"
+  );
+  if (!allUsers) return res.status(200).json({ message: "no users are found" });
+  res.status(200).json(allUsers);
+});
 export {
   createBlog,
   getBlogs,
@@ -462,4 +473,5 @@ export {
   getBlogsByTags,
   getSingleUser,
   getBlogByTitle,
+  getAllusers,
 };

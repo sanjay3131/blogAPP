@@ -17,6 +17,7 @@ import {
   getBlogsByTags,
   getSingleUser,
   getBlogByTitle,
+  getAllusers,
 } from "../controller/blogController.js";
 import { protect } from "../middleware/authmiddleware.js";
 import getUpload from "../middleware/upload.js";
@@ -28,6 +29,9 @@ const uploadBlogImage = getUpload("blog-images"); // folder name
 
 //Search Blog by title
 router.get("/searchBlog", getBlogByTitle);
+
+// get all users
+router.get("/getAllUsers", protect, getAllusers);
 
 // ✅ Post a blog with image upload support
 router.post("/create", protect, uploadBlogImage.single("image"), createBlog);
