@@ -102,7 +102,11 @@ const getSearchBlog = async (Query: string) => {
   const response = await axiosInstance.get(`/blogs/searchBlog?query=${Query}`);
   return response.data;
 };
-
+//get all users
+const getAllUsers = async () => {
+  const response = await axiosInstance.get("/blogs/getAllUsers");
+  return response;
+};
 export {
   getAllBlogs,
   checkUser,
@@ -120,4 +124,5 @@ export {
   toogleFollowAndUnfollow,
   getSingleUserDetails,
   getSearchBlog,
+  getAllUsers,
 };

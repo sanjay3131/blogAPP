@@ -1,4 +1,4 @@
-import { toogleLike } from "@/utils/ApiFunction";
+import { toogleFollowAndUnfollow, toogleLike } from "@/utils/ApiFunction";
 
 interface UserData {
   id: string;
@@ -24,3 +24,35 @@ export const handelLike = async (
     console.error("Error liking the blog:", error);
   }
 };
+
+export const handleFollowUser = async (
+  id: string,
+  queryClient: {
+    invalidateQueries: (options: { queryKey: unknown[] }) => Promise<unknown>;
+  }
+) => {
+  try {
+    await toogleFollowAndUnfollow(id);
+    await queryClient.invalidateQueries({
+      queryKey: ["followers"],
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ["following"],
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ["user"],
+    });
+  } catch (error) {
+    console.error("Error toggling follow/unfollow:", error);
+  }
+};
+export const tags: string[] = [
+  "programing",
+  "Environment",
+  "Science",
+  "Entertainment",
+  "Politics",
+  "Finance",
+  "Economics",
+  "Others",
+];

@@ -2,7 +2,6 @@ import {
   checkUser,
   getUserFollowers,
   getUserFollowing,
-  toogleFollowAndUnfollow,
 } from "@/utils/ApiFunction";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "./ui/button";
@@ -10,6 +9,7 @@ import noProfile from "../assets/noProfile.png";
 import { UserData } from "@/lib/types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { handleFollowUser } from "@/lib/utilFunction";
 
 const Follower = ({ userId }: { userId: string }) => {
   const queryClient = useQueryClient();
@@ -42,19 +42,7 @@ const Follower = ({ userId }: { userId: string }) => {
   const handleFollow = async (id: string) => {
     try {
       setLoadingUserId(id);
-      await toogleFollowAndUnfollow(id);
-      await queryClient.invalidateQueries({
-        queryKey: ["followers"],
-        exact: true,
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["following"],
-        exact: true,
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["user"],
-        exact: true,
-      });
+      handleFollowUser(id, queryClient);
     } catch (error) {
       console.error("Error toggling follow/unfollow:", error);
     } finally {
