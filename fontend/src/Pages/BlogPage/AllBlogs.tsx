@@ -3,7 +3,6 @@ import {
   getAllBlogs,
   getAllUsers,
   getSearchBlog,
-  toogleFollowAndUnfollow,
 } from "@/utils/ApiFunction";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { IoSearch } from "react-icons/io5";
@@ -15,6 +14,7 @@ import Card from "@/components/Card";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { handleFollowUser } from "@/lib/utilFunction";
+import BlogByCategories from "@/components/BlogByCategories";
 const AllBlogs = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["blogs"],
@@ -81,6 +81,9 @@ const AllBlogs = () => {
           <IoSearch />
         </Button>
       </div>
+      {/* blogs by categories */}
+      <BlogByCategories showAll />
+      {/* toogle side bar  */}
       <button className="bg-red-400" onClick={() => setSideBar(!sidebar)}>
         sidebar
       </button>

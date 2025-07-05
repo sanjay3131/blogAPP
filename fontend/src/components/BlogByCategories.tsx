@@ -7,7 +7,7 @@ import { tags } from "@/lib/utilFunction";
 import { BlogData } from "@/lib/types";
 import Card from "./Card";
 
-const BlogByCategories = () => {
+const BlogByCategories = ({ showAll = false }: { showAll?: boolean }) => {
   const [selectedTag, setSelectedTag] = useState<string[]>([]);
 
   const queryClient = useQueryClient();
@@ -71,16 +71,19 @@ const BlogByCategories = () => {
               Blogs in {selectedTag.join(", ")}
             </h2>
             <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
-              {blogsByTags.selectedBlogs
-                .slice(0, 6)
-                .map((blogData: BlogData, index: number) => (
-                  <Card
-                    key={blogData._id}
-                    blogData={blogData}
-                    index={index}
-                    queryClient={queryClient}
-                  />
-                ))}
+              {(blogsByTags.selectedBlogs
+                ? showAll
+                  ? blogsByTags.selectedBlogs
+                  : blogsByTags.selectedBlogs.slice(0, 6)
+                : []
+              ).map((blogData: BlogData, index: number) => (
+                <Card
+                  key={blogData._id}
+                  blogData={blogData}
+                  index={index}
+                  queryClient={queryClient}
+                />
+              ))}
             </motion.div>
           </motion.section>
         )}
