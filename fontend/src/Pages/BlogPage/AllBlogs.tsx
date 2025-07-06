@@ -82,12 +82,14 @@ const AllBlogs = () => {
         </Button>
       </div>
       {/* blogs by categories */}
-      <BlogByCategories showAll />
+      <div className="w-full mt-4">
+        <BlogByCategories showAll />
+      </div>
       {/* toogle side bar  */}
       <button className="bg-red-400" onClick={() => setSideBar(!sidebar)}>
         sidebar
       </button>
-      <div className="w-full flex gap-2 py-2  relative ">
+      <div className="w-full  py-2  relative ">
         {/* author and tags filter sidebar */}
 
         <motion.div
@@ -141,16 +143,37 @@ const AllBlogs = () => {
         </motion.div>
 
         {/* blog card  */}
-        <div
-          className=" w-full grid  sm:grid-cols-2 md:grid-cols-3 container mx-auto gap-8 p-4 
+        <div>
+          <h1 className="text-center text-2xl font-bold">All Blogs</h1>
+          <div
+            className=" w-full grid  sm:grid-cols-2 md:grid-cols-3 containe md:mx-auto gap-8 p-4 
     justify-center items-center pb-20 "
-        >
-          {/* searched blogs */}
-          {searchingisLoading ? (
-            <h1 className="text-center text-2xl font-bold">searching blogs</h1>
-          ) : searchQuery ? (
-            searchBlogs.length > 0 ? (
-              searchBlogs.map((bloagdata: BlogData, index: number) => (
+          >
+            {/* searched blogs */}
+            {searchingisLoading ? (
+              <h1 className="text-center text-2xl font-bold">
+                searching blogs
+              </h1>
+            ) : searchQuery ? (
+              searchBlogs.length > 0 ? (
+                searchBlogs.map((bloagdata: BlogData, index: number) => (
+                  <Card
+                    key={bloagdata._id}
+                    blogData={bloagdata}
+                    index={index}
+                    queryClient={queryClient}
+                  />
+                ))
+              ) : (
+                <h1 className="text-center text-2xl font-semibold w-full">
+                  No blogs found for
+                  <span className="font-extrabold text-red-600 ">
+                    {searchQuery}
+                  </span>
+                </h1>
+              )
+            ) : (
+              data.map((bloagdata: BlogData, index: number) => (
                 <Card
                   key={bloagdata._id}
                   blogData={bloagdata}
@@ -158,24 +181,8 @@ const AllBlogs = () => {
                   queryClient={queryClient}
                 />
               ))
-            ) : (
-              <h1 className="text-center text-2xl font-semibold w-full">
-                No blogs found for{" "}
-                <span className="font-extrabold text-red-600 ">
-                  {searchQuery}
-                </span>
-              </h1>
-            )
-          ) : (
-            data.map((bloagdata: BlogData, index: number) => (
-              <Card
-                key={bloagdata._id}
-                blogData={bloagdata}
-                index={index}
-                queryClient={queryClient}
-              />
-            ))
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

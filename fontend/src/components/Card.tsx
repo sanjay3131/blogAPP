@@ -30,12 +30,12 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
        min-w-[200px] h-[90%]  "
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.5 }}
       exit={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       transition={{ duration: 0.3, type: "spring" }}
     >
       {/* blog image  */}
-      <div className="w-fit  overflow-hidden rounded-2xl ">
+      <div className="w-full  overflow-hidden rounded-2xl ">
         <img
           src={blogData.image ? blogData.image : sampleImage}
           alt={blogData.title}

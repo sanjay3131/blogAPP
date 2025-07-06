@@ -66,11 +66,11 @@ const BlogByCategories = ({ showAll = false }: { showAll?: boolean }) => {
       {blogsByTags &&
         blogsByTags.selectedBlogs &&
         blogsByTags.selectedBlogs.length > 0 && (
-          <motion.section className="flex flex-col gap-4 p-4 rounded-2xl justify-center items-center">
+          <motion.section className="flex flex-col gap-4 p-4 rounded-2xl justify-center items-center w-full">
             <h2 className="text-2xl font-bold capitalize">
               Blogs in {selectedTag.join(", ")}
             </h2>
-            <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+            <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4  ">
               {(blogsByTags.selectedBlogs
                 ? showAll
                   ? blogsByTags.selectedBlogs
