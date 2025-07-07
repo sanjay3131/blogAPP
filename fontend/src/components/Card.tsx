@@ -27,10 +27,11 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
   return (
     <motion.div
       className="bg-Primary-text-color/10  max-w-[380px] p-4 rounded-2xl flex flex-col justify-between gap-2 border-2 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group 
-       min-w-[200px] h-[90%]  "
+       min-w-[200px] h-full "
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+      // animate={{ opacity: 1 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.5 }}
+      viewport={{ once: true, amount: 0.2 }}
       exit={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       transition={{ duration: 0.3, type: "spring" }}
     >

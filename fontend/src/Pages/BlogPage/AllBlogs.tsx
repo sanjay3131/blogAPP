@@ -3,6 +3,7 @@ import {
   getAllBlogs,
   getAllUsers,
   getSearchBlog,
+  getSingleUserDetails,
 } from "@/utils/ApiFunction";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { IoSearch } from "react-icons/io5";
@@ -15,7 +16,15 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { handleFollowUser } from "@/lib/utilFunction";
 import BlogByCategories from "@/components/BlogByCategories";
+import { FaAngleDoubleDown, FaAngleDoubleUp, FaSearch } from "react-icons/fa";
+
 const AllBlogs = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debounceQuery, setDebounceQuery] = useState("");
+  const [sidebar, setSideBar] = useState(false);
+  const [loadingUserId, setLoadingUserId] = useState<string | null>(null);
+  const [AuthorBlog, setAuthorBlog] = useState("");
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["blogs"],
     queryFn: getAllBlogs,
@@ -30,14 +39,13 @@ const AllBlogs = () => {
     queryKey: ["user"],
     queryFn: checkUser,
   });
+  const { data: authorBlog } = useQuery({
+    queryKey: ["otherUserData", AuthorBlog],
+    queryFn: () => getSingleUserDetails(AuthorBlog),
+  });
 
   const queryClient = useQueryClient();
-  console.log(data);
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debounceQuery, setDebounceQuery] = useState("");
-  const [sidebar, setSideBar] = useState(false);
-  const [loadingUserId, setLoadingUserId] = useState<string | null>(null);
+  console.log(">>>>", authorBlog);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -61,12 +69,16 @@ const AllBlogs = () => {
       setLoadingUserId(null);
     }
   };
+  const getAuthorBlogs = (id: string) => {
+    setAuthorBlog(id);
+    console.log(AuthorBlog);
+  };
 
   if (isLoading) return <div>loading...</div>;
   if (error) return <div>error </div>;
 
   return (
-    <div className="w-full ">
+    <div className="w-full flex flex-col gap-5">
       {/* search bar  */}
       <div className=" w-full md:px-24 flex justify-center items-center bg-Primary-button-color/15 ">
         <input
@@ -81,32 +93,50 @@ const AllBlogs = () => {
           <IoSearch />
         </Button>
       </div>
+
       {/* blogs by categories */}
       <div className="w-full mt-4">
         <BlogByCategories showAll />
       </div>
-      {/* toogle side bar  */}
-      <button className="bg-red-400" onClick={() => setSideBar(!sidebar)}>
-        sidebar
-      </button>
-      <div className="w-full  py-2  relative ">
-        {/* author and tags filter sidebar */}
 
-        <motion.div
-          className={` w-full  px-2 py-5 z-40 absolute top-5 ${
-            sidebar ? "translate-x-0" : "translate-x-[150%]"
-          }  bg-Primary-text-color/15 backdrop-blur-[3px] transition-all duration-300 ease-in-out rounded-2xl`}
+      {/* toogle side bar  */}
+      <div className="mt-2 relative flex justify-center items-center">
+        <Button
+          className=" text-2xl py-8 rounded-2xl "
+          onClick={() => setSideBar(!sidebar)}
         >
-          <div className="flex flex-col gap-4 items-center">
+          Authors {!sidebar ? <FaAngleDoubleDown /> : <FaAngleDoubleUp />}
+        </Button>
+
+        {/* author and tags filter sidebar */}
+        <motion.div
+          className={` w-full   px-2 py-5 z-40 absolute  top-[120%] ${
+            sidebar ? "translate-x-0" : "translate-x-[150%]"
+          }  bg-Primary-text-color/15 backdrop-blur-[3px] transition-all duration-300 ease-in-out rounded-2xl 
+          flex flex-col  gap-4 justify-around items-center`}
+        >
+          <div className="flex  justify-center items-center w-full gap-3">
+            <input
+              type="text"
+              placeholder="search users "
+              className="bg-white/85 w-fit py-2 rounded-2xl px-4 text-xl outline-none"
+            />
+            <FaSearch />
+          </div>
+          <div className="flex flex-col gap-4 justify-start w-full items-center ">
             {AllUserData?.data.map((userData: UserData, index: number) => (
               <motion.div
                 initial={{ opacity: 0, x: 100 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: index * 0.5, type: "spring" }}
+                transition={{
+                  duration: index * 0.5,
+                  type: "spring",
+                }}
                 key={index}
                 className="flex gap-4  items-center justify-around  bg-white/85 px-1 py-2 rounded-full w-[300px] min-w-[300px] 
                 "
+                onClick={() => getAuthorBlogs(userData._id)}
               >
                 <img
                   referrerPolicy="no-referrer"
@@ -141,12 +171,13 @@ const AllBlogs = () => {
             ))}
           </div>
         </motion.div>
-
+      </div>
+      <div className="w-full  py-2  relative ">
         {/* blog card  */}
         <div>
           <h1 className="text-center text-2xl font-bold">All Blogs</h1>
           <div
-            className=" w-full grid  sm:grid-cols-2 md:grid-cols-3 containe md:mx-auto gap-8 p-4 
+            className=" w-full grid  sm:grid-cols-2 md:grid-cols-3  md:mx-auto gap-8 p-4 
     justify-center items-center pb-20 "
           >
             {/* searched blogs */}

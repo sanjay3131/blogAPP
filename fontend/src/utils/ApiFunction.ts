@@ -107,6 +107,15 @@ const getAllUsers = async () => {
   const response = await axiosInstance.get("/blogs/getAllUsers");
   return response;
 };
+
+// get user by name
+const getUserByName = async (query: string) => {
+  const response = await axiosInstance.get(
+    `/blogs/getUserByName?query=${query}`
+  );
+  return response;
+};
+
 export {
   getAllBlogs,
   checkUser,
@@ -125,4 +134,5 @@ export {
   getSingleUserDetails,
   getSearchBlog,
   getAllUsers,
+  getUserByName,
 };

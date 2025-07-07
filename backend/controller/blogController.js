@@ -455,6 +455,22 @@ const getAllusers = asyncHandler(async (req, res) => {
   if (!allUsers) return res.status(200).json({ message: "no users are found" });
   res.status(200).json(allUsers);
 });
+
+//get user by name
+const getUsersByName = asyncHandler(async (req, res) => {
+  const loggedUser = req.user._id;
+  const userName = req.query.query || "";
+  if (!userName)
+    return res.status(200).json({ message: "user name is not there" });
+  const searchedUser = await User.find({
+    _id: { $ne: loggedUser },
+    name: { $regex: "^" + userName, $options: "i" },
+  }).select("name email profilePic");
+
+  if (searchedUser.length === 0 || !searchedUser)
+    return res.status(404).json({ message: "user not found" });
+  res.status(200).json(searchedUser);
+});
 export {
   createBlog,
   getBlogs,
@@ -474,4 +490,5 @@ export {
   getSingleUser,
   getBlogByTitle,
   getAllusers,
+  getUsersByName,
 };

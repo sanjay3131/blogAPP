@@ -18,6 +18,7 @@ import {
   getSingleUser,
   getBlogByTitle,
   getAllusers,
+  getUsersByName,
 } from "../controller/blogController.js";
 import { protect } from "../middleware/authmiddleware.js";
 import getUpload from "../middleware/upload.js";
@@ -26,6 +27,9 @@ import { imageGeneration } from "../utils/imageGeneration.js";
 const router = express.Router();
 
 const uploadBlogImage = getUpload("blog-images"); // folder name
+
+//get user by name
+router.get("/getUserByName", protect, getUsersByName);
 
 //Search Blog by title
 router.get("/searchBlog", getBlogByTitle);

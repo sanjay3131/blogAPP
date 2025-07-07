@@ -70,7 +70,10 @@ const BlogByCategories = ({ showAll = false }: { showAll?: boolean }) => {
             <h2 className="text-2xl font-bold capitalize">
               Blogs in {selectedTag.join(", ")}
             </h2>
-            <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4  ">
+            <motion.div
+              className="w-full grid  sm:grid-cols-2 md:grid-cols-3  md:mx-auto gap-8 p-4 
+     items-center pb-20"
+            >
               {(blogsByTags.selectedBlogs
                 ? showAll
                   ? blogsByTags.selectedBlogs
