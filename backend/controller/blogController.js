@@ -468,7 +468,7 @@ const getUsersByName = asyncHandler(async (req, res) => {
   }).select("name email profilePic");
 
   if (searchedUser.length === 0 || !searchedUser)
-    return res.status(404).json({ message: "user not found" });
+    return res.status(200).json({ message: "user not found" });
   res.status(200).json(searchedUser);
 });
 export {
