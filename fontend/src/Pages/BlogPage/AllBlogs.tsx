@@ -51,14 +51,14 @@ const AllBlogs = () => {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebounceQuery(searchQuery);
+      setDebounceQuery(searchQuery.trim());
     }, 1000);
     return () => clearTimeout(handler);
   }, [searchQuery]);
   const { data: searchBlogs = [], isLoading: searchingisLoading } = useQuery({
     queryKey: ["searchedBlogs", debounceQuery],
     queryFn: () => getSearchBlog(debounceQuery),
-    enabled: debounceQuery.length >= 2,
+    enabled: debounceQuery.length > 0,
   });
   // search user query
   const { data: seachedUserResult } = useQuery({
@@ -88,21 +88,6 @@ const AllBlogs = () => {
 
   return (
     <div className="w-full flex flex-col gap-5">
-      {/* search bar  */}
-      <div className=" w-full md:px-24 flex justify-center items-center bg-Primary-button-color/15 ">
-        <input
-          type="text"
-          id="searchBar"
-          onChange={(e) => setSearchQuery(e.target.value)}
-          value={searchQuery}
-          placeholder="Search"
-          className="bg-Primary-text-color/15 mr-4 rounded-2xl py-2 w-full  px-5 text-xl focus:shadow-md outline-0 focus:shadow-Primary-text-color/25"
-        />
-        <Button>
-          <IoSearch />
-        </Button>
-      </div>
-
       {/* blogs by categories */}
       <div className="w-full mt-4">
         <BlogByCategories showAll />
@@ -136,6 +121,7 @@ const AllBlogs = () => {
             <FaSearch />
           </div>
           <div>
+            {searchingisLoading && <h1>loading...</h1>}
             {Array.isArray(seachedUserResult?.data) || searchUser ? (
               seachedUserResult?.data?.length > 0 ? (
                 <div>
@@ -295,6 +281,22 @@ const AllBlogs = () => {
           ""
         )}
       </div>
+
+      {/* search bar  */}
+      <div className=" w-full md:px-24 flex justify-center items-center bg-Primary-button-color/15 ">
+        <input
+          type="text"
+          id="searchBar"
+          onChange={(e) => setSearchQuery(e.target.value)}
+          value={searchQuery}
+          placeholder="Search"
+          className="bg-Primary-text-color/15 mr-4 rounded-2xl py-2 w-full  px-5 text-xl focus:shadow-md outline-0 focus:shadow-Primary-text-color/25"
+        />
+        <Button>
+          <IoSearch />
+        </Button>
+      </div>
+
       <div className="w-full  py-2  relative ">
         {/* blog card  */}
         <div>
@@ -308,7 +310,7 @@ const AllBlogs = () => {
               <h1 className="text-center text-2xl font-bold">
                 searching blogs
               </h1>
-            ) : searchQuery ? (
+            ) : searchQuery && debounceQuery ? (
               searchBlogs.length > 0 ? (
                 searchBlogs.map((bloagdata: BlogData, index: number) => (
                   <Card
@@ -319,12 +321,14 @@ const AllBlogs = () => {
                   />
                 ))
               ) : (
-                <h1 className="text-center text-2xl font-semibold w-full">
-                  No blogs found for
-                  <span className="font-extrabold text-red-600 ">
-                    {searchQuery}
-                  </span>
-                </h1>
+                !searchingisLoading && (
+                  <h1 className="text-center text-2xl font-semibold w-full">
+                    No blogs found for : {"   "}
+                    <span className="font-extrabold text-red-600 ">
+                      {searchQuery}
+                    </span>
+                  </h1>
+                )
               )
             ) : (
               data.map((bloagdata: BlogData, index: number) => (
