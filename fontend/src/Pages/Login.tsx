@@ -93,9 +93,14 @@ const Login = () => {
         >
           <Button className="w-4/5">Login with Google</Button>
         </a>
-        <Button className="mt-5 " onClick={() => redirect("/")}>
-          Home Page
-        </Button>
+        <div>
+          <Button className="mt-5 " onClick={() => redirect("/")}>
+            Home Page
+          </Button>
+          <Button className="mt-5  ml-3" onClick={() => redirect("/register")}>
+            SignUp Page
+          </Button>
+        </div>
       </motion.section>
     </motion.div>
   );

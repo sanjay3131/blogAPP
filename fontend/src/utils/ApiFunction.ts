@@ -14,6 +14,17 @@ const loginUser = async (email: string, password: string) => {
   });
   return response.data;
 };
+
+//SignUp function
+const SignUp = async (email: string, password: string, name: string) => {
+  const response = await axiosInstance.post("/auth/register", {
+    name,
+    email,
+    password,
+  });
+  return response;
+};
+
 //Logout
 const Logout = async () => {
   const response = await axiosInstance.get("auth/logout");
@@ -135,4 +146,5 @@ export {
   getSearchBlog,
   getAllUsers,
   getUserByName,
+  SignUp,
 };

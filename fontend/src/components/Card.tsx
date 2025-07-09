@@ -22,12 +22,14 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
     queryFn: checkUser,
     retry: false,
   });
+
   const navigate = useNavigate();
 
   return (
     <motion.div
-      className="bg-Primary-text-color/10  max-w-[380px] p-4 rounded-2xl flex flex-col justify-between gap-2 border-2 border-Primary-button-color shadow-md shadow-Primary-text-color/50 group 
-       min-w-[200px] h-full "
+      className="bg-Primary-text-color/10  max-w-[380px]  min-w-[200px] h-full p-4 rounded-2xl flex flex-col justify-between gap-2 border-2
+       border-Primary-button-color shadow-md shadow-Primary-text-color/50 group 
+       "
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       // animate={{ opacity: 1 }}
       whileInView={{ opacity: 1, x: 0 }}
@@ -36,11 +38,11 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       transition={{ duration: 0.3, type: "spring" }}
     >
       {/* blog image  */}
-      <div className="w-full  overflow-hidden rounded-2xl ">
+      <div className="w-full  flex justify-center items-center overflow-hidden rounded-2xl ">
         <img
           src={blogData.image ? blogData.image : sampleImage}
           alt={blogData.title}
-          className="rounded-2xl group-hover:scale-110 transition-all duration-300 ease-in-out  "
+          className="rounded-2xl group-hover:scale-110 transition-all duration-300 ease-in-out  max-h-[250px] object-fill   "
         />
       </div>
       {/* blog title */}
@@ -75,6 +77,7 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
           )}
           {blogData.likes !== 0 ? blogData.likes : ""}
         </span>
+
         <Button
           onClick={() => navigate(`/blogs/${blogData._id}`)}
           className="mt-2 cursor-pointer hover:scale-105"

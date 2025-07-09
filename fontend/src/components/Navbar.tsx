@@ -44,6 +44,10 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const handelSignUp = () => {
+    navigate("/register");
+  };
+
   return (
     <nav className="">
       {/* mobile navbar */}
@@ -91,12 +95,20 @@ const Navbar = () => {
                 Logout
               </Button>
             ) : (
-              <Button
-                className="bg-Green-color shadow-Primary-text-color/50 shadow-sm text-Primary-text-color font-semibold text-lg hover:text-Primary-background-color "
-                onClick={handleLogin}
-              >
-                Login
-              </Button>
+              <div className=" flex flex-col">
+                <Button
+                  className="bg-Green-color shadow-Primary-text-color/50 shadow-sm text-Primary-text-color font-semibold text-lg hover:text-Primary-background-color "
+                  onClick={handleLogin}
+                >
+                  Login
+                </Button>
+                <Button
+                  className="bg-Green-color mt-2 shadow-Primary-text-color/50 shadow-sm text-Primary-text-color font-semibold text-lg hover:text-Primary-background-color "
+                  onClick={handelSignUp}
+                >
+                  SignUp
+                </Button>
+              </div>
             )}
           </div>
         </div>
@@ -135,12 +147,20 @@ const Navbar = () => {
                 Logout
               </Button>
             ) : (
-              <Button
-                className="bg-Green-color shadow-Primary-text-color/50 shadow-sm  font-semibold text-lg text-Primary-text-color hover:text-Primary-background-color "
-                onClick={handleLogin}
-              >
-                Login
-              </Button>
+              <div>
+                <Button
+                  className="bg-Green-color shadow-Primary-text-color/50 shadow-sm text-Primary-text-color font-semibold text-lg hover:text-Primary-background-color "
+                  onClick={handleLogin}
+                >
+                  Login
+                </Button>
+                <Button
+                  className="bg-Green-color ml-2 shadow-Primary-text-color/50 shadow-sm text-Primary-text-color font-semibold text-lg hover:text-Primary-background-color "
+                  onClick={handelSignUp}
+                >
+                  SignUp
+                </Button>
+              </div>
             )}
           </div>
         </div>

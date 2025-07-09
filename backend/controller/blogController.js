@@ -393,6 +393,7 @@ const textGenerationApi = asyncHandler(async (req, res) => {
       .json({ message: "Failed to fetch transcript", error: error.message });
   }
 });
+// get blogs by tags
 const getBlogsByTags = asyncHandler(async (req, res) => {
   const { tags } = req.body; // tags should be an array
 
@@ -401,7 +402,10 @@ const getBlogsByTags = asyncHandler(async (req, res) => {
   }
 
   // Find blogs where at least one tag matches
-  const selectedBlogs = await Blog.find({ tags: { $in: tags } });
+  const selectedBlogs = await Blog.find({ tags: { $in: tags } }).populate(
+    "author",
+    "name email profilePic"
+  );
 
   if (!selectedBlogs || selectedBlogs.length === 0)
     return res.status(200).json({ message: "No blogs found" });
@@ -429,7 +433,7 @@ const getSingleUser = asyncHandler(async (req, res) => {
     });
   res.status(200).json(user);
 });
-// search blog by Titl e
+// search blog by Title
 
 const getBlogByTitle = asyncHandler(async (req, res) => {
   const searchQuery = req.query.query || "";

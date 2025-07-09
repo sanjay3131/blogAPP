@@ -28,7 +28,7 @@ const BlogByCategories = ({ showAll = false }: { showAll?: boolean }) => {
           {tags.map((cat, index) => (
             <div
               key={index}
-              className={`px-4 py-2 rounded-2xl font-semibold uppercase cursor-pointer transition-all duration-300 hover:bg-Green-color ${
+              className={`px-4 py-2 rounded-2xl text-sm lg:text-lg  font-semibold uppercase cursor-pointer transition-all duration-300 hover:bg-Green-color ${
                 selectedTag.includes(cat)
                   ? "bg-Green-color  shadow-sm shadow-Primary-text-color scale-105"
                   : "bg-Green-color/25"

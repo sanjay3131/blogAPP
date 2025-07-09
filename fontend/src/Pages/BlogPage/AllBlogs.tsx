@@ -152,7 +152,6 @@ const AllBlogs = () => {
                         key={index}
                         className="flex gap-4 mt-4 items-center justify-around  bg-white/85 px-1 py-2 rounded-full w-[300px] min-w-[300px] 
                 "
-                        onClick={() => getAuthorBlogs(userData._id)}
                       >
                         <img
                           referrerPolicy="no-referrer"
@@ -162,9 +161,13 @@ const AllBlogs = () => {
                               ? userData.profilePic
                               : noAvathar
                           }
+                          onClick={() => getAuthorBlogs(userData._id)}
                           alt=""
                         />
-                        <h1 className="font-semibold capitalize">
+                        <h1
+                          className="font-semibold capitalize"
+                          onClick={() => getAuthorBlogs(userData._id)}
+                        >
                           {userData.name}
                         </h1>
                         {/* follow and unfollow button */}
@@ -218,7 +221,6 @@ const AllBlogs = () => {
                     key={index}
                     className="flex gap-4  items-center justify-around  bg-white/85 px-1 py-2 rounded-full w-[300px] min-w-[300px] 
                 "
-                    onClick={() => getAuthorBlogs(userData._id)}
                   >
                     <img
                       referrerPolicy="no-referrer"
@@ -227,8 +229,12 @@ const AllBlogs = () => {
                         userData.profilePic ? userData.profilePic : noAvathar
                       }
                       alt=""
+                      onClick={() => getAuthorBlogs(userData._id)}
                     />
-                    <h1 className="font-semibold capitalize">
+                    <h1
+                      className="font-semibold capitalize"
+                      onClick={() => getAuthorBlogs(userData._id)}
+                    >
                       {userData.name}
                     </h1>
                     {/* follow and unfollow button */}
