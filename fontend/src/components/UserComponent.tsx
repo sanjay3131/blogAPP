@@ -5,12 +5,20 @@ import { motion } from "framer-motion";
 // import social from "../assets/social.png";
 // import blogIcon from "../assets/computer.png";
 import Card from "@/components/Card";
-import { FaFacebookSquare, FaInstagramSquare } from "react-icons/fa";
+import {
+  FaFacebookSquare,
+  FaInstagramSquare,
+  FaUserEdit,
+} from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { BlogData, UserData } from "@/lib/types";
 import { useState } from "react";
 import Follower from "./Follower";
 import Following from "./Following";
+import noProfile from "../assets/noProfile.png";
+import { useQuery } from "@tanstack/react-query";
+import { checkUser } from "@/utils/ApiFunction";
+import { Button } from "./ui/button";
 interface UserComponentProps {
   author: {
     profilePic: string;
@@ -20,6 +28,8 @@ interface UserComponentProps {
       instagram?: string;
       twitter?: string;
     };
+    bio: string;
+    website: string;
     followers: UserData[];
     _id: string;
   };
@@ -41,18 +51,30 @@ const UserComponent = ({
   sidebardata,
 }: UserComponentProps) => {
   const [toogleBlock, setToogleBlock] = useState(1);
-  console.log(author);
+
+  const { data: userData } = useQuery({
+    queryKey: ["user"],
+    queryFn: checkUser,
+    retry: false,
+  });
 
   return (
     <motion.div className="w-full flex flex-col  justify-baseline  items-center gap-5 relative">
-      <div className=" w-full h-fit flex flex-col gap-4 justify-center items-center p-4">
+      <div className=" w-full h-fit flex flex-col gap-4 justify-center items-center p-4  relative">
         <img
-          src={author.profilePic}
+          src={author.profilePic ? author.profilePic : noProfile}
           alt="user profile pic"
           referrerPolicy="no-referrer"
           className=" size-24 rounded-full "
         />
+        {/* name */}
         <h1 className="text-2xl font-bold uppercase">{author.name}</h1>
+
+        {/* bio */}
+        {author.bio && <p>{author?.bio}</p>}
+
+        {/* website */}
+        {author.website && <a>{author.website}</a>}
         {/* social links */}
         <div className=" flex  w-fit justify-center items-center gap-3 px-9 text-2xl ">
           <a href={author.socialLinks?.facebook}>
@@ -65,6 +87,13 @@ const UserComponent = ({
             <FaSquareXTwitter />
           </a>
         </div>
+        {userData.author._id === author._id && (
+          <div className="absolute top-[50%] right-[20%]">
+            <Button>
+              Edit Profile <FaUserEdit />
+            </Button>
+          </div>
+        )}
       </div>
       {/* tool bar */}
 

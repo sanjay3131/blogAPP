@@ -24,13 +24,6 @@ const Home = () => {
     retry: false,
   });
 
-  // const { data: blogsByTags, isLoading: tagLoading } = useQuery({
-  //   queryKey: ["blogCategory", selectedTag],
-  //   queryFn: () => getBlogsByTags(selectedTag),
-  //   enabled: selectedTag.length > 0,
-  // });
-  // console.log(blogsByTags);
-
   const handelNavigation = () => {
     if (userData?.status == 200) {
       navigate("/createblog");

@@ -49,6 +49,10 @@ const Follower = ({ userId }: { userId: string }) => {
       setLoadingUserId(null);
     }
   };
+  const handelNavigation = (id: string) => {
+    if (userdata.author._id === id) navigate("/user");
+    else navigate(`/userPage/${id}`);
+  };
 
   if (isFollowersLoading || isFollowingLoading) {
     return <p>Loading...</p>;
@@ -75,13 +79,13 @@ const Follower = ({ userId }: { userId: string }) => {
               alt="Profile pic"
               referrerPolicy="no-referrer"
               className="size-10 rounded-full cursor-pointer"
-              onClick={() => navigate(`/userPage/${f._id}`)}
+              onClick={() => handelNavigation(f._id)}
             />
 
             {/* name and email  */}
             <div
               className="flex flex-col cursor-pointer"
-              onClick={() => navigate(`/userPage/${f._id}`)}
+              onClick={() => handelNavigation(f._id)}
             >
               <h1 className="font-semibold capitalize">{f.name}</h1>
             </div>
@@ -90,7 +94,7 @@ const Follower = ({ userId }: { userId: string }) => {
             <Button
               onClick={() => handleFollow(f._id)}
               className="text-sm rounded-full"
-              disabled={loadingUserId === f._id}
+              disabled={userdata.author._id === f._id}
             >
               {loadingUserId === f._id
                 ? "Loading..."

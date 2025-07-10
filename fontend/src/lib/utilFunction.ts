@@ -42,6 +42,9 @@ export const handleFollowUser = async (
     await queryClient.invalidateQueries({
       queryKey: ["user"],
     });
+    await queryClient.invalidateQueries({
+      queryKey: ["otherUserData"],
+    });
   } catch (error) {
     console.error("Error toggling follow/unfollow:", error);
   }

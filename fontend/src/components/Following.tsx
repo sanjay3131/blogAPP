@@ -15,7 +15,7 @@ const Following = ({ userId }: { userId: string }) => {
     queryFn: () => getUserFollowing(userId),
   });
   console.log(data);
-  const { data: userdata } = useQuery({
+  const { data: userdata, isLoading } = useQuery({
     queryKey: ["user"],
     queryFn: checkUser,
   });
@@ -25,8 +25,13 @@ const Following = ({ userId }: { userId: string }) => {
     const respose = await toogleFollowAndUnfollow(id);
     console.log(respose);
     await queryClient.invalidateQueries({ queryKey: ["following"] });
+    await queryClient.invalidateQueries({ queryKey: ["user"] });
   };
   const navigate = useNavigate();
+  const handelNavigation = (id: string) => {
+    if (userdata.author._id === id) navigate("/user");
+    else navigate(`/userPage/${id}`);
+  };
   return (
     <div className="flex flex-col gap-2">
       {data?.message ? (
@@ -43,13 +48,13 @@ const Following = ({ userId }: { userId: string }) => {
               alt="Profile pic"
               referrerPolicy="no-referrer"
               className="size-10 rounded-full cursor-pointer"
-              onClick={() => navigate(`/userPage/${f._id}`)}
+              onClick={() => handelNavigation(f._id)}
             />
 
             {/* name and email  */}
             <div
               className="flex flex-col cursor-pointer  "
-              onClick={() => navigate(`/userPage/${f._id}`)}
+              onClick={() => handelNavigation(f._id)}
             >
               <h1 className="font-semibold block  capitalize">{f.name}</h1>
               {/* <h1 className="text-gray-500 text-sm">{f.email}</h1> */}
@@ -60,8 +65,11 @@ const Following = ({ userId }: { userId: string }) => {
             <Button
               onClick={() => handelUnfollow(f._id)}
               className="text-sm rounded-full"
+              disabled={userdata.author._id === f._id}
             >
-              {userdata?.author?.following?.includes(f._id)
+              {isLoading
+                ? "loading..."
+                : userdata?.author?.following?.includes(f._id)
                 ? "Unfollow"
                 : "Follow"}
             </Button>

@@ -40,6 +40,7 @@ const AllBlogs = () => {
   const { data: user } = useQuery({
     queryKey: ["user"],
     queryFn: checkUser,
+    retry: false,
   });
   const { data: authorBlog } = useQuery({
     queryKey: ["otherUserData", AuthorBlog],
@@ -121,6 +122,13 @@ const AllBlogs = () => {
             <FaSearch />
           </div>
           <div>
+            {!user ? (
+              <h1 className="font-semibold text-xl">
+                Login to view users <Button>Login</Button>
+              </h1>
+            ) : (
+              ""
+            )}
             {searchingisLoading && <h1>loading...</h1>}
             {Array.isArray(seachedUserResult?.data) || searchUser ? (
               seachedUserResult?.data?.length > 0 ? (

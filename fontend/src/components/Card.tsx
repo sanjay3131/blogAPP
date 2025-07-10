@@ -29,7 +29,7 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
 
   return (
     <motion.div
-      className="bg-Primary-text-color/15 max-w-[380px] w-full rounded-2xl border border-Primary-button-color p-5 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-4 group"
+      className="bg-Primary-text-color/5 max-w-[380px] w-full rounded-2xl border border-Primary-button-color p-5 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-4 group"
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.2 }}
