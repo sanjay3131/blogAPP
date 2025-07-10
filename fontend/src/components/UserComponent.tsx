@@ -19,6 +19,7 @@ import noProfile from "../assets/noProfile.png";
 import { useQuery } from "@tanstack/react-query";
 import { checkUser } from "@/utils/ApiFunction";
 import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 interface UserComponentProps {
   author: {
     profilePic: string;
@@ -57,6 +58,10 @@ const UserComponent = ({
     queryFn: checkUser,
     retry: false,
   });
+  const navigate = useNavigate();
+  const navigateToEditUserProfile = () => {
+    navigate("/editUserProfile");
+  };
 
   return (
     <motion.div className="w-full flex flex-col  justify-baseline  items-center gap-5 relative">
@@ -89,7 +94,7 @@ const UserComponent = ({
         </div>
         {userData.author._id === author._id && (
           <div className="absolute top-[50%] right-[20%]">
-            <Button>
+            <Button onClick={() => navigateToEditUserProfile()}>
               Edit Profile <FaUserEdit />
             </Button>
           </div>
@@ -142,9 +147,9 @@ const UserComponent = ({
       <motion.div>
         {/* user blogs */}
         {toogleBlock == 1 ? (
-          <div className="w-full ">
+          <div className=" w-screen  ">
             {userBlogs && userBlogs.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:container md:mx-auto justify-items-center sm:justify-items-normal ">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:container md:mx-auto justify-items-center sm:justify-items-normal">
                 {userBlogs?.map((blogData: BlogData, index: number) => (
                   <Card
                     key={blogData._id}

@@ -21,6 +21,7 @@ import CreateBlogPage from "./Pages/createBlogPage/CreateBlogPage";
 import "react-quill/dist/quill.snow.css";
 import ScrollToTop from "./components/ScrollToTop";
 import OtherUserPage from "./Pages/UserProfilePage/OtherUserPage";
+import EditUserProfile from "./components/EditUserProfile";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,14 @@ const AnimatedRoutes = () => {
             element={
               <PrivateRoute>
                 <UserPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/editUserProfile"
+            element={
+              <PrivateRoute>
+                <EditUserProfile />
               </PrivateRoute>
             }
           />

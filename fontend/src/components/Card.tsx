@@ -55,7 +55,7 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
 
       {/* Tags */}
       <div className="flex flex-wrap gap-2">
-        {blogData?.tags.slice(0, 3).map((tag) => (
+        {blogData?.tags.map((tag) => (
           <span
             key={tag}
             className="bg-Green-color/50 text-[0.75rem] font-semibold px-3 py-1 rounded-full capitalize text-gray-800"
