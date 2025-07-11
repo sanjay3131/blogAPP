@@ -79,7 +79,7 @@ const UserComponent = ({
         {author.bio && <p>{author?.bio}</p>}
 
         {/* website */}
-        {author.website && <a>{author.website}</a>}
+        {author.website && <a href={author.website}>{author.website}</a>}
         {/* social links */}
         <div className=" flex  w-fit justify-center items-center gap-3 px-9 text-2xl ">
           <a href={author.socialLinks?.facebook}>
@@ -92,8 +92,8 @@ const UserComponent = ({
             <FaSquareXTwitter />
           </a>
         </div>
-        {userData.author._id === author._id && (
-          <div className="absolute top-[50%] right-[20%]">
+        {userData?.author._id === author._id && (
+          <div className=" bottom-0 right-0">
             <Button onClick={() => navigateToEditUserProfile()}>
               Edit Profile <FaUserEdit />
             </Button>

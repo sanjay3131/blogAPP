@@ -127,6 +127,18 @@ const getUserByName = async (query: string) => {
   return response;
 };
 
+//update user profile
+const updateUserProfile = async (formData: FormData) => {
+  const response = await axiosInstance.post(
+    "/auth/updateUserDetails",
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+  return response.data;
+};
+
 export {
   getAllBlogs,
   checkUser,
@@ -147,4 +159,5 @@ export {
   getAllUsers,
   getUserByName,
   SignUp,
+  updateUserProfile,
 };

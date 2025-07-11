@@ -48,16 +48,20 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const updateUserDetails = asyncHandler(async (req, res) => {
-  const { bio, website, socialLinks } = req.body;
+  const { bio, website, socialLinks, name } = req.body;
   const userId = req.user._id;
   const user = await User.findById(userId);
   if (!user) {
     res.status(404);
     throw new Error("User not found");
   }
+  if (name !== "") user.name = name;
   if (bio !== "") user.bio = bio;
   if (website !== "") user.website = website;
-  if (socialLinks) user.socialLinks = socialLinks;
+  if (socialLinks) {
+    user.socialLinks =
+      typeof socialLinks === "string" ? JSON.parse(socialLinks) : socialLinks;
+  }
   const profilePic = req.file?.path || "";
 
   if (profilePic) {

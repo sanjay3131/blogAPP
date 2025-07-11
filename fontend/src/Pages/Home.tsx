@@ -32,6 +32,16 @@ const Home = () => {
       navigate("/login");
     }
   };
+  interface ScrollToSectionFn {
+    (id: string): void;
+  }
+
+  const scrollToSection: ScrollToSectionFn = (id) => {
+    const element: HTMLElement | null = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -63,6 +73,7 @@ const Home = () => {
             topic.
           </p>
           <motion.button
+            onClick={() => scrollToSection("blogs")}
             className="bg-Green-color text-Primary-text-color rounded-[5px] font-semibold uppercase w-[180px] py-2 flex items-center 
           justify-between px-4 hover:scale-105  transition-all duration-200 ease-in-out group"
           >
@@ -81,7 +92,10 @@ const Home = () => {
         </div>
 
         {/* Trending Blogs */}
-        <motion.section className="flex flex-col gap-4 p-4 rounded-2xl justify-center items-center">
+        <motion.section
+          className="flex flex-col gap-4 p-4 rounded-2xl justify-center items-center"
+          id="blogs"
+        >
           <h2 className="text-2xl font-bold">New Blogs</h2>
           <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 container mx-auto  gap-4 justify-center items-center w-full p-8">
             {data.slice(0, 6).map((blogData: BlogData, index: number) => (
