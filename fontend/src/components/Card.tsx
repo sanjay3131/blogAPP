@@ -30,12 +30,18 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
   // const [deleteBlog, setDeleteBlog] = useState(false);
   const navigate = useNavigate();
   const handelDeleteBlog = async (id: string) => {
-    const response = await deleteSingleBlog(id);
-    await queryClient.invalidateQueries({
-      queryKey: ["blogs"],
-    });
-    setIsDeteBlog("");
-    console.log(response);
+    try {
+      const response = await deleteSingleBlog(id);
+      await queryClient.invalidateQueries({
+        queryKey: ["blogs"],
+      });
+      setIsDeteBlog("");
+      toast.success(response.message);
+      console.log(response);
+    } catch (error) {
+      toast.error("blog not deleted");
+      console.log(error);
+    }
   };
   return (
     <motion.div
