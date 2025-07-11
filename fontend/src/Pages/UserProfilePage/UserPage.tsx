@@ -4,7 +4,6 @@ import { checkUser, getAllUserBlog } from "@/utils/ApiFunction";
 import addFriend from "../../assets/add-friend.png";
 import bell from "../../assets/bell.png";
 import check from "../../assets/check.png";
-import social from "../../assets/social.png";
 import blogIcon from "../../assets/computer.png";
 
 import UserComponent from "@/components/UserComponent";
@@ -32,10 +31,7 @@ const UserPage = () => {
   // const []=useState([])
   const sidebardata = [
     { name: "Notification", icon: bell },
-    {
-      name: "Update_Profile",
-      icon: social,
-    },
+
     { name: "Followers", icon: addFriend, toogle: 2 },
     { name: "Following", icon: check, toogle: 3 },
     { name: "Blogs", icon: blogIcon, toogle: 1 },

@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { postBlog } from "@/utils/ApiFunction";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { Editor } from "@tinymce/tinymce-react";
+import type { Editor as TinyMCEEditor } from "tinymce";
 
 const CreateBlogPage = () => {
   const [title, setTitle] = useState("");
@@ -12,6 +14,7 @@ const CreateBlogPage = () => {
   const [previewImage, setPreviewImage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [disable, setDisable] = useState(false);
+  const editorRef = useRef<TinyMCEEditor | null>(null);
   const handelForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setDisable(true);
@@ -73,7 +76,13 @@ const CreateBlogPage = () => {
   const removeTag = (tag: string) => {
     setBlogTags(blogTags.filter((t) => t !== tag));
   };
-
+  const log = () => {
+    if (editorRef.current) {
+      const value = editorRef.current.getContent();
+      setContent(value);
+      console.log(value);
+    }
+  };
   return (
     <div className="container mx-auto p-8 md:px-24">
       <h1 className="text-xl md:text-3xl uppercase font-semibold text-gray-500">
@@ -144,7 +153,7 @@ const CreateBlogPage = () => {
         </div>
 
         {/* Content */}
-        <div className="w-full">
+        {/* <div className="w-full">
           <label
             htmlFor="content"
             className="text-xl md:text-2xl font-semibold px-2 cursor-pointer w-fit hover:scale-105 transition-all"
@@ -159,6 +168,46 @@ const CreateBlogPage = () => {
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></textarea>
+        </div> */}
+        <div>
+          {" "}
+          <Editor
+            apiKey="u3w7dg5t76wp9ow90eif6e9ebdr5xg9gli56wn63aehtrbn7"
+            onInit={(_evt, editor) => (editorRef.current = editor)}
+            onEditorChange={(newContent) => setContent(newContent)}
+            init={{
+              height: 500,
+              menubar: false,
+              plugins: [
+                "advlist",
+                "autolink",
+                "lists",
+                "link",
+                "image",
+                "charmap",
+                "preview",
+                "anchor",
+                "searchreplace",
+                "visualblocks",
+                "code",
+                "fullscreen",
+                "insertdatetime",
+                "media",
+                "table",
+                "code",
+                "help",
+                "wordcount",
+              ],
+              toolbar:
+                "undo redo | blocks | " +
+                "bold italic forecolor | alignleft aligncenter " +
+                "alignright alignjustify | bullist numlist outdent indent | " +
+                "removeformat | help",
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+            }}
+          />
+          <button onClick={log}>Log editor content</button>
         </div>
 
         {/* Image Upload */}

@@ -93,7 +93,7 @@ const UserComponent = ({
           </a>
         </div>
         {userData?.author._id === author._id && (
-          <div className=" bottom-0 right-0">
+          <div className="  top-0 right-0">
             <Button onClick={() => navigateToEditUserProfile()}>
               Edit Profile <FaUserEdit />
             </Button>
@@ -160,7 +160,7 @@ const UserComponent = ({
                 ))}
               </div>
             ) : (
-              <h1>No Blogs Posted</h1>
+              <h1 className="text-xl text-center">No Blogs Posted</h1>
             )}
           </div>
         ) : (

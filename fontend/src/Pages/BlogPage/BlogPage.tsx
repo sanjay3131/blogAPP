@@ -26,8 +26,11 @@ const BlogPage = () => {
       transition={{ duration: 0.3 }}
       className="p-4"
     >
-      <h1>{data.title}</h1>
-      <p>{data.content}</p>
+      <h1
+        dangerouslySetInnerHTML={{ __html: data.title }}
+        className="text-2xl"
+      ></h1>
+      <p dangerouslySetInnerHTML={{ __html: data.content }}></p>
     </motion.div>
   );
 };

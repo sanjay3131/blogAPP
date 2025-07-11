@@ -34,6 +34,7 @@ const Following = ({ userId }: { userId: string }) => {
   };
   return (
     <div className="flex flex-col gap-2">
+      <h1 className="text-xl text-center font-semibold mb-4">Following</h1>
       {data?.message ? (
         <h1>you are not following any user</h1>
       ) : (

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { BlogData } from "../lib/types.tsx";
 import { useQuery } from "@tanstack/react-query";
-import { checkUser } from "@/utils/ApiFunction.ts";
+import { checkUser, deleteSingleBlog } from "@/utils/ApiFunction.ts";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button.tsx";
 import { FaRegHeart, FaHeart, FaEdit } from "react-icons/fa";
@@ -9,6 +9,8 @@ import { MdDeleteOutline } from "react-icons/md";
 
 import { handelLike } from "@/lib/utilFunction.ts";
 import sampleImage from "../../src/assets/gemini-image.png";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface CardProps {
   blogData: BlogData;
@@ -24,12 +26,20 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
     queryFn: checkUser,
     retry: false,
   });
-
+  const [isDeleteBlog, setIsDeteBlog] = useState("");
+  // const [deleteBlog, setDeleteBlog] = useState(false);
   const navigate = useNavigate();
-
+  const handelDeleteBlog = async (id: string) => {
+    const response = await deleteSingleBlog(id);
+    await queryClient.invalidateQueries({
+      queryKey: ["blogs"],
+    });
+    setIsDeteBlog("");
+    console.log(response);
+  };
   return (
     <motion.div
-      className="bg-Primary-text-color/5 max-w-[380px] w-full rounded-2xl border border-Primary-button-color p-5 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-4 group"
+      className="bg-Primary-text-color/5 max-w-[380px] w-full rounded-2xl border border-Primary-button-color p-5 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-4 group relative"
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.2 }}
@@ -51,7 +61,10 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       </h3>
 
       {/* Content */}
-      <p className="text-sm text-gray-600 line-clamp-2">{blogData.content}</p>
+      <p
+        className="text-sm text-gray-600 line-clamp-2"
+        dangerouslySetInnerHTML={{ __html: blogData.content }}
+      ></p>
 
       {/* Tags */}
       <div className="flex flex-wrap gap-2">
@@ -92,12 +105,34 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       {/* Edit & Delete (only if user is author) */}
       {blogData.author._id === userData?.author?._id && (
         <div className="flex gap-2 justify-center mt-3">
-          <Button className="bg-yellow-400 hover:bg-yellow-500 text-black text-xs px-3 py-1 rounded-xl flex items-center gap-2">
+          <Button className="bg-yellow-400/15 hover:bg-yellow-500/15 text-black text-xs px-3 py-1 rounded-xl flex items-center gap-2">
             <FaEdit /> Edit
           </Button>
-          <Button className="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-xl flex items-center gap-2">
+          <Button
+            onClick={() => setIsDeteBlog(blogData._id)}
+            className="bg-red-500/15 hover:bg-red-600/15 text-black text-xs px-3 py-1 rounded-xl flex items-center gap-2"
+          >
             <MdDeleteOutline /> Delete
           </Button>
+        </div>
+      )}
+      {/* delete model */}
+      {isDeleteBlog === blogData._id && (
+        <div className="absolute bg-Primary-text-color/50 bottom-0 backdrop-blur-sm w-full h-full rounded-2xl flex justify-center items-center  ">
+          {/* inner model */}
+          <div className="flex flex-col gap-4">
+            <h1 className="text-xl text-wrap px-2 font-semibold text-Primary-button-color ">
+              {" "}
+              Are you sure to delete{" "}
+              <span className="font-bold text-red-500">{blogData.title}</span>
+            </h1>
+            <div className="flex justify-around">
+              <Button onClick={() => setIsDeteBlog("")}>cancel</Button>
+              <Button onClick={() => handelDeleteBlog(isDeleteBlog)}>
+                Delete
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </motion.div>

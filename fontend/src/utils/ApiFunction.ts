@@ -138,6 +138,17 @@ const updateUserProfile = async (formData: FormData) => {
   );
   return response.data;
 };
+// delete a blog by id
+const deleteSingleBlog = async (id: string) => {
+  const response = await axiosInstance.delete(`/blogs/delete/${id}`);
+  return response.data;
+};
+
+//edit a blog by id
+const editBlogById = async (id: string, formData: FormData) => {
+  const response = await axiosInstance.put(`/blogs/update/${id}`, formData);
+  return response.data;
+};
 
 export {
   getAllBlogs,
@@ -160,4 +171,6 @@ export {
   getUserByName,
   SignUp,
   updateUserProfile,
+  deleteSingleBlog,
+  editBlogById,
 };
