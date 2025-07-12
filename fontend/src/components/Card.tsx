@@ -45,7 +45,8 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
   };
   return (
     <motion.div
-      className="bg-Primary-text-color/5 max-w-[380px] w-full rounded-2xl border border-Primary-button-color p-5 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-4 group relative"
+      className="bg-Primary-text-color/5 max-w-[380px] w-full rounded-2xl border
+      min-w-[200px] border-Primary-button-color p-5 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-4 group relative"
       initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.2 }}
@@ -111,7 +112,10 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       {/* Edit & Delete (only if user is author) */}
       {blogData.author._id === userData?.author?._id && (
         <div className="flex gap-2 justify-center mt-3">
-          <Button className="bg-yellow-400/15 hover:bg-yellow-500/15 text-black text-xs px-3 py-1 rounded-xl flex items-center gap-2">
+          <Button
+            onClick={() => navigate(`/updateBlog/${blogData._id}`)}
+            className="bg-yellow-400/15 hover:bg-yellow-500/15 text-black text-xs px-3 py-1 rounded-xl flex items-center gap-2"
+          >
             <FaEdit /> Edit
           </Button>
           <Button
@@ -124,13 +128,15 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       )}
       {/* delete model */}
       {isDeleteBlog === blogData._id && (
-        <div className="absolute bg-Primary-text-color/50 bottom-0 backdrop-blur-sm w-full h-full rounded-2xl flex justify-center items-center  ">
+        <div className="absolute top-0 left-0 bg-black/45  backdrop-blur-[5px] w-full h-full rounded-2xl flex justify-center items-center transition-all duration-500 ease-in-out ">
           {/* inner model */}
           <div className="flex flex-col gap-4">
-            <h1 className="text-xl text-wrap px-2 font-semibold text-Primary-button-color ">
+            <h1 className="text-xl text-wrap px-2 font-semibold text-white ">
               {" "}
               Are you sure to delete{" "}
-              <span className="font-bold text-red-500">{blogData.title}</span>
+              <span className="font-bold text-Primary-background-color/75 ">
+                {blogData.title}
+              </span>
             </h1>
             <div className="flex justify-around">
               <Button onClick={() => setIsDeteBlog("")}>cancel</Button>
