@@ -186,9 +186,12 @@ const UpdateBlog = () => {
         <div>
           <Editor
             apiKey="u3w7dg5t76wp9ow90eif6e9ebdr5xg9gli56wn63aehtrbn7"
-            onInit={(_evt, editor) => (editorRef.current = editor)}
+            onInit={(_evt, editor) => {
+              editorRef.current = editor;
+              // Manually set content after init to avoid cursor jump
+              editor.setContent(content);
+            }}
             onEditorChange={(newContent) => setContent(newContent)}
-            initialValue={content}
             init={{
               height: 500,
               menubar: false,
