@@ -127,6 +127,10 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+.reset-tw,
+.reset-tw * {
+  all: revert !important;
+}
 
 @layer base {
   * {

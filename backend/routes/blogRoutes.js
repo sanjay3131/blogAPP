@@ -23,6 +23,7 @@ import {
 import { protect } from "../middleware/authmiddleware.js";
 import getUpload from "../middleware/upload.js";
 import { imageGeneration } from "../utils/imageGeneration.js";
+import { AIcontent } from "../utils/contentGeneration.js";
 
 const router = express.Router();
 
@@ -36,6 +37,9 @@ router.get("/searchBlog", getBlogByTitle);
 
 // get all users
 router.get("/getAllUsers", protect, getAllusers);
+
+// ai content generatione
+router.post("/aiContent", AIcontent);
 
 // ✅ Post a blog with image upload support
 router.post("/create", protect, uploadBlogImage.single("image"), createBlog);

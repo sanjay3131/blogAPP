@@ -39,6 +39,9 @@ const UpdateBlog = () => {
       setBlogTags(data.tags || []);
       setPreviewImage(data.image || "");
       setIsFormReady(true);
+      if (editorRef.current) {
+        editorRef.current.setContent(data.content);
+      }
     }
   }, [data]);
 
@@ -188,8 +191,10 @@ const UpdateBlog = () => {
             apiKey="u3w7dg5t76wp9ow90eif6e9ebdr5xg9gli56wn63aehtrbn7"
             onInit={(_evt, editor) => {
               editorRef.current = editor;
-              // Manually set content after init to avoid cursor jump
-              editor.setContent(content);
+              // If content already exists, set it manually
+              if (content) {
+                editor.setContent(content);
+              }
             }}
             onEditorChange={(newContent) => setContent(newContent)}
             init={{

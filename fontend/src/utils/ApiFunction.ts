@@ -150,6 +150,12 @@ const editBlogById = async (id: string, formData: FormData) => {
   return response.data;
 };
 
+const aiContent = async (prompt: string) => {
+  console.log(prompt);
+
+  const response = await axiosInstance.post("/blogs/aiContent", { prompt });
+  return response.data;
+};
 export {
   getAllBlogs,
   checkUser,
@@ -173,4 +179,5 @@ export {
   updateUserProfile,
   deleteSingleBlog,
   editBlogById,
+  aiContent,
 };
