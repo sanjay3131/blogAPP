@@ -16,36 +16,42 @@ const CreateBlogPage = () => {
   const [disable, setDisable] = useState(false);
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handelForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setDisable(true);
-    if (blogTags.length <= 0) {
-      return alert("please selete some tags");
-    }
+    try {
+      e.preventDefault();
+      setDisable(true);
+      if (blogTags.length <= 0) {
+        return alert("please selete some tags");
+      }
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("content", content);
-    blogTags.forEach((tag) => {
-      formData.append("tags", tag);
-    });
-    if (blogImage) formData.append("image", blogImage); // Add only if file exists
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      blogTags.forEach((tag) => {
+        formData.append("tags", tag);
+      });
+      if (blogImage) formData.append("image", blogImage); // Add only if file exists
 
-    const result = await postBlog(formData);
-    console.log(result);
-    if (result.message) {
+      const result = await postBlog(formData);
+      console.log(result);
+      if (result.message) {
+        setDisable(false);
+        toast.success(result.message);
+      } else {
+        toast.error("blog upload failed");
+      }
+
+      // Reset
+      setTitle("");
+      setContent("");
+      setBlogTags([]);
+      setSelectedTag("");
+      setBlogImage(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    } catch (error) {
+      console.log(error);
+    } finally {
       setDisable(false);
-      toast.success(result.message);
-    } else {
-      toast.error("blog upload failed");
     }
-
-    // Reset
-    setTitle("");
-    setContent("");
-    setBlogTags([]);
-    setSelectedTag("");
-    setBlogImage(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handelImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,11 +59,18 @@ const CreateBlogPage = () => {
       setBlogImage(e.target.files[0]); // Store the File object, not URL
     }
   };
-
+  const [isAiGeneration, setAiGeneration] = useState(false);
   const generateContent = async () => {
-    const AIresult = await aiContent(title);
-    console.log(AIresult, title);
-    setContent(AIresult?.content);
+    try {
+      setAiGeneration(true);
+      const AIresult = await aiContent(title);
+      console.log(AIresult, title);
+      setContent(AIresult?.content);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAiGeneration(false);
+    }
   };
   const tags: string[] = [
     "programing",
@@ -81,17 +94,22 @@ const CreateBlogPage = () => {
   const removeTag = (tag: string) => {
     setBlogTags(blogTags.filter((t) => t !== tag));
   };
-  const log = () => {
-    if (editorRef.current) {
-      const value = editorRef.current.getContent();
-      setContent(value);
-      console.log(value);
-    }
+  const generateImageContent = () => {
+    console.log(content);
+
+    if (!content) alert("write or generate some blog content");
   };
+  // const log = () => {
+  //   if (editorRef.current) {
+  //     const value = editorRef.current.getContent();
+  //     setContent(value);
+  //     console.log(value);
+  //   }
+  // };
   return (
-    <div className="flex justify-between gap-3">
+    <div className="flex gap-3 flex-col md:flex-row  justify-center items-cente md:justify-items-start md:ic">
       {/* left */}
-      <div className="container mx-auto p-8 md:px-24 w-1/2">
+      <div className=" p-8 md:px-24 md:w-1/2">
         <h1 className="text-xl md:text-3xl uppercase font-semibold text-gray-500">
           Write your <span className="text-black font-extrabold">Blog</span>
         </h1>
@@ -159,23 +177,6 @@ const CreateBlogPage = () => {
             )}
           </div>
 
-          {/* Content */}
-          {/* <div className="w-full">
-          <label
-            htmlFor="content"
-            className="text-xl md:text-2xl font-semibold px-2 cursor-pointer w-fit hover:scale-105 transition-all"
-          >
-            Content
-          </label>
-          <textarea
-            id="content"
-            required
-            className="border-2 border-gray-400 rounded-2xl focus:shadow-md focus:shadow-gray-400 p-4 outline-none w-full min-h-[300px] transition-all"
-            placeholder="Write your content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          ></textarea>
-        </div> */}
           <div>
             {" "}
             <Editor
@@ -211,15 +212,55 @@ const CreateBlogPage = () => {
                   "bold italic forecolor | alignleft aligncenter " +
                   "alignright alignjustify | bullist numlist outdent indent | " +
                   "removeformat | help",
-                content_style:
-                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                content_style: `body {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      color: #1f2937;
+      line-height: 1.6;
+      padding: 1rem;
+    }
+    h1 { font-size: 2rem; font-weight: bold; color: #111827; }
+    h2 { font-size: 1.5rem; font-weight: bold; color: #1f2937; }
+    p { margin-bottom: 0.75rem; }
+    ul, ol { padding-left: 1.5rem; }
+    blockquote {
+      border-left: 4px solid #9ca3af;
+      padding-left: 1rem;
+      color: #6b7280;
+      font-style: italic;
+    }
+    img { max-width: 100%; height: auto; border-radius: 0.5rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #d1d5db;
+      padding: 0.5rem;
+    }
+  `,
               }}
             />
-            <button onClick={log}>Log editor content</button>
+            {/* <button onClick={log}>Log editor content</button> */}
           </div>
 
           {/* Image Upload */}
-          <div className="flex flex-col justify-center items-center">
+
+          <div className="flex flex-col justify-center items-center gap-4 w-full">
+            {/* ai image generation  */}
+            <div className="w-full ">
+              <textarea
+                className="bg-Primary-text-color/10 w-full p-5 rounded-2xl"
+                placeholder="content for image generation"
+              />
+              <div className="flex  flex-col gap-2">
+                <Button onClick={() => generateImageContent(content)}>
+                  Generate Content By AI
+                </Button>
+                <Button>Generate Image</Button>
+              </div>
+            </div>
+            {/* choose from device */}
             <div className="flex gap-3 justify-center items-center">
               <input
                 type="file"
@@ -229,6 +270,7 @@ const CreateBlogPage = () => {
                 ref={fileInputRef}
                 className="bg-Primary-button-color hover:bg-gray-500/50 p-4 rounded-2xl text-center"
               />
+
               {/* Delete Image */}
               {previewImage && (
                 <Button
@@ -265,7 +307,7 @@ const CreateBlogPage = () => {
 
       {/* right */}
       <div
-        className="w-1/2 bg-red-100 px-2 flex flex-col gap-4
+        className="md:w-1/2 bg-Green-color/35 rounded-2xl py-7 px-4 h-fit flex flex-col gap-4 justify-start 
       "
       >
         <h1 className="text-xl md:text-3xl uppercase font-semibold text-gray-500">
@@ -291,13 +333,15 @@ const CreateBlogPage = () => {
           />
         </div>
         {/* generate content */}
-        <Button className="w-fit " onClick={generateContent}>
+        <Button
+          className="w-fit "
+          disabled={isAiGeneration}
+          onClick={generateContent}
+        >
           Generate Content
         </Button>
-        {/* content */}
-        {/* <div className="reset-tw bg-yellow-300">
-          <Markdown>{content}</Markdown>
-        </div> */}
+        {isAiGeneration && <div> loading....</div>}
+
         <div className="reset-tw bg-yellow-300 prose prose-lg">
           <div dangerouslySetInnerHTML={{ __html: content }} />
         </div>

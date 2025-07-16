@@ -2,7 +2,6 @@ import { getSingleblog } from "@/utils/ApiFunction";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
-import Markdown from "react-markdown";
 
 const BlogPage = () => {
   const params = useParams();

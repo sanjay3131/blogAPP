@@ -197,6 +197,7 @@ const UpdateBlog = () => {
               }
             }}
             onEditorChange={(newContent) => setContent(newContent)}
+            value={content}
             init={{
               height: 500,
               menubar: false,
