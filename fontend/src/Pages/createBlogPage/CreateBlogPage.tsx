@@ -4,6 +4,10 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Editor } from "@tinymce/tinymce-react";
 import type { Editor as TinyMCEEditor } from "tinymce";
+import {
+  useGenerateAiImage,
+  useGenerateAiImagePrompt,
+} from "@/lib/utilFunction";
 
 const CreateBlogPage = () => {
   const [title, setTitle] = useState("");
@@ -15,6 +19,8 @@ const CreateBlogPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [disable, setDisable] = useState(false);
   const editorRef = useRef<TinyMCEEditor | null>(null);
+  const [aiImagePromt, setAiImagePrompt] = useState("");
+  const [aiImage, setAiImage] = useState("");
   const handelForm = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -29,7 +35,16 @@ const CreateBlogPage = () => {
       blogTags.forEach((tag) => {
         formData.append("tags", tag);
       });
-      if (blogImage) formData.append("image", blogImage); // Add only if file exists
+
+      if (blogImage) {
+        formData.append("image", blogImage);
+        console.log(blogImage);
+      }
+      if (aiImage) {
+        formData.append("aiImage", aiImage);
+
+        console.log("aiimage ", aiImage);
+      }
 
       const result = await postBlog(formData);
       console.log(result);
@@ -56,7 +71,8 @@ const CreateBlogPage = () => {
 
   const handelImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setBlogImage(e.target.files[0]); // Store the File object, not URL
+      setBlogImage(e.target.files[0]);
+      setAiImage("");
     }
   };
   const [isAiGeneration, setAiGeneration] = useState(false);
@@ -94,22 +110,38 @@ const CreateBlogPage = () => {
   const removeTag = (tag: string) => {
     setBlogTags(blogTags.filter((t) => t !== tag));
   };
-  const generateImageContent = () => {
-    console.log(content);
 
-    if (!content) alert("write or generate some blog content");
+  // ai image promt generate
+  const { mutate: generateAIContent, isPending } = useGenerateAiImagePrompt();
+  const generateImageContent = async () => {
+    if (!content) return alert("write or generate some blog content");
+
+    if (content)
+      await generateAIContent(content, {
+        onSuccess: (data) => {
+          setAiImagePrompt(data.content); // you get `data` here correctly
+          console.log("AI Prompt generated:", aiImagePromt);
+        },
+      });
   };
-  // const log = () => {
-  //   if (editorRef.current) {
-  //     const value = editorRef.current.getContent();
-  //     setContent(value);
-  //     console.log(value);
-  //   }
-  // };
+  // generate ai image
+  const { mutate: generateImage, isPending: generatingImage } =
+    useGenerateAiImage();
+
+  const generateAiImage = async () => {
+    if (!aiImagePromt) alert("write or generate prompt to create image");
+    await generateImage(aiImagePromt, {
+      onSuccess: (data) => {
+        setAiImage(data.image);
+        console.log("ai image ", aiImage, data);
+        setBlogImage(null);
+      },
+    });
+  };
   return (
-    <div className="flex gap-3 flex-col md:flex-row  justify-center items-cente md:justify-items-start md:ic">
+    <div className="flex gap-3 flex-col md:flex-row  justify-center items-cente md:justify-items-start relative">
       {/* left */}
-      <div className=" p-8 md:px-24 md:w-1/2">
+      <div className=" p-8 md:px-24 md:w-1/2 sticky top-0">
         <h1 className="text-xl md:text-3xl uppercase font-semibold text-gray-500">
           Write your <span className="text-black font-extrabold">Blog</span>
         </h1>
@@ -252,12 +284,24 @@ const CreateBlogPage = () => {
               <textarea
                 className="bg-Primary-text-color/10 w-full p-5 rounded-2xl"
                 placeholder="content for image generation"
+                onChange={(e) => setAiImagePrompt(e.target.value)}
+                value={aiImagePromt}
               />
               <div className="flex  flex-col gap-2">
-                <Button onClick={() => generateImageContent(content)}>
+                <Button
+                  onClick={generateImageContent}
+                  disabled={isPending}
+                  type="button"
+                >
                   Generate Content By AI
                 </Button>
-                <Button>Generate Image</Button>
+                <Button
+                  type="button"
+                  disabled={generatingImage}
+                  onClick={generateAiImage}
+                >
+                  Generate Image
+                </Button>
               </div>
             </div>
             {/* choose from device */}
@@ -285,11 +329,14 @@ const CreateBlogPage = () => {
                 </Button>
               )}
             </div>
-            {blogImage && (
+            {aiImage && (
+              <img src={aiImage} alt="ai image" className="size-fit" />
+            )}
+            {blogImage && !aiImage && (
               <img
                 src={URL.createObjectURL(blogImage)}
-                alt=""
-                className="size-[10rem]"
+                alt="uploaded image"
+                className="w-full max-h-96 object-contain"
               />
             )}
           </div>
@@ -305,9 +352,10 @@ const CreateBlogPage = () => {
         </form>
       </div>
 
-      {/* right */}
+      {/* right ai content generation */}
       <div
         className="md:w-1/2 bg-Green-color/35 rounded-2xl py-7 px-4 h-fit flex flex-col gap-4 justify-start 
+        sticky bottom-0 left-0
       "
       >
         <h1 className="text-xl md:text-3xl uppercase font-semibold text-gray-500">

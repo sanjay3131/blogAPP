@@ -156,6 +156,20 @@ const aiContent = async (prompt: string) => {
   const response = await axiosInstance.post("/blogs/aiContent", { prompt });
   return response.data;
 };
+
+// ai image prompt  generation
+const aiImagePromtGenerate = async (prompt: string) => {
+  const response = await axiosInstance.post("/blogs/aiImagePromot", { prompt });
+  return response.data;
+};
+
+// ai image generation
+const aiImageGenaration = async (contents: string) => {
+  const response = await axiosInstance.post("/blogs/image/generation", {
+    contents,
+  });
+  return response.data;
+};
 export {
   getAllBlogs,
   checkUser,
@@ -180,4 +194,6 @@ export {
   deleteSingleBlog,
   editBlogById,
   aiContent,
+  aiImagePromtGenerate,
+  aiImageGenaration,
 };

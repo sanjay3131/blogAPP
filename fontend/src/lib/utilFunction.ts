@@ -1,4 +1,11 @@
-import { toogleFollowAndUnfollow, toogleLike } from "@/utils/ApiFunction";
+import {
+  aiImageGenaration,
+  aiImagePromtGenerate,
+  toogleFollowAndUnfollow,
+  toogleLike,
+} from "@/utils/ApiFunction";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface UserData {
   id: string;
@@ -59,3 +66,28 @@ export const tags: string[] = [
   "Economics",
   "Others",
 ];
+
+// mutation functions
+
+// generete ai image prompt
+export const useGenerateAiImagePrompt = () => {
+  return useMutation({
+    mutationFn: (prompt: string) => aiImagePromtGenerate(prompt),
+    onSuccess: () => {
+      toast.success("AI promt generated");
+    },
+    onError: () => {
+      toast.error("Failed to generate promt");
+    },
+  });
+};
+
+// generate ai image
+export const useGenerateAiImage = () => {
+  return useMutation({
+    mutationFn: (prompt: string) => aiImageGenaration(prompt),
+    onSuccess: () => {
+      toast.success("AI Image generated");
+    },
+  });
+};
