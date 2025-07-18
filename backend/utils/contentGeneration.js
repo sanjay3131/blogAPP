@@ -25,8 +25,7 @@ Do NOT include <html>, <head>, or <body> tags — return only the blog content s
 
 Make the tone friendly, engaging, and human. Do not include any disclaimers like "as an AI model."
 
-User Prompt: ${prompt}`;
-    console.log(prompt);
+User Prompt: ${prompt} `;
 
     const result = await model.generateContent(fullPrompt);
     const content = result.response.text();

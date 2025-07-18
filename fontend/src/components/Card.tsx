@@ -56,7 +56,13 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       {/* Blog Image */}
       <div className="overflow-hidden rounded-xl">
         <img
-          src={blogData.image || sampleImage}
+          src={
+            blogData?.image
+              ? blogData.image
+              : blogData?.aiImage
+              ? blogData.aiImage
+              : sampleImage
+          }
           alt={blogData.title}
           className="w-full h-[220px] object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
         />

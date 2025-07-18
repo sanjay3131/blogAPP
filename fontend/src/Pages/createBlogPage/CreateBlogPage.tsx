@@ -61,6 +61,8 @@ const CreateBlogPage = () => {
       setBlogTags([]);
       setSelectedTag("");
       setBlogImage(null);
+      setAiImage("");
+      setAiImagePrompt("");
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.log(error);

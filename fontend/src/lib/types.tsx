@@ -11,6 +11,7 @@ export type BlogData = {
     email: string;
   };
   image: string;
+  aiImage: string;
   tags: string[];
 };
 

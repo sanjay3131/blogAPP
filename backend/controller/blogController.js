@@ -8,7 +8,7 @@ import pkg from "@treeee/youtube-caption-extractor";
 // @route   POST /api/blogs/create
 // @access  Private
 const createBlog = asyncHandler(async (req, res) => {
-  const { title, content, tags } = req.body;
+  const { title, content, tags, aiImage } = req.body;
   const userId = req.user?._id;
   const user = await User.findById(userId);
   if (!user) {
@@ -31,6 +31,7 @@ const createBlog = asyncHandler(async (req, res) => {
     title,
     content,
     tags,
+    aiImage,
     image: imageUrl,
     imagePublicId,
     author: userId,
