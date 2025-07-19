@@ -23,6 +23,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import OtherUserPage from "./Pages/UserProfilePage/OtherUserPage";
 import EditUserProfile from "./components/EditUserProfile";
 import UpdateBlog from "./components/UpdateBlog";
+import ErrorPage from "./Pages/ErrorPage";
 
 const queryClient = new QueryClient();
 
@@ -82,6 +83,7 @@ const AnimatedRoutes = () => {
             </AdminRoute>
           }
         />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </AnimatePresence>
   );

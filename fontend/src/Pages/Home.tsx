@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { BlogData } from "../lib/types.tsx";
 import Card from "@/components/Card.tsx";
 import BlogByCategories from "@/components/BlogByCategories.tsx";
+import LoadingPage from "./LoadingPage.tsx";
 
 const Home = () => {
   const queryClient = useQueryClient();
@@ -43,7 +44,12 @@ const Home = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div>
+        <LoadingPage />
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -93,11 +99,14 @@ const Home = () => {
 
         {/* Trending Blogs */}
         <motion.section
-          className="flex flex-col gap-4 p-4 rounded-2xl justify-center items-center"
+          className="flex flex-col gap-4 p-4 rounded-2xl justify-center items-center w-full "
           id="blogs"
         >
           <h2 className="text-2xl font-bold">New Blogs</h2>
-          <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 container mx-auto  gap-4 justify-center items-center w-full p-8">
+          <motion.div
+            className="w-full grid  sm:grid-cols-2 md:grid-cols-3  md:mx-auto gap-8 
+    justify-center items-center pb-14 "
+          >
             {data.slice(0, 6).map((blogData: BlogData, index: number) => (
               <Card
                 key={blogData._id}

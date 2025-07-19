@@ -131,7 +131,7 @@ const CreateBlogPage = () => {
     useGenerateAiImage();
 
   const generateAiImage = async () => {
-    if (!aiImagePromt) alert("write or generate prompt to create image");
+    if (!aiImagePromt) return alert("write or generate prompt to create image");
     await generateImage(aiImagePromt, {
       onSuccess: (data) => {
         setAiImage(data.image);

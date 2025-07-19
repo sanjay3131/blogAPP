@@ -18,6 +18,8 @@ import { useEffect, useState } from "react";
 import { handleFollowUser } from "@/lib/utilFunction";
 import BlogByCategories from "@/components/BlogByCategories";
 import { FaAngleDoubleDown, FaAngleDoubleUp, FaSearch } from "react-icons/fa";
+import LoadingPage from "../LoadingPage";
+import ErrorPage from "../ErrorPage";
 
 const AllBlogs = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -84,8 +86,8 @@ const AllBlogs = () => {
     setSideBar(!sidebar);
   };
 
-  if (isLoading) return <div>loading...</div>;
-  if (error) return <div>error </div>;
+  if (isLoading) return <LoadingPage />;
+  if (error) return <ErrorPage />;
 
   return (
     <div className="w-full flex flex-col gap-5">
