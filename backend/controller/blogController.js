@@ -332,7 +332,9 @@ const getSingleBlog = asyncHandler(async (req, res) => {
   if (!blogId) {
     return res.status(400).json({ message: "Blog ID is required" });
   }
-  const blog = await Blog.findById(blogId).populate("author", "name email");
+  const blog = await Blog.findById(blogId)
+    .populate("author", "name email")
+    .populate("comments.user", "profilePic name");
 
   if (!blog) {
     return res.status(404).json({ message: "Blog not found" });
@@ -476,6 +478,22 @@ const getUsersByName = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: "user not found" });
   res.status(200).json(searchedUser);
 });
+
+// comment section
+// post a comment
+const PostAcomment = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const blogId = req.params.id;
+  const { comment } = req.body;
+
+  const findBlog = await Blog.findById(blogId);
+
+  if (!findBlog) return res.status(200).json({ message: "blog not found" });
+
+  findBlog.comments.push({ user: userId, text: comment });
+  findBlog.save();
+  res.status(200).json({ message: "comment added", comment, findBlog });
+});
 export {
   createBlog,
   getBlogs,
@@ -496,4 +514,5 @@ export {
   getBlogByTitle,
   getAllusers,
   getUsersByName,
+  PostAcomment,
 };

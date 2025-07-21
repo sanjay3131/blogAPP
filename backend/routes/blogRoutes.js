@@ -19,6 +19,7 @@ import {
   getBlogByTitle,
   getAllusers,
   getUsersByName,
+  PostAcomment,
 } from "../controller/blogController.js";
 import { protect } from "../middleware/authmiddleware.js";
 import getUpload from "../middleware/upload.js";
@@ -99,5 +100,8 @@ router.get("/user/:id", getSingleUser);
 
 //Text generation
 router.get("/video/textgeneration", protect, textGenerationApi);
+
+//post a comment
+router.post("/postComment/:id", protect, PostAcomment);
 
 export default router;

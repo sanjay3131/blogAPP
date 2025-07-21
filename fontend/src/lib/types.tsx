@@ -21,3 +21,15 @@ export type UserData = {
   profilePic: string;
   email: string;
 };
+
+export type CommentData = {
+  _id: string;
+  content: string;
+  user: UserData;
+  text: string;
+  profilePic: string;
+  likes: number;
+  likedBy: string[];
+  createdAt: string;
+  updatedAt: string;
+};
