@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoMdHome, IoMdClose } from "react-icons/io";
-import { FaBlogger, FaUser } from "react-icons/fa";
+import { FaBlogger } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
 import { checkUser, Logout } from "@/utils/ApiFunction";
@@ -19,11 +19,12 @@ const Navbar = () => {
     queryFn: checkUser,
     refetchOnWindowFocus: false, // Optimization
   });
+  console.log(userData);
 
   const navdata = [
     { name: "Home", href: "/", icon: <IoMdHome /> },
     { name: "Blogs", href: "/blogs", icon: <FaBlogger /> },
-    { name: "User", href: "/user", icon: <FaUser /> },
+    // { name: "User", href: "/user", icon: <FaUser /> },
   ];
 
   const handleLogout = async () => {
@@ -86,7 +87,23 @@ const Navbar = () => {
                 {item.name}
               </NavLink>
             ))}
-
+            {userData && (
+              <NavLink
+                to="/user"
+                className={({ isActive }) =>
+                  `flex items-center gap-2 text-lg font-semibold ${
+                    isActive ? "text-white" : ""
+                  }`
+                }
+              >
+                <img
+                  className="size-7 rounded-full"
+                  src={userData?.author.profilePic}
+                  alt=""
+                />
+                <h1>{userData?.author.name}</h1>
+              </NavLink>
+            )}
             {userData ? (
               <Button
                 className="bg-Green-color shadow-Primary-text-color/50 shadow-sm text-Primary-text-color font-semibold text-lg  hover:text-Primary-background-color "
@@ -139,6 +156,23 @@ const Navbar = () => {
                 {item.name}
               </NavLink>
             ))}
+            {userData && (
+              <NavLink
+                to="/user"
+                className={({ isActive }) =>
+                  `flex items-center gap-2 text-lg font-semibold ${
+                    isActive ? "text-white" : ""
+                  }`
+                }
+              >
+                <img
+                  className="size-7 rounded-full"
+                  src={userData?.author.profilePic}
+                  alt=""
+                />
+                <h1>{userData?.author.name}</h1>
+              </NavLink>
+            )}
             {userData ? (
               <Button
                 className="bg-Green-color shadow-Primary-text-color/50 shadow-sm  font-semibold text-lg text-Primary-text-color  hover:text-Primary-background-color "
