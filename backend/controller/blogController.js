@@ -494,6 +494,54 @@ const PostAcomment = asyncHandler(async (req, res) => {
   findBlog.save();
   res.status(200).json({ message: "comment added", comment, findBlog });
 });
+
+//edit comment
+const editComment = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const blogId = req.params.id;
+  const { commentId, newComment } = req.body;
+
+  const findBlog = await Blog.findById(blogId);
+  if (!findBlog) return res.status(200).json({ message: "blog not found" });
+
+  const findComment = findBlog.comments.id(commentId);
+  if (!findComment)
+    return res.status(200).json({ message: "comment not found" });
+  if (findComment.user._id.toString() !== userId.toString()) {
+    return res
+      .status(403)
+      .json({ message: "You are not authorized to edit this comment" });
+  }
+
+  findComment.text = newComment;
+  findComment.createdAt = new Date(); // Update the timestamp
+  await findBlog.save();
+  res.status(200).json({ message: "comment updated", findBlog });
+});
+
+//delete comment
+const deleteComment = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const blogId = req.params.id;
+  const { commentId } = req.body;
+
+  const findBlog = await Blog.findById(blogId);
+  if (!findBlog) return res.status(200).json({ message: "blog not found" });
+
+  const findComment = findBlog.comments.id(commentId);
+  if (!findComment)
+    return res.status(200).json({ message: "comment not found" });
+  if (findComment.user._id.toString() !== userId.toString()) {
+    return res
+      .status(403)
+      .json({ message: "You are not authorized to delete this comment" });
+  }
+
+  findComment.deleteOne();
+  await findBlog.save();
+  res.status(200).json({ message: "comment deleted", findBlog });
+});
+
 export {
   createBlog,
   getBlogs,
@@ -515,4 +563,6 @@ export {
   getAllusers,
   getUsersByName,
   PostAcomment,
+  editComment,
+  deleteComment,
 };

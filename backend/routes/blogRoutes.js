@@ -20,6 +20,8 @@ import {
   getAllusers,
   getUsersByName,
   PostAcomment,
+  editComment,
+  deleteComment,
 } from "../controller/blogController.js";
 import { protect } from "../middleware/authmiddleware.js";
 import getUpload from "../middleware/upload.js";
@@ -104,4 +106,9 @@ router.get("/video/textgeneration", protect, textGenerationApi);
 //post a comment
 router.post("/postComment/:id", protect, PostAcomment);
 
+// edit a comment
+router.put("/editComment/:id", protect, editComment);
+
+// delete a comment
+router.delete("/deleteComment/:id", protect, deleteComment);
 export default router;

@@ -91,3 +91,14 @@ export const useGenerateAiImage = () => {
     },
   });
 };
+
+// scroll to id
+interface ScrollToSectionFn {
+  (id: string): void;
+}
+export const scrollToSection: ScrollToSectionFn = (id) => {
+  const element: HTMLElement | null = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+};

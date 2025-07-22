@@ -9,6 +9,7 @@ import { BlogData } from "../lib/types.tsx";
 import Card from "@/components/Card.tsx";
 import BlogByCategories from "@/components/BlogByCategories.tsx";
 import LoadingPage from "./LoadingPage.tsx";
+import { scrollToSection } from "@/lib/utilFunction.ts";
 
 const Home = () => {
   const queryClient = useQueryClient();
@@ -31,16 +32,6 @@ const Home = () => {
     } else {
       toast.success("Login to create a blog");
       navigate("/login");
-    }
-  };
-  interface ScrollToSectionFn {
-    (id: string): void;
-  }
-
-  const scrollToSection: ScrollToSectionFn = (id) => {
-    const element: HTMLElement | null = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 

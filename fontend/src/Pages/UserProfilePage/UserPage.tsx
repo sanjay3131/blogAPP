@@ -39,7 +39,7 @@ const UserPage = () => {
   const { author } = userData;
 
   return (
-    <div className="bg-Primary-background-color w-full min-h-screen  flex flex-col md:flex-row p-8 gap-4 ">
+    <div className="bg-Primary-background-color w-full min-h-screen  flex flex-col md:flex-row p-8 gap-4 dark:bg-Primary-text-color ">
       {/* uesr profile */}
       <UserComponent
         author={author}

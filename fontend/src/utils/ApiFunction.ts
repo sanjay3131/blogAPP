@@ -170,6 +170,38 @@ const aiImageGenaration = async (contents: string) => {
   });
   return response.data;
 };
+
+//post a comment
+const postComment = async (blogId: string, comment: string) => {
+  const response = await axiosInstance.post(`/blogs/postComment/${blogId}`, {
+    comment,
+  });
+  return response.data;
+};
+
+//edit a comment
+const editComment = async (
+  blogId: string,
+  commentId: string,
+  newComment: string
+) => {
+  const response = await axiosInstance.put(`/blogs/editComment/${blogId}`, {
+    newComment,
+    commentId,
+  });
+  return response.data;
+};
+
+//delete a comment
+const deleteComment = async (blogId: string, commentId: string) => {
+  const response = await axiosInstance.delete(
+    `/blogs/deleteComment/${blogId}`,
+    {
+      data: { commentId },
+    }
+  );
+  return response.data;
+};
 export {
   getAllBlogs,
   checkUser,
@@ -196,4 +228,7 @@ export {
   aiContent,
   aiImagePromtGenerate,
   aiImageGenaration,
+  postComment,
+  editComment,
+  deleteComment,
 };
