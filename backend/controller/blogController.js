@@ -20,11 +20,36 @@ const createBlog = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please fill all the fields");
   }
+
   let imageUrl = "";
   let imagePublicId = "";
   if (req.file) {
     imageUrl = req.file.path; // secure_url from cloudinary
     imagePublicId = req.file.filename; // public_id from cloudinary
+  }
+  if (aiImage && user.aiImageGenerated.length > 0) {
+    const usedImage = user.aiImageGenerated
+      .filter(Boolean)
+      .find((img) => img.url === aiImage);
+
+    const unusedImages = user.aiImageGenerated
+      .filter(Boolean)
+      .filter((img) => img.url !== aiImage);
+
+    // Delete unused images from Cloudinary
+    if (unusedImages.length > 0) {
+      for (const img of unusedImages) {
+        try {
+          await cloudinary.uploader.destroy(img.public_id);
+        } catch (err) {
+          console.error("Cloudinary deletion failed:", err.message);
+        }
+      }
+    }
+
+    // Keep only the used image
+    user.aiImageGenerated = usedImage ? [usedImage] : [];
+    await user.save();
   }
 
   const blog = await Blog.create({
@@ -333,7 +358,7 @@ const getSingleBlog = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Blog ID is required" });
   }
   const blog = await Blog.findById(blogId)
-    .populate("author", "name email")
+    .populate("author", "name email profilePic")
     .populate("comments.user", "profilePic name");
 
   if (!blog) {

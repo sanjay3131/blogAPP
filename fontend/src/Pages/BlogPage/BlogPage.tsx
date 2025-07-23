@@ -7,7 +7,7 @@ import {
 } from "@/utils/ApiFunction";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ErrorInBlogPage from "../ErrorInBlogPage";
 import LoadingPage from "../LoadingPage";
 import { CommentData } from "@/lib/types";
@@ -16,6 +16,7 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { scrollToSection } from "@/lib/utilFunction";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import noProfile from "../../assets/noProfile.png";
 
 const BlogPage = () => {
   const params = useParams();
@@ -30,6 +31,8 @@ const BlogPage = () => {
     queryFn: checkUser,
     retry: false,
   });
+
+  const navgation = useNavigate();
 
   const queryClient = useQueryClient();
   console.log(data);
@@ -101,7 +104,7 @@ const BlogPage = () => {
     >
       {/* title */}
       <h1
-        className="text-6xl capitalize font-bold mb-4"
+        className=" text-4xl md:text-6xl capitalize font-extrabold mb-4"
         dangerouslySetInnerHTML={{ __html: data.title }}
       />
       {/* blog image */}
@@ -115,6 +118,37 @@ const BlogPage = () => {
         className="reset-tw"
         dangerouslySetInnerHTML={{ __html: data.content }}
       ></div>
+      {/* author profile */}
+      <div
+        className="flex flex-col items-start mt-4 w-full gap-1"
+        onClick={() => navgation(`/userPage/${data.author?._id}`)}
+      >
+        <div className="flex items-center gap-4 mt-4">
+          <img
+            src={data.author?.profilePic ? data.author.profilePic : noProfile}
+            referrerPolicy="no-referrer"
+            alt=""
+            className="w-10 h-10 rounded-full"
+          />
+          <h2 className="text-sm font-semibold capitalize">
+            {data.author?.name}
+          </h2>
+        </div>
+        <p className="text-xs text-gray-500 mt-1">
+          {new Date(data.createdAt).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </p>
+        <p className="text-xs text-gray-500">
+          {new Date(data.createdAt).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
+      </div>
+
       {/* comments */}
       {/* post / edit a comment */}
       {edit ? (
@@ -197,7 +231,10 @@ const BlogPage = () => {
               </span>
             </div>
 
-            <div className="flex items-center gap-2 mb-4">
+            <div
+              className="flex items-center gap-2 mb-4"
+              onClick={() => navgation(`/userPage/${comment.user?._id}`)}
+            >
               <img
                 src={comment.user?.profilePic}
                 alt=""

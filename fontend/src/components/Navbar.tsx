@@ -8,6 +8,7 @@ import { Button } from "./ui/button";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import "../App.css";
 import { toast } from "sonner";
+import noProfile from "../assets/noProfile.png";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -98,7 +99,11 @@ const Navbar = () => {
               >
                 <img
                   className="size-7 rounded-full"
-                  src={userData?.author.profilePic}
+                  src={
+                    userData?.author.profilePic
+                      ? userData.author.profilePic
+                      : noProfile
+                  }
                   alt=""
                 />
                 <h1>{userData?.author.name}</h1>

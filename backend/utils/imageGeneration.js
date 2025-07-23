@@ -26,6 +26,7 @@ export const imageGeneration = async (req, res) => {
     }
 
     let result = {};
+    let uploadResult = null;
 
     for (const part of response.candidates[0].content.parts) {
       if (part.text) {
@@ -48,7 +49,7 @@ export const imageGeneration = async (req, res) => {
         fs.writeFileSync(localPath, buffer);
 
         // Upload to Cloudinary
-        const uploadResult = await cloudinary.uploader.upload(localPath, {
+        uploadResult = await cloudinary.uploader.upload(localPath, {
           folder: "ai-generated-images",
         });
 
@@ -62,7 +63,10 @@ export const imageGeneration = async (req, res) => {
       }
     }
     const user = req.user;
-    user.aiImageGenerated.push(result.image);
+    user.aiImageGenerated.push({
+      url: result.image,
+      public_id: uploadResult.public_id,
+    });
     await user.save();
 
     res.json(result);
