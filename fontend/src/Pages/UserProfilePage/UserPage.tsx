@@ -2,7 +2,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { checkUser, getAllUserBlog } from "@/utils/ApiFunction";
 
 import addFriend from "../../assets/add-friend.png";
-import bell from "../../assets/bell.png";
 import check from "../../assets/check.png";
 import blogIcon from "../../assets/computer.png";
 
@@ -24,14 +23,10 @@ const UserPage = () => {
   });
   const queryClient = useQueryClient();
 
-  console.log("userData", userData, userBlogs);
-
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {(error as Error).message}</div>;
   // const []=useState([])
   const sidebardata = [
-    { name: "Notification", icon: bell },
-
     { name: "Followers", icon: addFriend, toogle: 2 },
     { name: "Following", icon: check, toogle: 3 },
     { name: "Blogs", icon: blogIcon, toogle: 1 },

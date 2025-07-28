@@ -15,7 +15,6 @@ const OtherUserPage = () => {
     queryFn: () => getSingleUserDetails(userId),
   });
 
-  console.log(data);
   const sidebardata = [
     { name: "Followers", icon: addFriend, toogle: 2 },
     { name: "Following", icon: check, toogle: 3 },

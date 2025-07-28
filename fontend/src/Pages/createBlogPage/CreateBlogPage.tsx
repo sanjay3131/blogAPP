@@ -38,16 +38,12 @@ const CreateBlogPage = () => {
 
       if (blogImage) {
         formData.append("image", blogImage);
-        console.log(blogImage);
       }
       if (aiImage) {
         formData.append("aiImage", aiImage);
-
-        console.log("aiimage ", aiImage);
       }
 
       const result = await postBlog(formData);
-      console.log(result);
       if (result.message) {
         setDisable(false);
         toast.success(result.message);
@@ -122,7 +118,6 @@ const CreateBlogPage = () => {
       await generateAIContent(content, {
         onSuccess: (data) => {
           setAiImagePrompt(data.content); // you get `data` here correctly
-          console.log("AI Prompt generated:", aiImagePromt);
         },
       });
   };
@@ -135,7 +130,6 @@ const CreateBlogPage = () => {
     await generateImage(aiImagePromt, {
       onSuccess: (data) => {
         setAiImage(data.image);
-        console.log("ai image ", aiImage, data);
         setBlogImage(null);
       },
     });

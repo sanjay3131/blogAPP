@@ -7,6 +7,10 @@ import { Editor } from "@tinymce/tinymce-react";
 import type { Editor as TinyMCEEditor } from "tinymce";
 import { useRef, useState, useEffect } from "react";
 import { toast } from "sonner";
+import {
+  useGenerateAiImage,
+  useGenerateAiImagePrompt,
+} from "@/lib/utilFunction";
 
 const UpdateBlog = () => {
   const navigate = useNavigate();
@@ -27,9 +31,43 @@ const UpdateBlog = () => {
   const [previewImage, setPreviewImage] = useState("");
   const [isFormReady, setIsFormReady] = useState(false);
   const [disable, setDisable] = useState(false);
+  const [aiImagePromt, setAiImagePrompt] = useState("");
+  const [aiImage, setAiImage] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<TinyMCEEditor | null>(null);
+
+  const { mutate: generateAIContentPrompt, isPending: generatingPrompt } =
+    useGenerateAiImagePrompt();
+  const { mutate: generateImage, isPending: generatingImage } =
+    useGenerateAiImage();
+
+  const generateImageContent = async () => {
+    if (!content) return alert("Please write some blog content first");
+
+    await generateAIContentPrompt(content, {
+      onSuccess: (data) => {
+        setAiImagePrompt(data.content);
+      },
+      onError: () => {
+        toast.error("Failed to generate prompt");
+      },
+    });
+  };
+
+  const generateAiImage = async () => {
+    if (!aiImagePromt) return alert("Please write or generate a prompt");
+
+    await generateImage(aiImagePromt, {
+      onSuccess: (data) => {
+        setAiImage(data.image);
+        setBlogImage(null); // remove manually uploaded image if AI image is used
+      },
+      onError: () => {
+        toast.error("AI image generation failed");
+      },
+    });
+  };
 
   // Set state once data is fetched
   useEffect(() => {
@@ -59,12 +97,21 @@ const UpdateBlog = () => {
     formData.append("title", title);
     formData.append("content", content);
     blogTags.forEach((tag) => formData.append("tags", tag));
-    if (blogImage) formData.append("image", blogImage);
+    if (blogImage) {
+      formData.append("image", blogImage);
+      console.log(blogImage);
+    }
+    if (aiImage) {
+      formData.append("aiImage", aiImage);
 
+      console.log("aiimage ", aiImage);
+    }
     const result = await editBlogById(blogId, formData);
 
     if (result.message) {
       toast.success(result.message);
+      console.log("Blog updated successfully", result);
+
       setDisable(false);
       navigate("/blogs");
     } else {
@@ -230,6 +277,43 @@ const UpdateBlog = () => {
         </div>
 
         {/* Image Upload */}
+        {/* AI Image Prompt and Generation */}
+        <div className="w-full flex flex-col gap-4">
+          <textarea
+            className="bg-gray-100 w-full p-3 rounded-xl"
+            placeholder="Enter prompt for AI image"
+            onChange={(e) => setAiImagePrompt(e.target.value)}
+            value={aiImagePromt}
+          />
+
+          <div className="flex flex-col md:flex-row gap-3">
+            <Button
+              type="button"
+              onClick={generateImageContent}
+              disabled={generatingPrompt}
+            >
+              Generate Prompt from Content
+            </Button>
+
+            <Button
+              type="button"
+              onClick={generateAiImage}
+              disabled={generatingImage}
+            >
+              Generate AI Image
+            </Button>
+          </div>
+
+          {/* Show AI image preview */}
+          {aiImage && (
+            <img
+              src={aiImage}
+              alt="ai generated"
+              className="w-full max-h-96 object-contain"
+            />
+          )}
+        </div>
+
         <div className="flex flex-col justify-center items-center">
           <div className="flex gap-3 justify-center items-center">
             <input

@@ -37,7 +37,6 @@ const Card = ({ blogData, index, queryClient }: CardProps) => {
       });
       setIsDeteBlog("");
       toast.success(response.message);
-      console.log(response);
     } catch (error) {
       toast.error("blog not deleted");
       console.log(error);

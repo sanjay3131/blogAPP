@@ -17,15 +17,13 @@ const BlogByCategories = ({ showAll = false }: { showAll?: boolean }) => {
     queryFn: () => getBlogsByTags(selectedTag),
     enabled: selectedTag.length > 0,
   });
-  console.log(blogsByTags);
 
   return (
     <div>
-      {" "}
       <motion.div className="flex flex-col items-center gap-5">
         <h1 className="text-2xl font-bold">Blogs by Categories</h1>
         <motion.div className="flex gap-4 flex-wrap justify-center items-center">
-          {tags.map((cat, index) => (
+          {tags?.map((cat, index) => (
             <div
               key={index}
               className={`px-4 py-2 rounded-2xl text-sm lg:text-lg  font-semibold uppercase cursor-pointer transition-all duration-300 hover:bg-Green-color ${

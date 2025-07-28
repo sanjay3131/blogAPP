@@ -91,7 +91,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 // update a blog
 // @route   PUT /api/blogs/:id
 const updateBlog = asyncHandler(async (req, res) => {
-  const { title, content, tags } = req.body;
+  const { title, content, tags, aiImage } = req.body;
   const blogId = req.params.id;
 
   const blog = await Blog.findById(blogId);
@@ -100,6 +100,11 @@ const updateBlog = asyncHandler(async (req, res) => {
   }
 
   const userId = req.user._id;
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
   if (blog.author.toString() !== userId.toString()) {
     return res
       .status(403)
@@ -116,6 +121,31 @@ const updateBlog = asyncHandler(async (req, res) => {
   if (title !== undefined) blog.title = title;
   if (content !== undefined) blog.content = content;
   if (tags !== undefined) blog.tags = tags;
+  if (aiImage !== undefined) blog.aiImage = aiImage;
+  if (aiImage && user.aiImageGenerated.length > 0) {
+    const usedImage = user.aiImageGenerated
+      .filter(Boolean)
+      .find((img) => img.url === aiImage);
+
+    const unusedImages = user.aiImageGenerated
+      .filter(Boolean)
+      .filter((img) => img.url !== aiImage);
+
+    // Delete unused images from Cloudinary
+    if (unusedImages.length > 0) {
+      for (const img of unusedImages) {
+        try {
+          await cloudinary.uploader.destroy(img.public_id);
+        } catch (err) {
+          console.error("Cloudinary deletion failed:", err.message);
+        }
+      }
+    }
+
+    // Keep only the used image
+    user.aiImageGenerated = usedImage ? [usedImage] : [];
+    await user.save();
+  }
 
   await blog.save();
 

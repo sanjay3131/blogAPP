@@ -35,7 +35,6 @@ const BlogPage = () => {
   const navgation = useNavigate();
 
   const queryClient = useQueryClient();
-  console.log(data);
   const [comment, setComment] = useState("");
   const [editComment, setEditComment] = useState("");
   const [commentId, setCommentId] = useState("");
@@ -54,12 +53,11 @@ const BlogPage = () => {
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
       setComment("");
       toast.success("Comment posted successfully");
+      scrollToSection("comments");
     } catch (error) {
       console.error("Error posting comment:", error);
       toast.error("Failed to post comment. Please try again later.");
     }
-
-    console.log("Comment submitted");
   };
   const handleDeleteComment = async (commentId: string) => {
     await deleteComment(data._id, commentId);
@@ -208,7 +206,7 @@ const BlogPage = () => {
       )}
 
       {/* read comments */}
-      <div className="w-full flex flex-col gap-4 mt-8">
+      <div className="w-full flex flex-col gap-4 mt-8" id="comments">
         {data.comments.map((comment: CommentData) => (
           <div
             key={comment._id}

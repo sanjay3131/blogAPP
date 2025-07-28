@@ -20,7 +20,6 @@ const Navbar = () => {
     queryFn: checkUser,
     refetchOnWindowFocus: false, // Optimization
   });
-  console.log(userData);
 
   const navdata = [
     { name: "Home", href: "/", icon: <IoMdHome /> },

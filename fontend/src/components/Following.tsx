@@ -14,7 +14,6 @@ const Following = ({ userId }: { userId: string }) => {
     queryKey: ["following"],
     queryFn: () => getUserFollowing(userId),
   });
-  console.log(data);
   const { data: userdata, isLoading } = useQuery({
     queryKey: ["user"],
     queryFn: checkUser,
@@ -22,8 +21,7 @@ const Following = ({ userId }: { userId: string }) => {
   const queryClient = useQueryClient();
 
   const handelUnfollow = async (id: string) => {
-    const respose = await toogleFollowAndUnfollow(id);
-    console.log(respose);
+    await toogleFollowAndUnfollow(id);
     await queryClient.invalidateQueries({ queryKey: ["following"] });
     await queryClient.invalidateQueries({ queryKey: ["user"] });
   };

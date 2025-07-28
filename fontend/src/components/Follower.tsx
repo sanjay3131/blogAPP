@@ -1,8 +1,4 @@
-import {
-  checkUser,
-  getUserFollowers,
-  getUserFollowing,
-} from "@/utils/ApiFunction";
+import { checkUser, getUserFollowers } from "@/utils/ApiFunction";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "./ui/button";
 import noProfile from "../assets/noProfile.png";
@@ -24,19 +20,18 @@ const Follower = ({ userId }: { userId: string }) => {
     queryFn: () => getUserFollowers(userId),
   });
 
-  const {
-    data: following,
-    isLoading: isFollowingLoading,
-    isError: isFollowingError,
-  } = useQuery({
-    queryKey: ["following"],
-    queryFn: () => getUserFollowing(userId),
-  });
+  // const {
+  //   data: following,
+  //   isLoading: isFollowingLoading,
+  //   isError: isFollowingError,
+  // } = useQuery({
+  //   queryKey: ["following"],
+  //   queryFn: () => getUserFollowing(userId),
+  // });
   const { data: userdata } = useQuery({
     queryKey: ["user"],
     queryFn: checkUser,
   });
-  console.log("user following ", following, userdata.author.following);
   const navigate = useNavigate();
 
   const handleFollow = async (id: string) => {
@@ -54,11 +49,11 @@ const Follower = ({ userId }: { userId: string }) => {
     else navigate(`/userPage/${id}`);
   };
 
-  if (isFollowersLoading || isFollowingLoading) {
+  if (isFollowersLoading) {
     return <p>Loading...</p>;
   }
 
-  if (isFollowersError || isFollowingError) {
+  if (isFollowersError) {
     return <p>Error loading data</p>;
   }
   return (

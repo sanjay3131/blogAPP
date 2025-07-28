@@ -38,7 +38,6 @@ const AllBlogs = () => {
     queryKey: ["allUserData"],
     queryFn: getAllUsers,
   });
-  console.log("=>>>>>", AllUserData);
   const { data: user } = useQuery({
     queryKey: ["user"],
     queryFn: checkUser,
@@ -50,7 +49,6 @@ const AllBlogs = () => {
   });
 
   const queryClient = useQueryClient();
-  console.log(">>>>", authorBlog);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -68,9 +66,7 @@ const AllBlogs = () => {
     queryKey: ["searchedUser", searchUser],
     queryFn: () => getUserByName(searchUser),
   });
-  console.log(seachedUserResult);
 
-  console.log(searchBlogs, !searchQuery, debounceQuery, user);
   const handleFollow = async (id: string) => {
     try {
       setLoadingUserId(id);

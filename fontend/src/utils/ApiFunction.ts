@@ -49,7 +49,6 @@ const postBlog = async (formdata: FormData) => {
   const response = await axiosInstance.post("/blogs/create", formdata, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-  console.log(response);
 
   return response.data;
 };

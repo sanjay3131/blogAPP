@@ -53,7 +53,6 @@ const EditUserProfile = () => {
       setFormLoading(true);
       const response = await updateUserProfile(formData);
       if (response.message) toast.success(response.message);
-      console.log(response);
     } catch (error) {
       console.log(error);
     } finally {

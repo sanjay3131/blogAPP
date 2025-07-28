@@ -89,15 +89,19 @@ const AnimatedRoutes = () => {
   );
 };
 
-const App = () => (
-  <GoogleOAuthProvider clientId="85649998640-dvrc24afh33okm05iqhell2uiub0vbuq.apps.googleusercontent.com">
-    <QueryClientProvider client={queryClient}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <AnimatedRoutes />
-        <Toaster />
-      </Suspense>
-    </QueryClientProvider>
-  </GoogleOAuthProvider>
-);
+const App = () => {
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  return (
+    <GoogleOAuthProvider clientId={clientId}>
+      <QueryClientProvider client={queryClient}>
+        <Suspense fallback={<div>Loading...</div>}>
+          <AnimatedRoutes />
+          <Toaster />
+        </Suspense>
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
+  );
+};
 
 export default App;
