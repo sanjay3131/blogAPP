@@ -209,8 +209,10 @@ const CreateBlogPage = () => {
             {" "}
             <Editor
               apiKey="u3w7dg5t76wp9ow90eif6e9ebdr5xg9gli56wn63aehtrbn7"
-              onInit={(_evt, editor) => (editorRef.current = editor)}
-              onEditorChange={(newContent) => setContent(newContent)}
+              onInit={(_evt: unknown, editor: TinyMCEEditor) =>
+                (editorRef.current = editor)
+              }
+              onEditorChange={(newContent: string) => setContent(newContent)}
               value={content}
               init={{
                 height: 500,
