@@ -236,14 +236,14 @@ const UpdateBlog = () => {
         <div>
           <Editor
             apiKey="u3w7dg5t76wp9ow90eif6e9ebdr5xg9gli56wn63aehtrbn7"
-            onInit={(_evt, editor) => {
+            onInit={(_evt: unknown, editor: TinyMCEEditor) => {
               editorRef.current = editor;
               // If content already exists, set it manually
               if (content) {
                 editor.setContent(content);
               }
             }}
-            onEditorChange={(newContent) => setContent(newContent)}
+            onEditorChange={(newContent: string) => setContent(newContent)}
             value={content}
             init={{
               height: 500,
