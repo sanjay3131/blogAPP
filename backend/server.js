@@ -8,7 +8,6 @@ import cookieParser from "cookie-parser";
 import setupGoogleStrategy from "./passport/googleStrategy.js";
 import authRoutes from "./routes/authRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
-import { imageGeneration } from "./utils/imageGeneration.js";
 //config
 configDotenv();
 const app = express();
@@ -16,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://blog-app-wine-sigma.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
