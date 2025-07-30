@@ -66,9 +66,9 @@ const Home = () => {
             of blogs.
           </motion.h1>
           <p className="text-gray-100/50">
-            Blog is an open platform where readers find dynamic thinking, and
-            where expert and undiscovered voices can share their writing on any
-            topic.
+            BlogVerse is an open platform where readers find dynamic thinking,
+            and where expert and undiscovered voices can share their writing on
+            any topic.
           </p>
           <motion.button
             onClick={() => scrollToSection("blogs")}
