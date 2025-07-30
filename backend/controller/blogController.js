@@ -192,7 +192,6 @@ const deleteAllBlogsOfUser = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: "No blogs found" });
   }
 
-  // Optional: Clear blog references in user
   user.blogPosts = [];
   await user.save();
 
@@ -249,7 +248,6 @@ const uploadImage = asyncHandler(async (req, res) => {
   // Validate file
   const file = req.file;
   const publicId = file.filename;
-  console.log(publicId);
 
   if (!file) {
     return res.status(400).json({ message: "No file uploaded" });
@@ -453,8 +451,7 @@ const textGenerationApi = asyncHandler(async (req, res) => {
 });
 // get blogs by tags
 const getBlogsByTags = asyncHandler(async (req, res) => {
-  const { tags } = req.body; // tags should be an array
-
+  const { tags } = req.body;
   if (!Array.isArray(tags) || tags.length === 0) {
     return res.status(400).json({ message: "Tags must be a non-empty array" });
   }
@@ -473,7 +470,6 @@ const getBlogsByTags = asyncHandler(async (req, res) => {
 //get single user
 const getSingleUser = asyncHandler(async (req, res) => {
   const userId = req.params.id;
-  console.log(userId);
 
   if (!userId)
     return res.status(400).json({
@@ -483,7 +479,6 @@ const getSingleUser = asyncHandler(async (req, res) => {
     .populate("blogPosts")
     .populate("followers", "name email profilePic")
     .populate("following", "name email profilePic");
-  console.log(user);
 
   if (!user)
     return res.status(404).json({

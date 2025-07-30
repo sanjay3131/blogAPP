@@ -53,8 +53,6 @@ export const imageGeneration = async (req, res) => {
           folder: "ai-generated-images",
         });
 
-        console.log(uploadResult);
-
         // Clean up local file
         fs.unlinkSync(localPath);
 
