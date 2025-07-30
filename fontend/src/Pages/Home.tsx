@@ -10,6 +10,7 @@ import Card from "@/components/Card.tsx";
 import BlogByCategories from "@/components/BlogByCategories.tsx";
 import LoadingPage from "./LoadingPage.tsx";
 import { scrollToSection } from "@/lib/utilFunction.ts";
+import ErrorPage from "./ErrorPage.tsx";
 
 const Home = () => {
   const queryClient = useQueryClient();
@@ -41,7 +42,7 @@ const Home = () => {
         <LoadingPage />
       </div>
     );
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <ErrorPage />;
 
   return (
     <motion.div
