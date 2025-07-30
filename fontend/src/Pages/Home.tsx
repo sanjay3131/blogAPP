@@ -99,14 +99,17 @@ const Home = () => {
             className="w-full grid  sm:grid-cols-2 md:grid-cols-3  md:mx-auto gap-8 
     justify-center items-center pb-14 "
           >
-            {data?.slice(0, 6).map((blogData: BlogData, index: number) => (
-              <Card
-                key={blogData._id}
-                blogData={blogData}
-                index={index}
-                queryClient={queryClient}
-              />
-            ))}
+            {data != null &&
+              data
+                ?.slice(0, 6)
+                .map((blogData: BlogData, index: number) => (
+                  <Card
+                    key={blogData._id}
+                    blogData={blogData}
+                    index={index}
+                    queryClient={queryClient}
+                  />
+                ))}
           </motion.div>
           <Button onClick={() => navigate("/blogs")} className="w-24">
             More Blogs
