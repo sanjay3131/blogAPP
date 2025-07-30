@@ -101,7 +101,7 @@ const Register = () => {
           </div>
         </form>
         <a
-          href="http://localhost:3000/api/auth/google"
+          href={import.meta.env.VITE_BACKEND_URL + "/auth/google"}
           className="w-full flex justify-center items-center px-4"
         >
           <Button className="w-4/5">SignUp with Google</Button>
