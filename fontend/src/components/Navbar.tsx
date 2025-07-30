@@ -34,7 +34,7 @@ const Navbar = () => {
         queryClient.removeQueries({ queryKey: ["user"] }); // Fully clear user cache
         navigate("/");
         toast.success("User logged out");
-        console.log("User logged out successfully.");
+        console.log("User logged out successfully.",res);
       }
     } catch (err) {
       console.error("Logout failed:", err);
