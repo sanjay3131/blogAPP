@@ -88,7 +88,7 @@ const Login = () => {
           </div>
         </form>
         <a
-          href="https://ai-blogapp.onrender.com/auth/google"
+          href="https://ai-blogapp.onrender.com/api/auth/google"
           className="w-full flex justify-center items-center px-4"
         >
           <Button className="w-4/5">Login with Google</Button>
