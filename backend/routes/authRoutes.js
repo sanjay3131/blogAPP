@@ -45,7 +45,7 @@ router.get(
   asyncHandler(async (req, res) => {
     const token = generateToken(req.user._id, res);
     // Optionally redirect or send token
-    res.redirect(`http://localhost:5173/user`); // or send JSON if API-only
+    res.redirect(process.env.Frontend_URL || "http://localhost:3000"); // or send JSON if API-only
   })
 );
 
