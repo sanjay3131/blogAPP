@@ -7,6 +7,8 @@ import blogIcon from "../../assets/computer.png";
 
 import UserComponent from "@/components/UserComponent";
 import { BlogData } from "@/lib/types";
+import LoadingPage from "../LoadingPage";
+import ErrorPage from "../ErrorPage";
 
 const UserPage = () => {
   const {
@@ -23,8 +25,8 @@ const UserPage = () => {
   });
   const queryClient = useQueryClient();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {(error as Error).message}</div>;
+  if (isLoading) return <LoadingPage />;
+  if (error) return <ErrorPage />;
   // const []=useState([])
   const sidebardata = [
     { name: "Followers", icon: addFriend, toogle: 2 },
