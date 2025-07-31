@@ -8,7 +8,6 @@ interface OtherUserFollowersProps {
 }
 
 const OtherUserFollowers = ({ followers }: OtherUserFollowersProps) => {
-  console.log(">>", followers);
   const navigate = useNavigate();
 
   return (

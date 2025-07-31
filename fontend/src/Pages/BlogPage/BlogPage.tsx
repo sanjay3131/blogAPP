@@ -12,7 +12,7 @@ import ErrorInBlogPage from "../ErrorInBlogPage";
 import LoadingPage from "../LoadingPage";
 import { CommentData } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { scrollToSection } from "@/lib/utilFunction";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -84,6 +84,24 @@ const BlogPage = () => {
     }
   };
 
+  // Scroll-to-top button visibility state
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [totalPageHeight, setTotalPageHeight] = useState(0);
+  const [currentScrollPosition, setCurrentScrollPosition] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const halfPage = document.body.scrollHeight / 5;
+
+      setShowScrollTop(scrollY > halfPage);
+      setCurrentScrollPosition(scrollY);
+      setTotalPageHeight(document.body.scrollHeight - 700);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   if (isLoading) return <LoadingPage />;
   if (error)
     return (
@@ -98,8 +116,23 @@ const BlogPage = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
-      className="p-4 flex flex-col justify-center items-center"
+      className="p-4 flex flex-col justify-center items-center relative"
     >
+      {/* progressbar */}
+      <div
+        className="fixed top-0 left-0 right-0 h-2 bg-gradient-to-r from-green-400 to-blue-500 
+         z-50"
+        style={{ width: `${(currentScrollPosition / totalPageHeight) * 100}%` }}
+      ></div>
+      {/* scroll to top */}
+      {showScrollTop && (
+        <button
+          className="fixed top-[89%] text-xl font-bold text-Primary-button-color right-2 bg-Primary-text-color/55 p-2 rounded-full shadow-md hover:bg-Primary-text-color/80 transition"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          ^ <br /> Top
+        </button>
+      )}
       {/* title */}
       <h1
         className=" text-4xl md:text-6xl capitalize font-extrabold mb-4"
@@ -113,7 +146,7 @@ const BlogPage = () => {
       />
       {/* blog content */}
       <div
-        className="reset-tw"
+        className="reset-tw "
         dangerouslySetInnerHTML={{ __html: data.content }}
       ></div>
       {/* author profile */}

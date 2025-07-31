@@ -8,6 +8,7 @@ import {
   useGenerateAiImage,
   useGenerateAiImagePrompt,
 } from "@/lib/utilFunction";
+import { useNavigate } from "react-router-dom";
 
 const CreateBlogPage = () => {
   const [title, setTitle] = useState("");
@@ -21,6 +22,8 @@ const CreateBlogPage = () => {
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const [aiImagePromt, setAiImagePrompt] = useState("");
   const [aiImage, setAiImage] = useState("");
+
+  const navigate = useNavigate();
   const handelForm = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -47,6 +50,7 @@ const CreateBlogPage = () => {
       if (result.message) {
         setDisable(false);
         toast.success(result.message);
+        navigate("/blogs");
       } else {
         toast.error("blog upload failed");
       }
@@ -135,9 +139,47 @@ const CreateBlogPage = () => {
     });
   };
   return (
-    <div className="flex gap-3 flex-col md:flex-row  justify-center items-cente md:justify-items-start relative">
-      {/* left */}
-      <div className=" p-8 md:px-24 md:w-1/2 sticky top-0">
+    <div className="flex gap-3 flex-col  justify-center  md:justify-items-start relative">
+      {/* left ai content generation */}
+      <div className="w-full  bg-Green-color/35 rounded-2xl py-7 px-4 h-fit flex flex-col gap-4 mt-10 ">
+        <h1 className="text-xl md:text-3xl uppercase font-semibold text-gray-500">
+          Create your AI <span className="text-black font-extrabold">Blog</span>
+        </h1>
+        {/* title */}
+        <div className="flex flex-col w-full">
+          <label
+            htmlFor="title"
+            className="text-xl md:text-2xl font-semibold px-2 cursor-pointer w-fit hover:scale-105 transition-all"
+          >
+            Title
+          </label>
+          <input
+            type="text"
+            id="title"
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="What is the title?"
+            className="border-2 border-gray-400 rounded-2xl focus:shadow-md focus:shadow-gray-400 p-4 outline-none transition-all w-full"
+            maxLength={100}
+          />
+        </div>
+        {/* generate content */}
+        <Button
+          className="w-fit "
+          disabled={isAiGeneration}
+          onClick={generateContent}
+        >
+          Generate Content
+        </Button>
+        {isAiGeneration && <div> loading....</div>}
+
+        <div className="reset-tw bg-yellow-300 prose prose-lg">
+          <div dangerouslySetInnerHTML={{ __html: content }} />
+        </div>
+      </div>
+      {/* right */}
+      <div className=" p-8 md:px-24 w-full sticky top-0">
         <h1 className="text-xl md:text-3xl uppercase font-semibold text-gray-500">
           Write your <span className="text-black font-extrabold">Blog</span>
         </h1>
@@ -205,7 +247,7 @@ const CreateBlogPage = () => {
             )}
           </div>
 
-          <div>
+          <div className=" w-full">
             {" "}
             <Editor
               apiKey="u3w7dg5t76wp9ow90eif6e9ebdr5xg9gli56wn63aehtrbn7"
@@ -280,25 +322,33 @@ const CreateBlogPage = () => {
             {/* ai image generation  */}
             <div className="w-full ">
               <textarea
-                className="bg-Primary-text-color/10 w-full p-5 rounded-2xl"
+                className="bg-Primary-text-color/10 w-full p-5 rounded-2xl resize-none h-[150px]"
                 placeholder="content for image generation"
                 onChange={(e) => setAiImagePrompt(e.target.value)}
                 value={aiImagePromt}
               />
-              <div className="flex  flex-col gap-2">
+              <div className="flex  flex-col gap-2 disabled:bg-black">
                 <Button
                   onClick={generateImageContent}
                   disabled={isPending}
                   type="button"
                 >
-                  Generate Content By AI
+                  {isPending ? (
+                    <span className="animate-pulse">Generating ...</span>
+                  ) : (
+                    "Generate Image Prompt"
+                  )}
                 </Button>
                 <Button
                   type="button"
                   disabled={generatingImage}
                   onClick={generateAiImage}
                 >
-                  Generate Image
+                  {generatingImage ? (
+                    <span className="animate-pulse">Generating ...</span>
+                  ) : (
+                    "Generate Image"
+                  )}
                 </Button>
               </div>
             </div>
@@ -328,7 +378,11 @@ const CreateBlogPage = () => {
               )}
             </div>
             {aiImage && (
-              <img src={aiImage} alt="ai image" className="size-fit" />
+              <img
+                src={aiImage}
+                alt="ai image"
+                className="size-fit rounded-2xl "
+              />
             )}
             {blogImage && !aiImage && (
               <img
@@ -345,52 +399,13 @@ const CreateBlogPage = () => {
               disable ? "cursor-not-allowed opacity-50" : "cursor-pointer"
             }`}
           >
-            Submit
+            {disable ? (
+              <span className="animate-pulse">Uploading...</span>
+            ) : (
+              "Upload Blog"
+            )}
           </Button>
         </form>
-      </div>
-
-      {/* right ai content generation */}
-      <div
-        className="md:w-1/2 bg-Green-color/35 rounded-2xl py-7 px-4 h-fit flex flex-col gap-4 justify-start 
-        sticky bottom-0 left-0
-      "
-      >
-        <h1 className="text-xl md:text-3xl uppercase font-semibold text-gray-500">
-          Create your AI <span className="text-black font-extrabold">Blog</span>
-        </h1>
-        {/* title */}
-        <div className="flex flex-col w-full">
-          <label
-            htmlFor="title"
-            className="text-xl md:text-2xl font-semibold px-2 cursor-pointer w-fit hover:scale-105 transition-all"
-          >
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            required
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="What is the title?"
-            className="border-2 border-gray-400 rounded-2xl focus:shadow-md focus:shadow-gray-400 p-4 outline-none transition-all w-full"
-            maxLength={100}
-          />
-        </div>
-        {/* generate content */}
-        <Button
-          className="w-fit "
-          disabled={isAiGeneration}
-          onClick={generateContent}
-        >
-          Generate Content
-        </Button>
-        {isAiGeneration && <div> loading....</div>}
-
-        <div className="reset-tw bg-yellow-300 prose prose-lg">
-          <div dangerouslySetInnerHTML={{ __html: content }} />
-        </div>
       </div>
     </div>
   );

@@ -41,7 +41,15 @@ const AnimatedRoutes = () => {
           <Route path="/blogs" element={<AllBlogs />} />
           <Route path="/blogs/:id" element={<BlogPage />} />
           <Route path="/createblog" element={<CreateBlogPage />} />
-          <Route path="/userPage/:id" element={<OtherUserPage />} />
+
+          <Route
+            path="/userPage/:id"
+            element={
+              <PrivateRoute>
+                <OtherUserPage />
+              </PrivateRoute>
+            }
+          />
 
           <Route
             path="/user"

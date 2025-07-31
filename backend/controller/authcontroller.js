@@ -87,7 +87,7 @@ export const updateUserDetails = asyncHandler(async (req, res) => {
 // @desc    Get logged in user
 // @route   GET /api/auth/check
 export const checkUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password");
+  const user = await User.findById(req.user?._id).select("-password");
 
   if (!user) {
     res.status(401).json({ message: "User not found ", status: "401" });

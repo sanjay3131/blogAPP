@@ -20,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { checkUser } from "@/utils/ApiFunction";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
+import { handleFollowUser } from "@/lib/utilFunction";
 interface UserComponentProps {
   author: {
     profilePic: string;
@@ -65,40 +66,59 @@ const UserComponent = ({
 
   return (
     <motion.div className="w-full flex flex-col  justify-baseline  items-center gap-5 relative">
-      <div className=" w-full h-fit flex flex-col gap-4 justify-center items-center p-4  relative">
-        <img
-          src={author.profilePic ? author.profilePic : noProfile}
-          alt="user profile pic"
-          referrerPolicy="no-referrer"
-          className=" size-24 rounded-full "
-        />
-        {/* name */}
-        <h1 className="text-2xl font-bold uppercase">{author.name}</h1>
-
-        {/* bio */}
-        {author.bio && <p>{author?.bio}</p>}
-
-        {/* website */}
-        {author.website && <a href={author.website}>{author.website}</a>}
-        {/* social links */}
-        <div className=" flex  w-fit justify-center items-center gap-3 px-9 text-2xl ">
-          <a href={author.socialLinks?.facebook}>
-            <FaFacebookSquare />
-          </a>
-          <a href={author.socialLinks?.instagram}>
-            <FaInstagramSquare />{" "}
-          </a>
-          <a href={author.socialLinks?.twitter}>
-            <FaSquareXTwitter />
-          </a>
+      <div className=" w-full h-fit flex flex-col gap-4 justify-around items-center p-4  relative">
+        <div className="w-fit ">
+          <img
+            src={author.profilePic ? author.profilePic : noProfile}
+            alt="user profile pic"
+            referrerPolicy="no-referrer"
+            className=" size-34 rounded-full "
+          />
         </div>
-        {userData?.author._id === author._id && (
-          <div className="  top-0 right-0">
-            <Button onClick={() => navigateToEditUserProfile()}>
-              Edit Profile <FaUserEdit />
-            </Button>
+        <div className="w-[80%] flex flex-col gap-5 justify-start items-center ">
+          {/* name */}
+          <h1 className="text-2xl font-bold uppercase">{author.name}</h1>
+
+          {/* bio */}
+          {author.bio && <p>{author?.bio}</p>}
+
+          {/* website */}
+          {author.website && <a href={author.website}>{author.website}</a>}
+          {/* social links */}
+          <div className=" flex  w-fit justify-center items-center gap-3 px-9 text-2xl ">
+            <a href={author.socialLinks?.facebook}>
+              <FaFacebookSquare />
+            </a>
+            <a href={author.socialLinks?.instagram}>
+              <FaInstagramSquare />{" "}
+            </a>
+            <a href={author.socialLinks?.twitter}>
+              <FaSquareXTwitter />
+            </a>
           </div>
-        )}
+          {/* follow and unfollow */}
+          {userData?.author._id !== author._id && (
+            <div>
+              <Button
+                onClick={() => {
+                  handleFollowUser(author._id, queryClient);
+                }}
+              >
+                {userData?.author?.following?.includes(author._id)
+                  ? "Unfollow"
+                  : "Follow"}
+              </Button>
+            </div>
+          )}
+          {/* edit profile button */}
+          {userData?.author._id === author._id && (
+            <div className="  top-0 right-0">
+              <Button onClick={() => navigateToEditUserProfile()}>
+                Edit Profile <FaUserEdit />
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
       {/* tool bar */}
 
