@@ -13,11 +13,23 @@ configDotenv();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// CORS configuration
+const allowedOrigins = [
+  process.env.Vercel_Frontend_URL,
+  process.env.Localhost,
+  process.env.Render_Frontend_URL,
+];
 app.use(
   cors({
-    origin: process.env.Frontend_URL,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // if you're using cookies/auth
   })
 );
 
