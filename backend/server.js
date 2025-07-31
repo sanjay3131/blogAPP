@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: process.env.VITE_Frontend_URL || process.env.Frontend_URL,
+    origin: process.env.Frontend_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
