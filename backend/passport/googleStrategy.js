@@ -14,7 +14,7 @@ const setupGoogleStrategy = (passport) => {
         passReqToCallback: true,
         proxy: true,
       },
-      async (accessToken, refreshToken, profile, done) => {
+      async (req, accessToken, refreshToken, profile, done) => {
         try {
           const existingUser = await User.findOne({ googleId: profile.id });
 
