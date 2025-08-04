@@ -43,6 +43,8 @@ router.get(
     failureRedirect: "/login",
   }),
   asyncHandler(async (req, res) => {
+    console.log("✅ Reached Google callback route");
+    console.log("👉 req.user:", req.user); // Check if user exists
     const token = generateToken(req.user._id, res);
     // Optionally redirect or send token
     res.redirect(process.env.Vercel_Frontend_URL || "http://localhost:3000"); // or send JSON if API-only
