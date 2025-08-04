@@ -39,8 +39,8 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
+    failureRedirect: `${process.env.Vercel_Frontend_URL}/login`,
     session: false,
-    failureRedirect: "/login",
   }),
   asyncHandler(async (req, res) => {
     console.log("✅ Reached Google callback route");
