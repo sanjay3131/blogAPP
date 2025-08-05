@@ -8,29 +8,38 @@ import cookieParser from "cookie-parser";
 import setupGoogleStrategy from "./passport/googleStrategy.js";
 import authRoutes from "./routes/authRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
+
 //config
 configDotenv();
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// CORS configuration - fixed for production
 app.use(
   cors({
-    origin: process.env.Vercel_Frontend_URL,
+    origin: [
+      "http://localhost:5173", // for development
+      process.env.FRONTEND_URL || process.env.Vercel_Frontend_URL,
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
 const PORT = process.env.PORT || 5000;
+
 app.use(cookieParser());
-app.use(
-  session({ secret: "keyboard cat", resave: false, saveUninitialized: false })
-);
+
+// Since you're not using sessions, remove session middleware
 app.use(passport.initialize());
-app.use(passport.session());
+// Remove passport.session() since you're not using sessions
 setupGoogleStrategy(passport);
 
-// Serialize user
+// Since you're not using sessions, you might not need these
+// But keep them if your googleStrategy.js uses them
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -51,4 +60,10 @@ app.listen(PORT, () => {
   // Connect to MongoDB
   connectDb();
   console.log(`Server is running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV}`);
+  console.log(
+    `Frontend URL: ${
+      process.env.FRONTEND_URL || process.env.Vercel_Frontend_URL
+    }`
+  );
 });

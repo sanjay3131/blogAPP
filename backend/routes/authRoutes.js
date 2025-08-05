@@ -46,8 +46,8 @@ router.get(
     console.log("✅ Reached Google callback route");
     console.log("👉 req.user:", req.user); // Check if user exists
     const token = generateToken(req.user._id, res);
-    // Optionally redirect or send token
-    res.redirect(process.env.Vercel_Frontend_URL || "http://localhost:3000"); // or send JSON if API-only
+    const redirectUrl = `${process.env.Vercel_Frontend_URL}/google-auth-success?token=${token}`;
+    res.redirect(redirectUrl); // ⬅️ Send token back to frontend
   })
 );
 
