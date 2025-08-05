@@ -46,7 +46,7 @@ router.get(
     console.log("✅ Reached Google callback route");
     console.log("👉 req.user:", req.user); // Check if user exists
     const token = generateToken(req.user._id, res);
-    const redirectUrl = `${process.env.Vercel_Frontend_URL}/google-auth-success?token=${token}`;
+    const redirectUrl = `${process.env.Vercel_Frontend_URL}`;
     res.redirect(redirectUrl); // ⬅️ Send token back to frontend
   })
 );
