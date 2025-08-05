@@ -88,7 +88,6 @@ router.get(
     accessType: "offline", // Get refresh token
   })
 );
-
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -96,34 +95,10 @@ router.get(
     session: false,
   }),
   asyncHandler(async (req, res) => {
-    try {
-      console.log("✅ Reached Google callback route");
-      console.log("👉 req.user:", req.user);
-      console.log("🌍 Environment:", process.env.NODE_ENV);
-      console.log("🔗 Frontend URL:", process.env.FRONTEND_URL);
+    console.log("✅ CALLBACK HIT");
+    console.log("👉 req.user:", req.user);
 
-      if (!req.user) {
-        console.log("❌ No user found in req.user");
-        return res.redirect(`${process.env.FRONTEND_URL}/login`);
-      }
-
-      console.log("🔄 About to generate token for user ID:", req.user._id);
-
-      // Generate token and set cookie with cross-origin settings
-      const token = generateToken(req.user._id, res);
-
-      console.log("🍪 Token generated successfully:", token ? "✅" : "❌");
-      console.log("🍪 Token length:", token ? token.length : "No token");
-
-      const redirectUrl = process.env.FRONTEND_URL;
-
-      console.log("🔄 Redirecting to:", redirectUrl);
-      res.redirect(redirectUrl);
-    } catch (error) {
-      console.error("❌ Error in Google callback:", error);
-      console.error("❌ Error stack:", error.stack);
-      res.redirect(`${process.env.FRONTEND_URL}`);
-    }
+    res.send("Login success");
   })
 );
 
