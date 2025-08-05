@@ -115,7 +115,7 @@ router.get(
       console.log("🍪 Token generated successfully:", token ? "✅" : "❌");
       console.log("🍪 Token length:", token ? token.length : "No token");
 
-      const redirectUrl = `${process.env.FRONTEND_URL}`;
+      const redirectUrl = process.env.FRONTEND_URL;
 
       console.log("🔄 Redirecting to:", redirectUrl);
       res.redirect(redirectUrl);
