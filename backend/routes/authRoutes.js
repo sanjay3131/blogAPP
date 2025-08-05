@@ -104,9 +104,7 @@ router.get(
 
       if (!req.user) {
         console.log("❌ No user found in req.user");
-        return res.redirect(
-          `${process.env.FRONTEND_URL}/login`
-        );
+        return res.redirect(`${process.env.FRONTEND_URL}/login`);
       }
 
       console.log("🔄 About to generate token for user ID:", req.user._id);
@@ -117,8 +115,6 @@ router.get(
       console.log("🍪 Token generated successfully:", token ? "✅" : "❌");
       console.log("🍪 Token length:", token ? token.length : "No token");
 
-      // For cross-origin setup, you might need to pass token in URL temporarily
-      // and let frontend set it as httpOnly cookie via an API call
       const redirectUrl = `${process.env.FRONTEND_URL}`;
 
       console.log("🔄 Redirecting to:", redirectUrl);
@@ -126,7 +122,7 @@ router.get(
     } catch (error) {
       console.error("❌ Error in Google callback:", error);
       console.error("❌ Error stack:", error.stack);
-      res.redirect(`${process.env.FRONTEND_URL}/login);
+      res.redirect(`${process.env.FRONTEND_URL}`);
     }
   })
 );
