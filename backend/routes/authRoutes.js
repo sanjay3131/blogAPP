@@ -98,7 +98,21 @@ router.get(
     console.log("✅ CALLBACK HIT");
     console.log("👉 req.user:", req.user);
 
-    res.send("Login success");
+    // res.send("Login success");
+    const token = generateToken(req.user._id, res);
+    console.log("🔑 Token generated:", token);
+    res.redirect(process.env.FRONTEND_URL);
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token,
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        profilePic: req.user.profilePic,
+      },
+    });
   })
 );
 
