@@ -108,7 +108,10 @@ router.get("/test-read-cookie", (req, res) => {
 // Google OAuth
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    prompt: "select_account", // Force account selection
+  })
 );
 
 router.get(
