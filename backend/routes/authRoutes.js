@@ -120,7 +120,7 @@ router.get(
   asyncHandler(async (req, res) => {
     const token = generateToken(req.user._id, res);
     // Optionally redirect or send token
-    res.redirect(process.env); // or send JSON if API-only
+    res.redirect(process.env.FRONTEND_URL); // or send JSON if API-only
   })
 );
 export default router;
