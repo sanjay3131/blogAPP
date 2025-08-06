@@ -11,7 +11,9 @@ import blogRoutes from "./routes/blogRoutes.js";
 
 //config
 configDotenv();
+
 const app = express();
+app.set("trust proxy", 1);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 // CORS configuration - fixed for production
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || process.env.Vercel_Frontend_URL,
+    origin: process.env.FRONTEND_URL,
 
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
