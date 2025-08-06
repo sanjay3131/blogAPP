@@ -118,7 +118,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: "/login",
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
   }),
   asyncHandler(async (req, res) => {
     const token = generateToken(req.user._id, res);
