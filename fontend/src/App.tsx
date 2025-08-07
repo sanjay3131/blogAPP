@@ -24,6 +24,7 @@ import OtherUserPage from "./Pages/UserProfilePage/OtherUserPage";
 import EditUserProfile from "./components/EditUserProfile";
 import UpdateBlog from "./components/UpdateBlog";
 import ErrorPage from "./Pages/ErrorPage";
+import { log } from "console";
 
 const queryClient = new QueryClient();
 
@@ -99,6 +100,7 @@ const AnimatedRoutes = () => {
 
 const App = () => {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  log("Google Client ID:", clientId);
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
