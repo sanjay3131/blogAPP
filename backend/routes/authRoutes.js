@@ -123,6 +123,15 @@ router.get(
   asyncHandler(async (req, res) => {
     const token = generateToken(req.user._id, res);
     // Optionally redirect or send token
+    console.log("🔑 Token generated:", token);
+
+    const cookie = res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none", // Required for cross-site cookies
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+    console.log("Cookie set:", cookie);
     res.redirect(`${process.env.FRONTEND_URL}/user`); // or send JSON if API-only
   })
 );
