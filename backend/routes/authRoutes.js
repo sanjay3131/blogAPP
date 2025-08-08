@@ -121,11 +121,15 @@ router.get(
     session: false,
   }),
   asyncHandler(async (req, res) => {
-    const token = generateToken(req.user._id, res);
+    const token = await generateToken(req.user._id, res);
     // Optionally redirect or send token
     console.log("🔑 Token generated:", token);
-
-    res.redirect(process.env.FRONTEND_URL);
+    if (!token) {
+      return res.status(500).json({ message: "Token generation failed" });
+    }
+    token
+      ? res.redirect(process.env.FRONTEND_URL)
+      : res.status(500).json({ message: "Token generation failed" });
   })
 );
 export default router;
