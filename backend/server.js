@@ -3,7 +3,6 @@ import cors from "cors";
 import { configDotenv } from "dotenv";
 import connectDb from "./databaseConfig/connectDb.js";
 import passport from "passport";
-import session from "express-session";
 import cookieParser from "cookie-parser";
 import setupGoogleStrategy from "./passport/googleStrategy.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -19,11 +18,11 @@ app.use(express.urlencoded({ extended: true }));
 // CORS configuration - fixed for production
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: [process.env.FRONTEND_URL],
 
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
