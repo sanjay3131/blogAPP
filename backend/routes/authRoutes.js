@@ -128,7 +128,7 @@ router.get(
       return res.status(500).json({ message: "Token generation failed" });
     }
     token
-      ? res.redirect(process.env.FRONTEND_URL)
+      ? res.redirect(`${process.env.FRONTEND_URL}/token=${token}`)
       : res.status(500).json({ message: "Token generation failed" });
   })
 );
