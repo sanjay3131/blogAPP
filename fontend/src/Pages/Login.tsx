@@ -24,6 +24,9 @@ const Login = () => {
     setEmail("");
     setPassword("");
   };
+  const handleGoogleLogin = () => {
+    window.open("https://ai-blogapp.onrender.com/api/auth/google", "_self");
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -87,12 +90,9 @@ const Login = () => {
             <Button type="submit">Login</Button>
           </div>
         </form>
-        <a
-          href="https://ai-blogapp.onrender.com/api/auth/google"
-          className="w-full flex justify-center items-center px-4"
-        >
-          <Button className="w-4/5">Login with Google</Button>
-        </a>
+        <Button onClick={handleGoogleLogin} className="w-4/5">
+          Login with Google
+        </Button>
         <div>
           <Button className="mt-5 " onClick={() => redirect("/")}>
             Home Page

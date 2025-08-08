@@ -80,6 +80,8 @@ const AnimatedRoutes = () => {
 
         {/* Login / Register */}
         <Route path="/login" element={<Login />} />
+        <Route path="/login/:toke n" element={<Login />} />
+
         <Route path="/register" element={<Register />} />
 
         {/* Admin Page */}
