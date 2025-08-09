@@ -1,21 +1,26 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../axios/axiosInstance";
+import { checkUser } from "@/utils/ApiFunction";
 
 export default function AuthSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axiosInstance
-      .get("/auth/checkUser")
-      .then((res) => {
-        console.log("User authenticated:", res.data);
-        navigate("/"); // go to home once cookies are confirmed
-      })
-      .catch((err) => {
-        console.error("Auth check failed", err);
+    const verifyLogin = async () => {
+      try {
+        const response = await checkUser();
+        if (response.status === 200) {
+          navigate("/user");
+        } else {
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Verification failed:", error);
         navigate("/login");
-      });
+      }
+    };
+
+    verifyLogin();
   }, []);
 
   return <div>Verifying login...</div>;
