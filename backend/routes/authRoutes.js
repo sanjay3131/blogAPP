@@ -95,7 +95,7 @@ router.get(
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 6 * 24 * 60 * 60 * 1000,
     });
     token
       ? res.redirect(`${process.env.FRONTEND_URL}/auth-success`)
