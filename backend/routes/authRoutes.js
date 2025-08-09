@@ -69,42 +69,6 @@ router.get("/test-read-cookie", (req, res) => {
   });
 });
 
-// // Google OAuth
-// router.get(
-//   "/google",
-//   (req, res, next) => {
-//     console.log("🚀 Starting Google OAuth flow");
-//     console.log(
-//       "📋 Google Client ID:",
-//       process.env.GOOGLE_CLIENT_ID ? "Set" : "Not Set"
-//     );
-//     console.log("🔗 Callback URL:", process.env.GOOGLE_CALLBACK_URL);
-//     console.log("🌍 Request origin:", req.get("origin"));
-//     next();
-//   },
-//   passport.authenticate("google", {
-//     scope: ["profile", "email"],
-//     prompt: "select_account", // Force account selection
-//     accessType: "offline", // Get refresh token
-//   })
-// );
-// router.get(
-//   "/google/callback",
-//   passport.authenticate("google", {
-//     failureRedirect: `${process.env.FRONTEND_URL}/login`,
-//     session: false,
-//   }),
-//   asyncHandler(async (req, res) => {
-//     console.log("✅ CALLBACK HIT");
-//     console.log("👉 req.user:", req.user);
-
-//     // res.send("Login success");
-//     const token = generateToken(req.user._id, res);
-//     console.log("🔑 Token generated:", token);
-//     res.redirect(process.env.FRONTEND_URL);
-//   })
-// );
-
 // Google OAuth
 router.get(
   "/google",
@@ -128,7 +92,7 @@ router.get(
       return res.status(500).json({ message: "Token generation failed" });
     }
     token
-      ? res.redirect(process.env.FRONTEND_URL)
+      ? res.redirect(`${process.env.FRONTEND_URL}/auth-success`)
       : res.status(500).json({ message: "Token generation failed" });
   })
 );

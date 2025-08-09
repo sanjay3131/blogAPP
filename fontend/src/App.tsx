@@ -24,6 +24,7 @@ import OtherUserPage from "./Pages/UserProfilePage/OtherUserPage";
 import EditUserProfile from "./components/EditUserProfile";
 import UpdateBlog from "./components/UpdateBlog";
 import ErrorPage from "./Pages/ErrorPage";
+import AuthSuccess from "./Pages/auth-success";
 
 const queryClient = new QueryClient();
 
@@ -80,7 +81,7 @@ const AnimatedRoutes = () => {
 
         {/* Login / Register */}
         <Route path="/login" element={<Login />} />
-        <Route path="/login/:toke n" element={<Login />} />
+        <Route path="/auth-success" element={<AuthSuccess />} />
 
         <Route path="/register" element={<Register />} />
 
