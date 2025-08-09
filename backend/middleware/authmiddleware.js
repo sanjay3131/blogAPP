@@ -3,29 +3,37 @@ import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 
 export const protect = asyncHandler(async (req, res, next) => {
-  // Retrieve the token from cookies
   const token = req.cookies.token;
+  console.log("middleware: Request headers:", req.headers);
+  console.log("middleware: Cookies received:", req.cookies);
   console.log("middleware: Token retrieved from cookies:", token);
 
   if (!token) {
+    console.log("middleware: No token found in cookies");
     return res.status(401).json({ message: "Not authorized, no token" });
   }
 
   try {
-    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("middleware: Token decoded:", decoded);
 
-    if (!decoded) {
+    if (!decoded || !decoded.userId) {
+      console.log("middleware: Invalid decoded token:", decoded);
       return res.status(401).json({ message: "Not authorized, token failed" });
     }
 
-    // Attach the user to the request object
     req.user = await User.findById(decoded.userId).select("-password");
-    console.log("middleware: User found:", req.user);
+    if (!req.user) {
+      console.log("middleware: User not found for ID:", decoded.userId);
+      return res
+        .status(401)
+        .json({ message: "Not authorized, user not found" });
+    }
+    console.log("middleware: User found:", req.user._id);
 
-    next(); // Proceed to the next middleware or route handler
+    next();
   } catch (error) {
-    return res.status(401).json({ message: "Not authorized, token failed" });
+    console.error("middleware: Token verification failed:", error.message);
+    res.status(401).json({ message: "Not authorized, token failed" });
   }
 });

@@ -6,8 +6,7 @@ const checkUser = async () => {
   const response = await axiosInstance.get("/auth/checkUser", {
     withCredentials: true,
   });
-  
-  
+
   return response.data;
 };
 //Login function
