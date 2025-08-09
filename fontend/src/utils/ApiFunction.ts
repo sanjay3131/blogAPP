@@ -3,7 +3,11 @@ import { axiosInstance } from "@/axios/axiosInstance";
 // authenticate function
 // check if the user is authenticated
 const checkUser = async () => {
-  const response = await axiosInstance.get("/auth/checkUser");
+  const response = await axiosInstance.get("/auth/checkUser", {
+    withCredentials: true,
+  });
+  
+  
   return response.data;
 };
 //Login function

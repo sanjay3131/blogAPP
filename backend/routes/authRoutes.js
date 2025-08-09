@@ -103,7 +103,7 @@ router.get(
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 6 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
         path: "/", // Ensure cookie is available for all paths
       });
       console.log("🍪 Cookie set: token=", token);
