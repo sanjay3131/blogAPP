@@ -1,27 +1,31 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { checkUser } from "@/utils/ApiFunction";
 
-export default function AuthSuccess() {
+function AuthSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const verifyLogin = async () => {
+    const checkUser = async () => {
       try {
-        const response = await checkUser();
-        if (response.status === 200) {
-          navigate("/user");
-        } else {
-          navigate("/login");
-        }
+        const response = await axios.get(
+          "https://ai-blogapp.onrender.com/api/auth/checkUser",
+          {
+            withCredentials: true,
+          }
+        );
+        console.log("Check user response:", response.data);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        navigate("/");
       } catch (error) {
-        console.error("Verification failed:", error);
-        navigate("/login");
+        console.error("Error checking user:", error);
+        navigate(`${process.env.FRONTEND_URL}/login`);
       }
     };
+    checkUser();
+  }, [navigate]);
 
-    verifyLogin();
-  }, []);
-
-  return <div>Verifying login...</div>;
+  return <div>Loading...</div>;
 }
+
+export default AuthSuccess;
