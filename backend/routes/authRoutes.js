@@ -91,6 +91,11 @@ router.get(
     if (!token) {
       return res.status(500).json({ message: "Token generation failed" });
     }
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
     token
       ? res.redirect(`${process.env.FRONTEND_URL}/auth-success`)
       : res.status(500).json({ message: "Token generation failed" });
