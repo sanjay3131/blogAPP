@@ -72,7 +72,6 @@ router.get("/test-read-cookie", (req, res) => {
 // Google OAuth
 router.get(
   "/google",
-  protect,
   passport.authenticate("google", {
     scope: ["profile", "email"],
     prompt: "select_account", // Force account selection
@@ -81,7 +80,6 @@ router.get(
 
 router.get(
   "/google/callback",
-  protect,
   passport.authenticate("google", {
     failureRedirect: `${process.env.FRONTEND_URL}/login`,
     session: false,
