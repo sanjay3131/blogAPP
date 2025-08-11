@@ -1,29 +1,27 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { checkUser } from "@/utils/ApiFunction";
 
 function AuthSuccess() {
   const navigate = useNavigate();
 
+  const { data: userData, error } = useQuery({
+    queryKey: ["user"],
+    queryFn: checkUser,
+    retry: false,
+  });
+
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const response = await axios.get(
-          "https://ai-blogapp.onrender.com/api/auth/checkUser",
-          {
-            withCredentials: true,
-          }
-        );
-        console.log("Check user response:", response.data);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        navigate("/");
-      } catch (error) {
-        console.error("Error checking user:", error);
-        navigate(`${process.env.FRONTEND_URL}/login`);
-      }
-    };
-    checkUser();
-  }, [navigate]);
+    if (userData) {
+      console.log("Check user response:", userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      navigate("/");
+    } else if (error) {
+      console.error("Error checking user:", error);
+      navigate(`${process.env.FRONTEND_URL}/login`);
+    }
+  }, [userData, error, navigate]);
 
   return <div>Loading...</div>;
 }
