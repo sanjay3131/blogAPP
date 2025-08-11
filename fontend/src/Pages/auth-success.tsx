@@ -5,30 +5,20 @@ import { useNavigate } from "react-router-dom";
 function AuthSuccess() {
   const navigate = useNavigate();
 
+  // AuthSuccess.jsx
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const response = await axios.get(
-          "https://ai-blogapp.onrender.com/api/auth/checkUser",
-          { withCredentials: true }
-        );
-
-        console.log("Check user response:", response.data);
-
-        if (response.data?.user) {
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          navigate(`/`);
-        } else {
-          navigate("/login");
-        }
-      } catch (error) {
-        console.error("Error checking user:", error);
+    axios
+      .get(`${process.env.BACKEND_URL}/api/auth/checkUser`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        navigate("/");
+      })
+      .catch(() => {
         navigate("/login");
-      }
-    };
-
-    checkUser();
-  }, [navigate]);
+      });
+  }, []);
 
   return <div>Loading...</div>;
 }
