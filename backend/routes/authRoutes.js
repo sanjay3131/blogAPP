@@ -107,7 +107,7 @@ router.get(
         path: "/", // Ensure cookie is available for all paths
       });
       console.log("🍪 Cookie set: token=", token);
-      res.redirect(`${process.env.FRONTEND_URL}/auth-success`);
+      res.redirect(`${process.env.FRONTEND_URL}`);
     } catch (error) {
       console.error("Error in Google callback:", error);
       res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_error`);

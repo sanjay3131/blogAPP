@@ -17,7 +17,7 @@ function AuthSuccess() {
 
         if (response.data?.user) {
           localStorage.setItem("user", JSON.stringify(response.data.user));
-          navigate("/");
+          navigate(`/`);
         } else {
           navigate("/login");
         }
