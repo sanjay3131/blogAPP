@@ -81,37 +81,13 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: `${process.env.FRONTEND_URL}/login`,
     session: false,
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
   }),
   asyncHandler(async (req, res) => {
-    try {
-      const user = req.user;
-      if (!user || !user._id) {
-        console.error("No user or user._id in callback:", req.user);
-        return res.redirect(`${process.env.FRONTEND_URL}/login?error=no_user`);
-      }
-      const token = await generateToken(user._id, res);
-      console.log("🔑 Token generated:", token);
-      if (!token) {
-        console.error("Token generation failed");
-        return res.redirect(
-          `${process.env.FRONTEND_URL}/login?error=token_failed`
-        );
-      }
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: "/", // Ensure cookie is available for all paths
-      });
-      console.log("🍪 Cookie set: token=", token);
-      res.redirect(`${process.env.FRONTEND_URL}`);
-    } catch (error) {
-      console.error("Error in Google callback:", error);
-      res.redirect(`${process.env.FRONTEND_URL}/login?error=auth_error`);
-    }
+    const token = generateToken(req.user._id, res);
+    // Optionally redirect or send token
+    res.redirect(`${process.env.FRONTEND_URL}/user`);
   })
 );
 export default router;

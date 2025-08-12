@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // CORS configuration - fixed for production
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL || process.env.FRONTEND_LOCAL_URL],
+    origin: process.env.FRONTEND_URL,
 
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
