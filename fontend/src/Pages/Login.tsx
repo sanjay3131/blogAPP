@@ -15,6 +15,8 @@ const Login = () => {
       await loginUser(email, password);
 
       toast.success("Login successful!");
+      console.log("login done>");
+
       redirect("/user");
     } catch (error) {
       console.log(error);
@@ -97,7 +99,9 @@ const Login = () => {
           href="https://ai-blogapp.onrender.com/api/auth/google"
           className="w-full flex justify-center items-center px-4"
         >
-          <Button className="w-4/5">Login with Google</Button>
+          <Button className="w-4/5 bg-Green-color text-black ">
+            Login with Google with a tag
+          </Button>
         </a>
         <div>
           <Button className="mt-5 " onClick={() => redirect("/")}>
