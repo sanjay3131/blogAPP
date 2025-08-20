@@ -25,7 +25,7 @@ const Login = () => {
     setPassword("");
   };
   const handleGoogleLogin = () => {
-    window.open("https://ai-blogapp.onrender.com/api/auth/google", "_self");
+    window.location.href = "https://ai-blogapp.onrender.com/api/auth/google";
   };
   return (
     <motion.div
@@ -93,6 +93,12 @@ const Login = () => {
         <Button onClick={handleGoogleLogin} className="w-4/5">
           Login with Google
         </Button>
+        <a
+          href="http://localhost:3000/api/auth/google"
+          className="w-full flex justify-center items-center px-4"
+        >
+          <Button className="w-4/5">Login with Google</Button>
+        </a>
         <div>
           <Button className="mt-5 " onClick={() => redirect("/")}>
             Home Page

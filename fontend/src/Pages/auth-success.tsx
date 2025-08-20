@@ -16,6 +16,8 @@ function AuthSuccess() {
         navigate("/");
       })
       .catch(() => {
+        console.log("auth success failed redirect to login page...");
+
         navigate("/login");
       });
   }, []);
