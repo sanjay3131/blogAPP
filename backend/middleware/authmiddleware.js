@@ -4,9 +4,6 @@ import asyncHandler from "express-async-handler";
 
 export const protect = asyncHandler(async (req, res, next) => {
   const token = req.cookies.token;
-  console.log("middleware: Request headers:", req.headers);
-  console.log("middleware: Cookies received:", req.cookies);
-  console.log("middleware: Token retrieved from cookies:", token);
 
   if (!token) {
     console.log("middleware: No token found in cookies");
@@ -15,10 +12,8 @@ export const protect = asyncHandler(async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("middleware: Token decoded:", decoded);
 
     if (!decoded || !decoded.userId) {
-      console.log("middleware: Invalid decoded token:", decoded);
       return res.status(401).json({ message: "Not authorized, token failed" });
     }
 
@@ -33,7 +28,6 @@ export const protect = asyncHandler(async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error("middleware: Token verification failed:", error.message);
     res.status(401).json({ message: "Not authorized, token failed" });
   }
 });
