@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // CORS configuration - fixed for production
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.FRONTEND_LOCAL_URL,
 
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -30,13 +30,11 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cookieParser());
 
-// Since you're not using sessions, remove session middleware
 app.use(passport.initialize());
-// Remove passport.session() since you're not using sessions
+// app.use(passport.session());
+
 setupGoogleStrategy(passport);
 
-// Since you're not using sessions, you might not need these
-// But keep them if your googleStrategy.js uses them
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -60,7 +58,7 @@ app.listen(PORT, () => {
   console.log(`Environment: ${process.env.NODE_ENV}`);
   console.log(
     `Frontend URL: ${
-      process.env.FRONTEND_URL || process.env.Vercel_Frontend_URL
+      process.env.FRONTEND_LOCAL_URL || process.env.Vercel_Frontend_URL
     }`
   );
 });

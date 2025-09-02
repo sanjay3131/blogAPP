@@ -100,12 +100,12 @@ const Register = () => {
             <Button type="submit">SignUp</Button>
           </div>
         </form>
-        <a
+        {/* <a
           href="https://ai-blogapp.onrender.com/api/auth/google"
           className="w-full flex justify-center items-center px-4"
         >
           <Button className="w-4/5">SignUp with Google</Button>
-        </a>
+        </a> */}
         <div>
           <Button className="mt-5 " onClick={() => redirect("/")}>
             Home Page
